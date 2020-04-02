@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FadUpdateMarch22_2020", "FadUpdateMarch22_2020.vdproj", "{DC1BDF7A-787A-4D47-A390-05BA8895543E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Default = Debug|Default
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC1BDF7A-787A-4D47-A390-05BA8895543E}.Debug|Default.ActiveCfg = Debug
+		{DC1BDF7A-787A-4D47-A390-05BA8895543E}.Debug|Default.Build.0 = Debug
+		{DC1BDF7A-787A-4D47-A390-05BA8895543E}.Release|Default.ActiveCfg = Release
+		{DC1BDF7A-787A-4D47-A390-05BA8895543E}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {76A81D59-F256-4D77-8868-494E324DED23}
+	EndGlobalSection
+EndGlobal

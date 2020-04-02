@@ -19,6 +19,7 @@ namespace FAD3
     {
         private const int CURSORWIDTH = 5;
         private const int GRIDSIZE = 50000;
+        private const int SIZING_FACTOR = 3;
 
         private static fadUTMZone _utmZone =                                    //holds the utm zone of the grid
                                 fadUTMZone.utmZone_Undefined;
@@ -78,9 +79,10 @@ namespace FAD3
         public bool UpdateOnGridCreate { get; set; }
 
         private static List<string> _filesToDeleteOnClose = new List<string>();
-        public const int XBuffer = 1500;
-        public const int YTopBuffer = 4000;
-        public const int YBottomBuffer = 3000;
+        //public const int XBUFFER = 1500;
+        public const int XBUFFER = 100;
+        public const int YTOPBUFFER = 4000;
+        public const int YBOTTOMBUFFER = 3000;
         public bool HasSubgrid { get; set; }
         public int SubGridCount { get; set; }
 
@@ -586,11 +588,12 @@ namespace FAD3
                         int xMax = centroidX + (WidthToFit / 2);
                         int yMin = centroidY - (HeightToFit / 2);
                         int yMax = centroidY + (HeightToFit / 2);
-                        ext.SetBounds(xMin - (labelDistance * 3) - XBuffer, yMin - (labelDistance * 3) - YBottomBuffer, 0, xMax + (labelDistance * 3) + XBuffer, yMax + (labelDistance * 3) + YTopBuffer, 0);
+                        ext.SetBounds(xMin - (labelDistance * SIZING_FACTOR) - XBUFFER, yMin - (labelDistance * SIZING_FACTOR) - YBOTTOMBUFFER, 0, xMax + (labelDistance * SIZING_FACTOR) + XBUFFER, yMax + (labelDistance * SIZING_FACTOR) + YTOPBUFFER, 0);
                     }
                     else
                     {
-                        ext.SetBounds(e.xMin - (labelDistance * 3) - XBuffer, e.yMin - (labelDistance * 3) - YBottomBuffer, 0, e.xMax + (labelDistance * 3) + XBuffer, e.yMax + (labelDistance * 3) + YTopBuffer, 0);
+                        //ext.SetBounds(e.xMin - (labelDistance * SIZING_FACTOR) - XBUFFER, e.yMin - (labelDistance * SIZING_FACTOR) - YBottomBuffer, 0, e.xMax + (labelDistance * SIZING_FACTOR) + XBUFFER, e.yMax + (labelDistance * SIZING_FACTOR) + YTopBuffer, 0);
+                        ext.SetBounds(e.xMin - (labelDistance * SIZING_FACTOR) - XBUFFER, e.yMin - (labelDistance * SIZING_FACTOR) - YBOTTOMBUFFER, 0, e.xMax + (labelDistance * SIZING_FACTOR) + XBUFFER, e.yMax + (labelDistance * SIZING_FACTOR) + YTOPBUFFER, 0);
                     }
                     _axMap.Extents = ext;
                 });

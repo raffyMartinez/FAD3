@@ -18,7 +18,7 @@ namespace FAD3
         private static List<GearSpecification> _GearSpecifications = new List<GearSpecification>();
 
         //this field contains the spec data of the sampled gear
-        private static Dictionary<string, SampledGearSpecData> _SampledGearSpecs = new Dictionary<string, SampledGearSpecData>();
+        private static Dictionary<string, SampledGearSpecData> _sampledGearSpecs = new Dictionary<string, SampledGearSpecData>();
 
         /// <summary>
         /// Assigns the SamplingGuid.
@@ -58,7 +58,7 @@ namespace FAD3
         /// </summary>
         public static void SetSampledGearSpecsForPreSave()
         {
-            _SampledGearSpecs.Clear();
+            _sampledGearSpecs.Clear();
             _HasUnsavedSampledGearSpecEdits = true;
         }
 
@@ -67,21 +67,9 @@ namespace FAD3
         /// </summary>
         public static Dictionary<string, SampledGearSpecData> SampledGearSpecs
         {
-            get { return _SampledGearSpecs; }
+            get { return _sampledGearSpecs; }
         }
 
-        /// <summary>
-        /// struct that holds the template for the specs of a gear variation
-        /// </summary>
-        //public struct GearSpecification1
-        //{
-        //    public string Property { get; set; }
-        //    public string Type { get; set; }
-        //    public string Notes { get; set; }
-        //    public string RowGuid { get; set; }
-        //    public fad3DataStatus DataStatus { get; set; }
-        //    public int Sequence { get; set; }
-        //}
 
         /// <summary>
         /// structure that holds the data of sampled gear's specs
@@ -150,20 +138,25 @@ namespace FAD3
                     deleteCount = update.ExecuteNonQuery();
                 }
 
-                foreach (KeyValuePair<string, SampledGearSpecData> kv in _SampledGearSpecs)
+            }
+            
+            using (var con = new OleDbConnection(global.ConnectionString))
+            {
+                con.Open();
+                foreach (KeyValuePair<string, SampledGearSpecData> kv in _sampledGearSpecs)
                 {
                     sql = "";
                     if (kv.Value.SpecificationValue.Length > 0)
                     {
                         sql = $@"Insert into tblSampledGearSpec (RowID, SamplingGUID, SpecID, [Value]) values (
-                                '{kv.Value.RowID}',
-                                {{{ _samplingGuid}}},
-                                '{kv.Value.SpecificationGuid}',
+                                {{{kv.Value.RowID}}},
+                                {{{samplingGuid}}},
+                                {{{kv.Value.SpecificationGuid}}},
                                 '{kv.Value.SpecificationValue}')";
-                    }
+                        //}
 
-                    if (sql.Length > 0)
-                    {
+                        //if (sql.Length > 0)
+                        //{
                         using (OleDbCommand update = new OleDbCommand(sql, con))
                         {
                             try
@@ -185,6 +178,7 @@ namespace FAD3
                     }
                 }
             }
+        
 
             return deleteCount > 0 || saveSuccessCount > 0 || SampledGearSpecs.Count == 0;
         }
@@ -223,7 +217,7 @@ namespace FAD3
             using (var con = new OleDbConnection(global.ConnectionString))
             {
                 _HasSampledGearSpecs = false;
-                _SampledGearSpecs.Clear();
+                _sampledGearSpecs.Clear();
                 var sql = $@"SELECT tblGearSpecs.RowID, ElementName, SpecID, Value
                     FROM tblGearSpecs INNER JOIN tblSampledGearSpec ON tblGearSpecs.RowID = tblSampledGearSpec.SpecID
                     WHERE tblGearSpecs.Version = '2' AND tblSampledGearSpec.SamplingGUID = {{{_samplingGuid}}}";
@@ -245,7 +239,7 @@ namespace FAD3
                         s.SpecificationName = dr["ElementName"].ToString();
                         s.DataStatus = fad3DataStatus.statusFromDB;
 
-                        _SampledGearSpecs.Add(s.SpecificationGuid, s);
+                        _sampledGearSpecs.Add(s.SpecificationGuid, s);
                     }
                     con.Close();
                 }
@@ -433,7 +427,7 @@ namespace FAD3
         public static string PreSavedSampledGearSpec()
         {
             var s = "";
-            foreach (KeyValuePair<string, SampledGearSpecData> kv in _SampledGearSpecs)
+            foreach (KeyValuePair<string, SampledGearSpecData> kv in _sampledGearSpecs)
             {
                 s += kv.Value.SpecificationName + ": " + kv.Value.SpecificationValue + "\r\n";
             }

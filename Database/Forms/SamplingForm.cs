@@ -713,6 +713,7 @@ namespace FAD3
             {
                 Text = "Sampling detail";
                 _gearClassName = _lv.Items["GearClass"].SubItems[1].Text;
+                ManageGearSpecsClass.SamplingGuid = _samplingGUID;
                 var result = OperatingExpenses.ReadData(SamplingGUID);
                 _hasExpenseData = result.success;
                 _txtExpenses.Text = OperatingExpenses.SamplingExpenses;

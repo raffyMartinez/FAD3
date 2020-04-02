@@ -372,7 +372,10 @@ namespace FAD3
                 if (c.GetType().Name == "TextBox" || c.GetType().Name == "ComboBox")
                 {
                     var arr = c.Tag.ToString().Split('|');
-                    if (_isNew) spec.RowID = Guid.NewGuid().ToString();
+                    //if (_isNew) spec.RowID = Guid.NewGuid().ToString();
+                    //var guid = Guid.NewGuid().ToString();
+                    //MessageBox.Show(guid);
+                    spec.RowID = Guid.NewGuid().ToString();
                     spec.SpecificationGuid = c.Name;
                     spec.SpecificationValue = c.Text;
                     spec.SpecificationName = ManageGearSpecsClass.SpecNameFromSpecGUID(spec.SpecificationGuid);

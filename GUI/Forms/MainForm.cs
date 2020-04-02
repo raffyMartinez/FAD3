@@ -60,6 +60,7 @@ namespace FAD3
 
         private ListView _lvCatch;
         private ListView _lvLF_GMS;
+        private ListView _activeListView;
 
         //for column sort
         //private int _sortColumn = -1;
@@ -616,6 +617,9 @@ namespace FAD3
                     tsi.Name = "menuEditCatchComposition";
                     tsi.Visible = ((ListView)Source).Items.Count > 2;
 
+                    tsi = menuDropDown.Items.Add("Copy text");
+                    tsi.Name = "menuCopyText";
+
                     //only show browse submenu if catch name is scientific name
                     ListViewItem lvi = ((ListView)Source).SelectedItems[0];
                     if (lvi.Text.Length > 0 && lvi.Tag.ToString() == "Scientific")
@@ -684,6 +688,9 @@ namespace FAD3
                             MenuName = "menuNewLFTable";
                         }
                     }
+
+                    tsi = menuDropDown.Items.Add("Copy text");
+                    tsi.Name = "menuCopyText";  
 
                     tsi = menuDropDown.Items.Add(MenuPrompt);
                     tsi.Name = MenuName;
@@ -1247,12 +1254,12 @@ namespace FAD3
                 case "menuCopyText":
                     StringBuilder copyText = new StringBuilder();
                     string col = "";
-                    foreach (ColumnHeader c in lvMain.Columns)
+                    foreach (ColumnHeader c in _activeListView.Columns)
                     {
                         col += $"{c.Text}\t";
                     }
                     copyText.Append($"{col.TrimEnd()}\r\n");
-                    foreach (ListViewItem item in lvMain.Items)
+                    foreach (ListViewItem item in _activeListView.Items)
                     {
                         copyText.Append(item.Text);
                         for (int n = 1; n < item.SubItems.Count; n++)
@@ -3280,28 +3287,50 @@ namespace FAD3
             _catchLocalNamesForm = null;
         }
 
+        /// <summary>
+        /// Updates catch composition list, showing computed weights and count for each catch item
+        /// and adding totals on the bottom to the list
+        /// </summary>
+        /// <param name="samplingGuid"></param>
         private void ShowCatchComposition(string samplingGuid)
         {
             if (_subListExisting)
             {
                 _lvCatch.Items.Clear();
                 int n = 1;
+                double fromTotalCatchTotalWt = 0;
                 double computedWeight = 0;
                 double totalCatchWt = 0;
                 int totalCatchCount = 0;
+                double catchWeightLessFromTotal = 0;
                 double totalComputedWeight = 0;
                 int totalComputedCount = 0;
                 int computedCount = 0;
                 var catchComposition = CatchComposition.RetrieveCatchComposition(_samplingGUID);
+
                 if (catchComposition.Count > 0)
                 {
+                    //we need to determine first if the weight of all catch is from total
+                    //then deduct total weight of from total catch to the catch weight
+                    foreach(KeyValuePair<string, CatchLine>cl in catchComposition)
+                    {
+                        if(cl.Value.FromTotalCatch)
+                        {
+                            fromTotalCatchTotalWt += cl.Value.CatchWeight;
+                        }
+                    }
+                    catchWeightLessFromTotal = (double)_weightOfCatch - fromTotalCatchTotalWt;
+
+                    //we examine the catch individually and compute depending on whether it is from total or whether 
+                    //a subsample is taken for those catch that are numerous
                     foreach (KeyValuePair<string, CatchLine> kv in catchComposition)
                     {
-                        if (kv.Value.FromTotalCatch)
+                        if (kv.Value.FromTotalCatch || _weightOfSample == null)
                         {
                             if (_weightOfSample == null)
                             {
-                                //from total and not a sub samle
+                                //if sample weight is missing then we assume that entire catch composition
+                                //is from total catch
                                 computedWeight = kv.Value.CatchWeight;
                                 if (kv.Value.CatchCount == null)
                                 {
@@ -3331,23 +3360,23 @@ namespace FAD3
                         }
                         else
                         {
-                            if (_weightOfSample != null)
-                            {
-                                computedWeight = ((double)_weightOfCatch / (double)_weightOfSample) * kv.Value.CatchWeight;
+                                // the fish sampled is from a sampling of the main catch
+                                computedWeight = ((Double)kv.Value.CatchWeight / (double)_weightOfSample) * catchWeightLessFromTotal;
                                 if (kv.Value.CatchCount == null)
                                 {
-                                    computedCount = (int)((kv.Value.CatchWeight / kv.Value.CatchSubsampleWt) * kv.Value.CatchSubsampleCount) * (int)((double)_weightOfCatch / (double)_weightOfSample);
+                                    //we extrapolate catch count from the subsample weight and catch
+                                    computedCount = (int)(catchWeightLessFromTotal / (double)_weightOfSample * (kv.Value.CatchWeight/kv.Value.CatchSubsampleWt*kv.Value.CatchSubsampleCount));
                                 }
                                 else
                                 {
-                                    computedCount = (int)((_weightOfCatch / (double)_weightOfSample) * kv.Value.CatchCount);
+                                    computedCount = (int)(catchWeightLessFromTotal / (double)_weightOfSample * kv.Value.CatchCount);
                                 }
-                            }
-                            else
-                            {
-                            }
+
                         }
 
+
+
+                        //we then add one row to the listview
                         var lvi = new ListViewItem(new string[]
                         {
                             n.ToString(),
@@ -3357,7 +3386,6 @@ namespace FAD3
                             kv.Value.CatchSubsampleWt.ToString(),
                             kv.Value.CatchSubsampleCount.ToString(),
                             kv.Value.FromTotalCatch.ToString(),
-                            //kv.Value.TaxaNumber.ToString()
                             computedWeight.ToString("N2"),
                             computedCount.ToString()
                         });
@@ -3368,6 +3396,8 @@ namespace FAD3
                         lvi.Tag = kv.Value.NameType.ToString();
                         _lvCatch.Items.Add(lvi);
 
+
+                        //we then update the running sums
                         totalCatchWt += kv.Value.CatchWeight;
                         totalCatchCount += kv.Value.CatchCount == null ? 0 : (int)kv.Value.CatchCount;
                         totalComputedWeight += computedWeight;
@@ -3377,6 +3407,8 @@ namespace FAD3
                     }
                 }
 
+
+                //we add the sums to the bottom to the list
                 _lvCatch.Items.Add("");
                 var lviTotal = _lvCatch.Items.Add("");
                 lviTotal.SubItems.Add("Totals");
@@ -3448,11 +3480,10 @@ namespace FAD3
             _samplings.ReadUIFromXML();
             var DateEncoded = "";
 
-            //if (samplingGUID.Length > 0 && _samplings.SamplingsForMonth.ContainsKey(samplingGUID))
+
             if (samplingGUID.Length > 0)
             {
                 //we fill up the list view from the _Sampling class variable.
-                //_samplings.SamplingGUID = SamplingGUID;
                 _samplings.CatchAndEffortOfSampling(samplingGUID);
                 var sampling = _samplings.SamplingsForMonth[samplingGUID];
 
@@ -3608,7 +3639,6 @@ namespace FAD3
                             break;
 
                         default:
-                            //lvi.SubItems[1].Text = effortData[lvi.Name];
                             break;
                     }
                 }
@@ -3670,10 +3700,8 @@ namespace FAD3
         {
             SamplingForm fs = new SamplingForm();
             fs.Sampling = _samplings.SamplingsForMonth[_samplingGUID];
-            //fs.SamplingGUID = _samplingGUID;
             fs.ListViewSamplingDetail(lvMain);
             fs.TargetArea = _targetArea;
-            //fs.TargetAreaGuid = _targetAreaGuid;
             fs.Parent_Form = this;
             fs.VesselDimension(_vesLength, _vesWidth, _vesHeight);
             fs.Show(this);
@@ -3819,14 +3847,17 @@ namespace FAD3
         {
             Point p = treeMain.PointToClient(new Point(e.X, e.Y));
             TreeNode node = treeMain.GetNodeAt(p.X, p.Y);
+            
             if (node.PrevVisibleNode != null)
             {
                 node.PrevVisibleNode.BackColor = Color.White;
             }
+
             if (node.NextVisibleNode != null)
             {
                 node.NextVisibleNode.BackColor = Color.White;
             }
+
             if (((TreeLevelTag)node.Tag).TreeLevelName == "landing_site" && node.Parent == _nodeParent)
             {
                 node.BackColor = Color.Aquamarine;
@@ -3867,6 +3898,9 @@ namespace FAD3
 
         private void OnListView_MouseClick(object sender, MouseEventArgs e)
         {
+
+            _activeListView = (ListView)sender;
+
             switch (((ListView)sender).Name)
             {
                 case "lvMain":

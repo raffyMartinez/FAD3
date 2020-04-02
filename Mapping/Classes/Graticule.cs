@@ -36,6 +36,7 @@ namespace FAD3
         private Double _gridHeight;
         private double _gridWidth;
         private double _intervalSize;
+        private const double _EXTENTFACTOR = 0.93;
         public MapTextGraticuleHelper GraticuleTextHelper { get; internal set; }
 
         public string MapTitle { get; set; }
@@ -179,6 +180,7 @@ namespace FAD3
                 {
                     //ef is expansion factor
                     var ef = (_mapExtents.xMax - _mapExtents.xMin) * 0.01;
+                    //var ef = (_mapExtents.xMax - _mapExtents.xMin) * 0.5;
 
                     _mapExtents.SetBounds(_mapExtents.xMin - ef, _mapExtents.yMin - ef, 0, _mapExtents.xMax + ef, _mapExtents.yMax + (ef), 0);
 
@@ -326,8 +328,11 @@ namespace FAD3
             _graticuleExtents = new Extents();
 
             //0.93 means that the graticule is 93% of the map extent
-            tempW = (xMax - xMin) * 0.93;
-            tempH = (yMax - yMin) * 0.93;
+            //tempW = (xMax - xMin) * 0.93;
+            //tempH = (yMax - yMin) * 0.93;
+
+            tempW = (xMax - xMin) * _EXTENTFACTOR;
+            tempH = (yMax - yMin) * _EXTENTFACTOR;
 
             //compute the origin of the graticule
             _xOrigin = (xMin + ((xMax - xMin) / 2)) - (tempW / 2);

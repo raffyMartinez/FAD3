@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FADUpdater_Apr_02_2020_1", "FADUpdater_Apr_02_2020_1.vdproj", "{AF1B83A2-D683-473E-AE5D-6E8386C06554}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Default = Debug|Default
+		Release|Any CPU = Release|Any CPU
+		Release|Default = Release|Default
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Debug|Any CPU.ActiveCfg = Debug
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Debug|Any CPU.Build.0 = Debug
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Debug|Default.ActiveCfg = Debug
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Debug|Default.Build.0 = Debug
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Release|Any CPU.ActiveCfg = Release
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Release|Any CPU.Build.0 = Release
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Release|Default.ActiveCfg = Release
+		{AF1B83A2-D683-473E-AE5D-6E8386C06554}.Release|Default.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DD2DB0DE-9FAB-44F0-89FB-23A089795110}
+	EndGlobalSection
+EndGlobal

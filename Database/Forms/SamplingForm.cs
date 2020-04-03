@@ -960,7 +960,7 @@ namespace FAD3
 
             if (_samplings.UpdateEffort(_editedSampling))
             {
-                return ManageGearSpecsClass.SaveSampledGearSpecsEx(_samplingGUID);
+                return ManageGearSpecsClass.SaveSampledGearSpecs(_samplingGUID);
             }
             else
             {

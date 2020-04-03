@@ -10,6 +10,13 @@ namespace FAD3
     /// </summary>
     public static class DBCheck
     {
+
+        public static void RefreshCache()
+        {
+            var dbe = new DBEngine();
+            dbe.Idle(IdleEnum.dbRefreshCache);
+        }
+
         public static List<string> TableList;
 
         public static bool CheckDB(string mdbPath)

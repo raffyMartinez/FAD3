@@ -123,15 +123,14 @@ namespace FAD3
             get { return _GearSpecifications; }
         }
 
-        public static bool SaveSampledGearSpecsEx(string samplingGuid)
+
+        public static int DeleteSampledGearSpec(string samplingGUID)
         {
-            var saveSuccessCount = 0;
             var deleteCount = 0;
-            string sql = "";
             using (var con = new OleDbConnection(global.ConnectionString))
             {
                 con.Open();
-                sql = $"Delete * from tblSampledGearSpec where SamplingGUID = {{{samplingGuid}}}";
+                string sql = $"Delete * from tblSampledGearSpec where SamplingGUID = {{{samplingGUID}}}";
 
                 using (OleDbCommand update = new OleDbCommand(sql, con))
                 {
@@ -139,74 +138,202 @@ namespace FAD3
                 }
 
             }
-            
+            return deleteCount;
+        }
+
+        private static bool DeleteSavedSpec(string rowGuid)
+        {
+            bool success = false;
             using (var con = new OleDbConnection(global.ConnectionString))
             {
                 con.Open();
-                foreach (KeyValuePair<string, SampledGearSpecData> kv in _sampledGearSpecs)
+                var sql = $"Delete * from tblSamplesGearSpec where RowID={{{rowGuid}}}";
+                using (OleDbCommand update = new OleDbCommand(sql, con))
                 {
-                    sql = "";
-                    if (kv.Value.SpecificationValue.Length > 0)
+                    try
                     {
-                        sql = $@"Insert into tblSampledGearSpec (RowID, SamplingGUID, SpecID, [Value]) values (
+                        if (update.ExecuteNonQuery() > 0)
+                        {
+                            success = true;
+                        }
+                    }
+                    catch (OleDbException oex)
+                    {
+                        Logger.LogError(oex.Message, oex.StackTrace);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex.Message, ex.StackTrace);
+                    }
+
+                }
+            }
+            return success;
+        }
+        private static bool SaveNewGearSpec(KeyValuePair<string, SampledGearSpecData> kv)
+        {
+            bool success = false;
+            using (var con = new OleDbConnection(global.ConnectionString))
+            {
+                con.Open();
+                var sql = $@"Insert into tblSampledGearSpec (RowID, SamplingGUID, SpecID, [Value]) values (
                                 {{{kv.Value.RowID}}},
-                                {{{samplingGuid}}},
+                                {{{kv.Value.SamplingGuid}}},
                                 {{{kv.Value.SpecificationGuid}}},
                                 '{kv.Value.SpecificationValue}')";
-                        //}
 
-                        //if (sql.Length > 0)
-                        //{
-                        using (OleDbCommand update = new OleDbCommand(sql, con))
+                using (OleDbCommand update = new OleDbCommand(sql, con))
+                {
+                    try
+                    {
+                        if (update.ExecuteNonQuery() > 0)
                         {
-                            try
+                            success = true;
+                        }
+                    }
+                    catch (OleDbException oex)
+                    {
+                        Logger.LogError(oex.Message, oex.StackTrace);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex.Message, ex.StackTrace);
+                    }
+                }
+            }
+            return success;
+        }
+
+        /// <summary>
+        /// Find out if a specific gear spec from a sampled landing is saved
+        /// </summary>
+        /// <param name="samplingGuid"></param>
+        /// <returns></returns>
+        private static bool SampledGearSpecRecordExist(string samplingGuid, string specGUID)
+        {
+            string s = "";
+            using (var con = new OleDbConnection(global.ConnectionString))
+            {
+                con.Open();
+                
+                string sql = $@"Select Top 1 [Value] from tblSampledGearSpec where 
+                            SamplingGUID={{{samplingGuid}}} and SpecID={{{specGUID}}}";
+
+                OleDbCommand c = new OleDbCommand(sql, con);
+                s = (string)c.ExecuteScalar();
+            }
+            return s != null && s.Length > 0;
+        }
+
+        /// <summary>
+        /// Find out if a sampled landing has its gear specifications already saved
+        /// </summary>
+        /// <param name="samplingGuid"></param>
+        /// <returns></returns>
+        private static bool SampledGearSpecsRecordExist(string samplingGuid)
+        {
+            string s = "";
+            using (var con = new OleDbConnection(global.ConnectionString))
+            {
+                con.Open();
+                string sql = $"Select Top 1 [Value] from tblSampledGearSpec where SamplingGUID={{{samplingGuid}}}";
+                OleDbCommand c = new OleDbCommand(sql, con);
+                s = (string)c.ExecuteScalar();
+            }
+            return s != null && s.Length > 0;
+        }
+
+        public static bool SaveSampledGearSpecs(string samplingGuid)
+        {
+            int saveSuccessCount = 0;
+            int deletedCount = 0;
+            string sql = "";
+            using (var con = new OleDbConnection(global.ConnectionString))
+            {
+                con.Open();
+
+                if (SampledGearSpecsRecordExist(samplingGuid))
+                {
+                    foreach (KeyValuePair<string, SampledGearSpecData> kv in _sampledGearSpecs)
+                    {
+
+                        if (kv.Value.SpecificationValue.Length > 0)
+                        {
+
+                            if (SampledGearSpecRecordExist(kv.Value.SamplingGuid,kv.Value.SpecificationGuid))
                             {
-                                if (update.ExecuteNonQuery() > 0)
+                                sql = $@"UPDATE tblSampledGearSpec set [Value] = '{kv.Value.SpecificationValue.ToString()}'
+                                Where SamplingGUID={{{kv.Value.SamplingGuid}}} AND SpecID = {{{kv.Value.SpecificationGuid}}}";
+
+                                using (OleDbCommand update = new OleDbCommand(sql, con))
+                                {
+                                    try
+                                    {
+                                        if (update.ExecuteNonQuery() > 0)
+                                        {
+                                            saveSuccessCount++;
+                                        }
+                                    }
+                                    catch (OleDbException oex)
+                                    {
+                                        Logger.LogError(oex.Message, oex.StackTrace);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Logger.LogError(ex.Message, ex.StackTrace);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if(SaveNewGearSpec(kv))
                                 {
                                     saveSuccessCount++;
                                 }
                             }
-                            catch (OleDbException oex)
+                        }
+                        else
+                        {
+                            sql = $@"Delete * from tblSampledGearSpec where SamplingGUID={{{samplingGuid}}}
+                                        and SpecID={{{kv.Value.SpecificationGuid}}}";
+                            using (OleDbCommand update = new OleDbCommand(sql, con))
                             {
-                                Logger.LogError(oex.Message, oex.StackTrace);
+                                try
+                                {
+                                    if (update.ExecuteNonQuery() > 0)
+                                    {
+                                        deletedCount++;
+                                    }
+                                }
+                                catch (OleDbException oex)
+                                {
+                                    Logger.LogError(oex.Message, oex.StackTrace);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.LogError(ex.Message, ex.StackTrace);
+                                }
                             }
-                            catch (Exception ex)
-                            {
-                                Logger.LogError(ex.Message, ex.StackTrace);
-                            }
+
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (KeyValuePair<string, SampledGearSpecData> kv in _sampledGearSpecs)
+                    {
+                        if (SaveNewGearSpec(kv))
+                        {
+                            saveSuccessCount++;
                         }
                     }
                 }
             }
-        
 
-            return deleteCount > 0 || saveSuccessCount > 0 || SampledGearSpecs.Count == 0;
+            return saveSuccessCount > 0 || SampledGearSpecs.Count == 0 || deletedCount > 0;
         }
 
-        /// <summary>
-        /// Boolean. Determine if the sampled gear has a specifications template
-        /// </summary>
-        /// <param name="SamplingGuid"></param>
-        /// <returns></returns>
-        public static bool SampledGearHasSpecs(string SamplingGuid)
-        {
-            var hasSpecs = false;
-            using (var con = new OleDbConnection(global.ConnectionString))
-            {
-                var sql = $@"SELECT TOP 1 SamplingGUID FROM tblGearSpecs INNER JOIN tblSampledGearSpec ON
-                          tblGearSpecs.RowID = tblSampledGearSpec.SpecID WHERE tblGearSpecs.Version = '2'
-                          AND tblSampledGearSpec.SamplingGUID ={{{SamplingGuid}}}";
 
-                using (var dt = new DataTable())
-                {
-                    con.Open();
-                    var adapter = new OleDbDataAdapter(sql, con);
-                    adapter.Fill(dt);
-                    hasSpecs = dt.Rows.Count > 0;
-                }
-            }
-            return hasSpecs;
-        }
 
         /// <summary>
         /// Retrieve the specs of the gear that was sampled.

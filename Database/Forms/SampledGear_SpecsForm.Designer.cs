@@ -34,6 +34,7 @@
             this.labelTitle = new System.Windows.Forms.Label();
             this.statusBar = new System.Windows.Forms.StatusStrip();
             this.panelTip = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonDelete = new System.Windows.Forms.Button();
             this.statusBar.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -80,6 +81,7 @@
             // statusBar
             // 
             this.statusBar.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.panelTip});
             this.statusBar.Location = new System.Drawing.Point(0, 427);
@@ -91,15 +93,27 @@
             // panelTip
             // 
             this.panelTip.Name = "panelTip";
-            this.panelTip.Size = new System.Drawing.Size(0, 17);
+            this.panelTip.Size = new System.Drawing.Size(0, 16);
+            // 
+            // buttonDelete
+            // 
+            this.buttonDelete.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonDelete.Location = new System.Drawing.Point(172, 391);
+            this.buttonDelete.Name = "buttonDelete";
+            this.buttonDelete.Size = new System.Drawing.Size(55, 23);
+            this.buttonDelete.TabIndex = 5;
+            this.buttonDelete.Text = "Clear";
+            this.buttonDelete.UseVisualStyleBackColor = true;
+            this.buttonDelete.Click += new System.EventHandler(this.Onbutton_Click);
             // 
             // SampledGear_SpecsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
             this.CausesValidation = false;
             this.ClientSize = new System.Drawing.Size(347, 449);
+            this.Controls.Add(this.buttonDelete);
             this.Controls.Add(this.statusBar);
             this.Controls.Add(this.labelTitle);
             this.Controls.Add(this.buttonCancel);
@@ -129,5 +143,6 @@
         private System.Windows.Forms.Label labelTitle;
         private System.Windows.Forms.StatusStrip statusBar;
         private System.Windows.Forms.ToolStripStatusLabel panelTip;
+        private System.Windows.Forms.Button buttonDelete;
     }
 }

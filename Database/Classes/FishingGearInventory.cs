@@ -234,6 +234,83 @@ namespace FAD3.Database.Classes
             return localNames;
         }
 
+        public Dictionary<string,GearInventoryHeader>GetGearRowHeadersEx(string inventoryGuid)
+        {
+            Dictionary<string, GearInventoryHeader> inventoryHeaders = new Dictionary<string, GearInventoryHeader>();
+            var sql = $@"SELECT tblGearInventoryBarangayData.DataGuid,
+                            tblGearInventories.InventoryName,
+                            Provinces.ProvinceName,
+                            Municipalities.Municipality,
+                            tblGearInventoryBarangay.Barangay,
+                            tblGearInventoryBarangay.Sitio,
+                            tblEnumerators.EnumeratorName,
+                            tblGearInventoryBarangay.InventoryDate,
+                            tblGearClass.GearClassName,
+                            tblGearVariations.Variation
+                         FROM (tblGearClass INNER JOIN
+                            tblGearVariations ON
+                            tblGearClass.GearClass = tblGearVariations.GearClass) INNER JOIN
+                            (tblEnumerators RIGHT JOIN
+                            ((Provinces INNER JOIN Municipalities ON
+                            Provinces.ProvNo = Municipalities.ProvNo) INNER JOIN
+                            ((tblGearInventories INNER JOIN
+                            tblGearInventoryBarangay ON
+                            tblGearInventories.InventoryGuid = tblGearInventoryBarangay.InventoryGuid) INNER JOIN
+                            tblGearInventoryBarangayData ON
+                            tblGearInventoryBarangay.BarangayInventoryGuid = tblGearInventoryBarangayData.BarangayInventoryGUID) ON
+                            Municipalities.MunNo = tblGearInventoryBarangay.Municipality) ON
+                            tblEnumerators.EnumeratorID = tblGearInventoryBarangay.Enumerator) ON
+                            tblGearVariations.GearVarGUID = tblGearInventoryBarangayData.GearVariation
+                         WHERE tblGearInventories.InventoryGuid={{{inventoryGuid}}}
+                         ORDER BY tblGearInventories.InventoryName,
+                            Provinces.ProvinceName,
+                            Municipalities.Municipality,
+                            tblGearInventoryBarangay.Barangay,
+                            tblGearInventoryBarangay.Sitio,
+                            tblGearInventoryBarangay.InventoryDate,
+                            tblGearClass.GearClassName,
+                            tblGearVariations.Variation";
+
+            var dt = new DataTable();
+            using (var conection = new OleDbConnection(global.ConnectionString))
+            {
+                try
+                {
+                    conection.Open();
+
+                    var adapter = new OleDbDataAdapter(sql, conection);
+                    adapter.Fill(dt);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        DataRow dr = dt.Rows[i];
+                        var names = "";
+                        foreach (string name in InventoryGearLocalName(dr["DataGuid"].ToString()))
+                        {
+                            names += name + ", ";
+                        }
+                        GearInventoryHeader gih = new GearInventoryHeader
+                        {
+                            Sitio = dr["Sitio"].ToString(),
+                            Barangay = dr["Barangay"].ToString(),
+                            LGU = dr["Municipality"].ToString(),
+                            Province = dr["ProvinceName"].ToString(),
+                            ProjectName = dr["InventoryName"].ToString(),
+                            SurveyDate = (DateTime)dr["InventoryDate"],
+                            GearClass = dr["GearClassName"].ToString(),
+                            GearVariation = dr["Variation"].ToString(),
+                            LocalNames =  names.Trim(new char[] { ' ', ',' }),
+                            Enumerator=dr["EnumeratorName"].ToString()
+                        };
+                        inventoryHeaders.Add(dr["DataGuid"].ToString(), gih);
+                    }
+                }
+                catch
+                {
+                }
+            }
+            return inventoryHeaders;
+        }
+
         public Dictionary<string, (string projectName, string province, string lgu, string barangay, string sitio,
             string enumerator, DateTime surveyDate, string gearClass, string gearVariation, string localNames)> GetGearRowHeaders(string inventoryGuid)
         {
@@ -533,11 +610,105 @@ namespace FAD3.Database.Classes
             return names;
         }
 
+        public Dictionary<string, GearInventoryData>GetInventoryDataEx(string inventoryGUID)
+        {
+            Dictionary<string, GearInventoryData> inventoryData = new Dictionary<string, GearInventoryData>();
+            var sql = $@"SELECT tblGearInventoryBarangayData.*
+                        FROM(tblGearInventories INNER JOIN
+                            tblGearInventoryBarangay ON
+                            tblGearInventories.InventoryGuid = tblGearInventoryBarangay.InventoryGuid) INNER JOIN
+                            tblGearInventoryBarangayData ON
+                            tblGearInventoryBarangay.BarangayInventoryGuid = tblGearInventoryBarangayData.BarangayInventoryGUID
+                        WHERE tblGearInventories.InventoryGuid={{{inventoryGUID}}}";
+
+            var dt = new DataTable();
+            using (var conection = new OleDbConnection(global.ConnectionString))
+            {
+                try
+                {
+                    conection.Open();
+                    var adapter = new OleDbDataAdapter(sql, conection);
+                    adapter.Fill(dt);
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+
+                        DataRow dr = dt.Rows[i];
+  
+                        int? maxCPUEVal = null;
+                        int? minCPUEVal = null;
+                        int? upperModeCPUEVal = null;
+                        int? lowerModeCPUEVal = null;
+                        int? avgCPUEVal = null;
+                        int? modeCPUEVal = null;
+                        int? dominantPercent = null;
+                        double? equiKgVal = null;
+
+                        if (int.TryParse(dr["MaxCPUE"].ToString(), out int v))
+                        {
+                            maxCPUEVal = v;
+                        }
+                        if (int.TryParse(dr["MinCPUE"].ToString(), out v))
+                        {
+                            minCPUEVal = v;
+                        }
+                        if (int.TryParse(dr["ModeUpper"].ToString(), out v))
+                        {
+                            upperModeCPUEVal = v;
+                        }
+                        if (int.TryParse(dr["ModeLower"].ToString(), out v))
+                        {
+                            lowerModeCPUEVal = v;
+                        }
+                        if (int.TryParse(dr["AverageCPUE"].ToString(), out v))
+                        {
+                            avgCPUEVal = v;
+                        }
+                        if (int.TryParse(dr["Mode"].ToString(), out v))
+                        {
+                            modeCPUEVal = v;
+                        }
+                        if (double.TryParse(dr["EquivalentKg"].ToString(), out double vv))
+                        {
+                            equiKgVal = vv;
+                        }
+                        if (int.TryParse(dr["DominantCatchPercent"].ToString(), out v))
+                        {
+                            dominantPercent = v;
+                        }
+                        GearInventoryData gid = new GearInventoryData
+                        {
+                            CountCommercial = Convert.ToInt32(dr["CountCommercial"]),
+                            CountMotorized = Convert.ToInt32(dr["CountMunicipalMotorized"]),
+                            CountNoBoat = Convert.ToInt32(dr["CountNoBoat"]),
+                            CountNonMotorized = Convert.ToInt32(dr["CountMunicipalNonMotorized"]),
+                            MaxCPUE = maxCPUEVal,
+                            MinCPUE = minCPUEVal,
+                            UpperMode = upperModeCPUEVal,
+                            LowerMode = lowerModeCPUEVal,
+                            NumberDaysUsed = Convert.ToInt32(dr["NumberDaysPerMonth"]),
+                            CPUEUnit=dr["CPUEUnit"].ToString(),
+                            Notes=dr["Notes"].ToString(),
+                            DominantPercent=dominantPercent,
+                            AverageCPUE=avgCPUEVal,
+                            CpueMode = modeCPUEVal,
+                            EquivalentKg = equiKgVal
+                        };
+                        inventoryData.Add(dr["DataGuid"].ToString(), gid);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(ex.Message, "FishingGearInventory.cs", "GetInventoryData");
+                }
+            }
+            return inventoryData;
+        }
+
         public Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
             int countNoBoat, int? maxCPUE, int? minCPUE,
             int? upperMode, int? lowerMode, int numberDaysUsed,
-            string cpueUnit, string Notes, int? dominantPercent,
-            int? averageCPUE, int? cpueMode, double? equivalentKg)> GetInventoryData(string inventoryGuid)
+            string cpueUnit, string Notes, int? dominantPercent, int? averageCPUE, int? cpueMode, double? equivalentKg)> 
+            GetInventoryData(string inventoryGuid)
         {
             Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
             int countNoBoat, int? maxCPUE, int? minCPUE,
@@ -638,6 +809,20 @@ namespace FAD3.Database.Classes
             return inventoryData;
         }
 
+        public Dictionary<string, GearInventoryMonthsFishing> GetMonthsFishingEx(Dictionary<string ,GearInventoryHeader> header)
+        {
+            Dictionary<string, GearInventoryMonthsFishing> monthsFishing = new Dictionary<string, GearInventoryMonthsFishing>();
+            foreach(var item in header.Keys)
+            {
+                List<int> fishingMonths = GetMonthsFishing(item);
+                List<int> peakMonths = GetMonthsFishing(item, true);
+                GearInventoryMonthsFishing gimf = new GearInventoryMonthsFishing();
+                gimf.FishingMonths = fishingMonths;
+                gimf.FishingMonthsPeak = peakMonths;
+                monthsFishing.Add(item, gimf);
+            }
+            return monthsFishing;
+        }
         public List<int> GetMonthsFishing(string dataGuid, bool getPeakMonths = false)
         {
             List<int> months = new List<int>();

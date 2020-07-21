@@ -172,6 +172,7 @@ namespace FAD3
             _mapLayersHandler.OnLayerVisibilityChanged += OnMapLayerVisibilityChanged;
             _mapLayersHandler.CurrentLayer += OnCurrentMapLayer;
             _mapLayersHandler.LayerRead += OnMapLayerRead;
+            _mapLayersHandler.TilesVisible = false;
             _mapInterActionHandler = new MapInterActionHandler(axMap, _mapLayersHandler)
             {
                 MapContextMenuStrip = menuDropDown

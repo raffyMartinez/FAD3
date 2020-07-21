@@ -30,6 +30,15 @@ namespace FAD3.Database.Classes
                 case "catch":
                     sql = SetCatchSQL();
                     break;
+                case "gear_specs":
+                    sql = SetGearSpecSQL();
+                    break;
+                case "fishing_expense":
+                    sql = SetFishingExpenseSQL();
+                    break;
+                case "fishing_expense_items":
+                    sql = SetFishingExpenseItemsSQL();
+                    break;
             }
             SetData(sql);
         }
@@ -56,6 +65,71 @@ namespace FAD3.Database.Classes
             }
         }
 
+        private static string SetFishingExpenseItemsSQL()
+        {
+            return $@"TRANSFORM First(tblFishingExpenseItems.Cost) AS FirstOfCost
+                    SELECT tblAOI.AOIName, tblLandingSites.LSName, tblGearClass.GearClassName, 
+                        tblGearVariations.Variation, tblSampling.RefNo, tblSampling.SamplingDate
+                    FROM (tblAOI 
+                        INNER JOIN (tblLandingSites 
+                        INNER JOIN (tblGearClass 
+                        INNER JOIN (tblGearVariations 
+                        INNER JOIN (tblSampling 
+                        INNER JOIN tblFishingExpense 
+                            ON tblSampling.SamplingGUID = tblFishingExpense.SamplingGUID) 
+                            ON tblGearVariations.GearVarGUID = tblSampling.GearVarGUID) 
+                            ON tblGearClass.GearClass = tblGearVariations.GearClass) 
+                            ON tblLandingSites.LSGUID = tblSampling.LSGUID) 
+                            ON tblAOI.AOIGuid = tblLandingSites.AOIGuid) INNER JOIN tblFishingExpenseItems 
+                            ON tblFishingExpense.SamplingGUID = tblFishingExpenseItems.SamplingGuid
+                    GROUP BY tblAOI.AOIName, tblLandingSites.LSName, tblGearClass.GearClassName, 
+                        tblGearVariations.Variation, tblSampling.RefNo, tblSampling.SamplingDate
+                    ORDER BY tblAOI.AOIName, tblLandingSites.LSName, tblGearClass.GearClassName, 
+                        tblGearVariations.Variation
+                    PIVOT tblFishingExpenseItems.ExpenseItem";
+        }
+        private static string SetFishingExpenseSQL()
+        {
+            return $@"SELECT tblAOI.AOIName, tblLandingSites.LSName, tblGearClass.GearClassName, 
+                        tblGearVariations.Variation, tblSampling.RefNo, tblSampling.SamplingDate, 
+                        tblFishingExpense.CostOfFishing, tblFishingExpense.ReturnOfInvestment, 
+                        tblFishingExpense.IncomeFromFishSold, tblFishingExpense.FishWeightForConsumption
+                    FROM tblAOI 
+                        INNER JOIN (tblLandingSites 
+                        INNER JOIN (tblGearClass 
+                        INNER JOIN (tblGearVariations 
+                        INNER JOIN (tblSampling 
+                        INNER JOIN tblFishingExpense 
+                            ON tblSampling.SamplingGUID = tblFishingExpense.SamplingGUID) 
+                            ON tblGearVariations.GearVarGUID = tblSampling.GearVarGUID) 
+                            ON tblGearClass.GearClass = tblGearVariations.GearClass) 
+                            ON tblLandingSites.LSGUID = tblSampling.LSGUID) 
+                            ON tblAOI.AOIGuid = tblLandingSites.AOIGuid
+                    ORDER BY tblAOI.AOIName, tblLandingSites.LSName, tblGearClass.GearClassName, 
+                        tblGearVariations.Variation";
+        }
+        private static string SetGearSpecSQL()
+        {
+            return $@"TRANSFORM First(tblSampledGearSpec.Value) AS FirstOfValue
+                        SELECT tblAOI.AOIName, tblLandingSites.LSName, tblGearClass.GearClassName, 
+                            tblGearVariations.Variation, tblSampling.RefNo, tblSampling.SamplingDate
+                        FROM tblGearClass 
+                            INNER JOIN (tblAOI 
+                            INNER JOIN (tblLandingSites 
+                            INNER JOIN (tblGearSpecs 
+                            INNER JOIN (tblGearVariations 
+                            INNER JOIN (tblSampling 
+                            INNER JOIN tblSampledGearSpec 
+                                ON tblSampling.SamplingGUID = tblSampledGearSpec.SamplingGUID) 
+                                ON tblGearVariations.GearVarGUID = tblSampling.GearVarGUID) 
+                                ON tblGearSpecs.RowID = tblSampledGearSpec.SpecID) 
+                                ON tblLandingSites.LSGUID = tblSampling.LSGUID) 
+                                ON tblAOI.AOIGuid = tblLandingSites.AOIGuid) 
+                                ON tblGearClass.GearClass = tblGearVariations.GearClass
+                        GROUP BY tblAOI.AOIName, tblLandingSites.LSName, tblGearClass.GearClassName, 
+                            tblGearVariations.Variation, tblSampling.RefNo, tblSampling.SamplingDate
+                        PIVOT tblGearSpecs.ElementName";
+        }
         private static string SetCatchSQL()
         {
             return $@"SELECT Provinces.ProvinceName AS Province,

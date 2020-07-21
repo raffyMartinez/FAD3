@@ -132,8 +132,7 @@ namespace FAD3
 
                     sql = $@"SELECT FishingGround FROM tblSampling WHERE SamplingGUID={{{samplingGuid}}}
                         UNION ALL
-                        SELECT GridName from tblGrid
-                        WHERE SamplingGUID={{{samplingGuid}}}";
+                        SELECT GridName from tblGrid WHERE SamplingGUID={{{samplingGuid}}}";
 
                     dt.Rows.Clear();
                     adapter = new OleDbDataAdapter(sql, conection);
@@ -201,7 +200,7 @@ namespace FAD3
         }
 
         /// <summary>
-        /// maps fishing grounds belonging to a target area, landing site, or type of gear gear
+        /// maps fishing grounds belonging to a target area, landing site, or type of gear
         /// </summary>
         /// <param name="aoiGUID"></param>
         /// <param name="samplingYears"></param>
@@ -231,9 +230,7 @@ namespace FAD3
             var ifldNumberHauls = 0;
             var ifldNumberFisher = 0;
             var ifldDateSet = 0;
-            var ifldTimeSet = 0;
             var ifldDateHauled = 0;
-            var ifldTimeHauled = 0;
             var ifldVessel = 0;
             var ifldHP = 0;
             var ifldCatchWt = 0;
@@ -353,17 +350,11 @@ namespace FAD3
                     ifldNumberFisher = sf.EditAddField("NoFishers", FieldType.INTEGER_FIELD, 1, 2);
                     sf.Field[ifldNumberFisher].Alias = "Number of fishers";
 
-                    ifldDateSet = sf.EditAddField("DateSet", FieldType.DATE_FIELD, 1, 2);
-                    sf.Field[ifldDateSet].Alias = "Date gear set";
+                    ifldDateSet = sf.EditAddField("DatTimeSet", FieldType.DATE_FIELD, 1, 2);
+                    sf.Field[ifldDateSet].Alias = "Date and time gear set";
 
-                    ifldTimeSet = sf.EditAddField("TimeSet", FieldType.DATE_FIELD, 1, 2);
-                    sf.Field[ifldTimeSet].Alias = "Time gear set";
-
-                    ifldDateHauled = sf.EditAddField("DateHaul", FieldType.DATE_FIELD, 1, 2);
-                    sf.Field[ifldDateHauled].Alias = "Date gear hauled";
-
-                    ifldTimeHauled = sf.EditAddField("TimeHaul", FieldType.DATE_FIELD, 1, 2);
-                    sf.Field[ifldTimeHauled].Alias = "Time gear hauled";
+                    ifldDateHauled = sf.EditAddField("DateTimeHaul", FieldType.DATE_FIELD, 1, 2);
+                    sf.Field[ifldDateHauled].Alias = "Date and time gear hauled";
 
                     ifldVessel = sf.EditAddField("VesType", FieldType.STRING_FIELD, 1, 30);
                     sf.Field[ifldVessel].Alias = "Type of vessel used";
@@ -376,7 +367,7 @@ namespace FAD3
 
                     query = @"SELECT tblAOI.AOIName, tblEnumerators.EnumeratorName, tblLandingSites.LSName, tblGearClass.GearClassName,
                             tblGearVariations.Variation, Year([SamplingDate]) AS samplingYear, tblSampling.FishingGround, tblSampling.NoHauls,
-                            tblSampling.NoFishers, tblSampling.DateSet, tblSampling.TimeSet, tblSampling.DateHauled, tblSampling.TimeHauled,
+                            tblSampling.NoFishers, DateSet + TimeSet As DateTimeSet, DateHauled + TimeHauled AS DateTimeHauled,
                             tblSampling.VesType, tblSampling.hp, tblSampling.WtCatch FROM (tblAOI INNER JOIN tblLandingSites ON
                             tblAOI.AOIGuid = tblLandingSites.AOIGuid) INNER JOIN ((tblGearClass INNER JOIN tblGearVariations ON
                             tblGearClass.GearClass = tblGearVariations.GearClass) INNER JOIN (tblEnumerators RIGHT JOIN tblSampling ON
@@ -405,7 +396,6 @@ namespace FAD3
                     using (var myDT = new DataTable())
                     {
                         adapter.Fill(myDT);
-                        //var n = 0;
                         foreach (DataRow dr in myDT.Rows)
                         {
                             var fg = dr["FishingGround"].ToString();
@@ -476,17 +466,11 @@ namespace FAD3
                                                 if (dr["NoFishers"].ToString().Length > 0)
                                                     sf.EditCellValue(ifldNumberFisher, iShp, int.Parse(dr["NoFishers"].ToString()));
 
-                                                if (dr["DateSet"].ToString().Length > 0)
-                                                    sf.EditCellValue(ifldDateSet, iShp, DateTime.Parse(dr["DateSet"].ToString()));
+                                                if (dr["DateTimeSet"].ToString().Length > 0)
+                                                    sf.EditCellValue(ifldDateSet, iShp, DateTime.Parse(dr["DateTimeSet"].ToString()));
 
-                                                if (dr["TimeSet"].ToString().Length > 0)
-                                                    sf.EditCellValue(ifldTimeSet, iShp, DateTime.Parse(dr["TimeSet"].ToString()));
-
-                                                if (dr["DateHauled"].ToString().Length > 0)
-                                                    sf.EditCellValue(ifldDateHauled, iShp, DateTime.Parse(dr["DateHauled"].ToString()));
-
-                                                if (dr["TimeHauled"].ToString().Length > 0)
-                                                    sf.EditCellValue(ifldTimeHauled, iShp, DateTime.Parse(dr["TimeHauled"].ToString()));
+                                                if (dr["DateTimeHauled"].ToString().Length > 0)
+                                                    sf.EditCellValue(ifldDateHauled, iShp, DateTime.Parse(dr["DateTimeHauled"].ToString()));
 
                                                 if (dr["VesType"].ToString().Length > 0)
                                                 {
@@ -521,8 +505,6 @@ namespace FAD3
                                     }
                                 }
                             }
-
-                            //n++;
                         }
                     }
                 }

@@ -45,13 +45,14 @@
             // 
             // toolBar
             // 
+            this.toolBar.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.toolBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbExcel,
             this.toolStripSeparator1,
             this.tsbClose});
             this.toolBar.Location = new System.Drawing.Point(0, 0);
             this.toolBar.Name = "toolBar";
-            this.toolBar.Size = new System.Drawing.Size(759, 25);
+            this.toolBar.Size = new System.Drawing.Size(1012, 27);
             this.toolBar.TabIndex = 1;
             this.toolBar.Text = "toolStrip1";
             this.toolBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnToolbarItemClicked);
@@ -62,14 +63,14 @@
             this.tsbExcel.Image = global::FAD3.Properties.Resources.ExportToExcel_16x;
             this.tsbExcel.ImageTransparentColor = System.Drawing.Color.White;
             this.tsbExcel.Name = "tsbExcel";
-            this.tsbExcel.Size = new System.Drawing.Size(23, 22);
+            this.tsbExcel.Size = new System.Drawing.Size(29, 24);
             this.tsbExcel.Text = "toolStripButton1";
             this.tsbExcel.ToolTipText = "Export to Excel";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
             // 
             // tsbClose
             // 
@@ -77,7 +78,7 @@
             this.tsbClose.Image = global::FAD3.Properties.Resources.im_exit;
             this.tsbClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(23, 22);
+            this.tsbClose.Size = new System.Drawing.Size(29, 24);
             this.tsbClose.Text = "toolStripButton2";
             this.tsbClose.ToolTipText = "Close";
             // 
@@ -87,7 +88,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 267F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tvTopics, 0, 1);
@@ -95,21 +96,23 @@
             this.tableLayoutPanel1.Controls.Add(this.lvReports, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lvYears, 0, 3);
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 28);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 34);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(759, 441);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1012, 543);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // label1
             // 
-            this.label1.Location = new System.Drawing.Point(3, 0);
+            this.label1.Location = new System.Drawing.Point(4, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(194, 20);
+            this.label1.Size = new System.Drawing.Size(259, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Topic";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -119,17 +122,19 @@
             this.tvTopics.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.tvTopics.Location = new System.Drawing.Point(3, 23);
+            this.tvTopics.Location = new System.Drawing.Point(4, 29);
+            this.tvTopics.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tvTopics.Name = "tvTopics";
-            this.tvTopics.Size = new System.Drawing.Size(194, 254);
+            this.tvTopics.Size = new System.Drawing.Size(259, 312);
             this.tvTopics.TabIndex = 1;
             this.tvTopics.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnTreeNodeClick);
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(3, 280);
+            this.label2.Location = new System.Drawing.Point(4, 345);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(194, 20);
+            this.label2.Size = new System.Drawing.Size(259, 25);
             this.label2.TabIndex = 2;
             this.label2.Text = "Years";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -139,19 +144,22 @@
             this.lvReports.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvReports.Location = new System.Drawing.Point(203, 23);
+            this.lvReports.HideSelection = false;
+            this.lvReports.Location = new System.Drawing.Point(271, 29);
+            this.lvReports.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvReports.Name = "lvReports";
             this.tableLayoutPanel1.SetRowSpan(this.lvReports, 3);
-            this.lvReports.Size = new System.Drawing.Size(553, 415);
+            this.lvReports.Size = new System.Drawing.Size(737, 510);
             this.lvReports.TabIndex = 4;
             this.lvReports.UseCompatibleStateImageBehavior = false;
             this.lvReports.DoubleClick += new System.EventHandler(this.OnListDoubleClick);
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(203, 0);
+            this.label3.Location = new System.Drawing.Point(271, 0);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(553, 20);
+            this.label3.Size = new System.Drawing.Size(737, 25);
             this.label3.TabIndex = 5;
             this.label3.Text = "Reports";
             this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
@@ -162,21 +170,24 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvYears.CheckBoxes = true;
-            this.lvYears.Location = new System.Drawing.Point(3, 303);
+            this.lvYears.HideSelection = false;
+            this.lvYears.Location = new System.Drawing.Point(4, 374);
+            this.lvYears.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvYears.Name = "lvYears";
-            this.lvYears.Size = new System.Drawing.Size(194, 135);
+            this.lvYears.Size = new System.Drawing.Size(259, 165);
             this.lvYears.TabIndex = 6;
             this.lvYears.UseCompatibleStateImageBehavior = false;
             this.lvYears.View = System.Windows.Forms.View.Details;
             // 
             // DatabaseReportForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(759, 469);
+            this.ClientSize = new System.Drawing.Size(1012, 577);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "DatabaseReportForm";
             this.Text = "DatabaseReportForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);

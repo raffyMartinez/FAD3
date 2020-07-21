@@ -8,11 +8,13 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Text;
-
+using System.Threading.Tasks;
+using FAD3.Database.Classes.gearinventory;
 namespace FAD3.Database.Forms
 {
     public partial class GearInventoryTabularForm : Form
     {
+        private DateTime _startOpen;
         private TraceListener _listener;
         private Dictionary<string, string> _columnDataType = new Dictionary<string, string>();
         private static GearInventoryTabularForm _instance;
@@ -20,21 +22,26 @@ namespace FAD3.Database.Forms
         private FishingGearInventory _inventory;
         private Dictionary<string, (string month, string type)> _monthsFishing = new Dictionary<string, (string month, string type)>();
 
-        private Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
-            int countNoBoat, int? maxCPUE, int? minCPUE,
-            int? upperMode, int? lowerMode, int numberDaysUsed,
-            string cpueUnit, string Notes, int? dominantPercent,
-            int? averageCPUE, int? cpueMode, double? equivalentKg)> _inventoryData = new
-            Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
-            int countNoBoat, int? maxCPUE, int? minCPUE,
-            int? upperMode, int? lowerMode, int numberDaysUsed,
-            string cpueUnit, string Notes, int? dominantPercent,
-            int? averageCPUE, int? cpueMode, double? equivalentKg)>();
+        private bool _isGettingInventoryFromdb = false;
+        private InventoryReadHelper _readHelper;
+        private InventoryViewModel _inventoryViewModel;
+        //private Dictionary<string, GearInventoryMonthsFishing> _monthsFishingEx;
 
-        private Dictionary<string, (string projectName, string province, string lgu, string barangay, string sitio,
-            string enumerator, DateTime surveyDate, string gearClass, string gearVariation, string localNames)> _headers = new
-            Dictionary<string, (string projectName, string province, string lgu, string barangay, string sitio,
-            string enumerator, DateTime surveyDate, string gearClass, string gearVariation, string localNames)>();
+        //private Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
+        //    int countNoBoat, int? maxCPUE, int? minCPUE,
+        //    int? upperMode, int? lowerMode, int numberDaysUsed,
+        //    string cpueUnit, string Notes, int? dominantPercent,
+        //    int? averageCPUE, int? cpueMode, double? equivalentKg)> _inventoryData = new
+        //    Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
+        //    int countNoBoat, int? maxCPUE, int? minCPUE,
+        //    int? upperMode, int? lowerMode, int numberDaysUsed,
+        //    string cpueUnit, string Notes, int? dominantPercent,
+        //    int? averageCPUE, int? cpueMode, double? equivalentKg)>();
+
+        //private Dictionary<string, (string projectName, string province, string lgu, string barangay, string sitio,
+        //    string enumerator, DateTime surveyDate, string gearClass, string gearVariation, string localNames)> _headers = new
+        //    Dictionary<string, (string projectName, string province, string lgu, string barangay, string sitio,
+        //    string enumerator, DateTime surveyDate, string gearClass, string gearVariation, string localNames)>();
 
         public bool ShowProjectColumn { get; set; }
         public string InventoryProjectName { get; set; }
@@ -47,6 +54,7 @@ namespace FAD3.Database.Forms
 
         public GearInventoryTabularForm(FishingGearInventory inventory, string inventoryGuid)
         {
+            _startOpen = DateTime.Now;
             Logger.Log($"Constructing {this.ToString()}");
             InitializeComponent();
             _inventory = inventory;
@@ -59,6 +67,7 @@ namespace FAD3.Database.Forms
 
         private void OnNodeAfterSelect(object sender, TreeViewEventArgs e)
         {
+            tsLabel.Text = "";
             switch (e.Node.Name)
             {
                 case "nodeProject":
@@ -66,7 +75,7 @@ namespace FAD3.Database.Forms
                     break;
 
                 case "nodeFisherVessel":
-                    ShowFisherVessel();
+                    FillHeaderRowsEx(showVesselCounts:true);
                     break;
 
                 case "nodeGear":
@@ -74,23 +83,24 @@ namespace FAD3.Database.Forms
                     break;
 
                 case "nodeGearCount":
-                    ShowGearCounts();
+                    ShowGearCountsEx();
                     break;
 
                 case "nodeGearOperation":
-                    ShowGearDaysInUse();
+                    ShowGearDaysInUseEx();
                     break;
 
                 case "nodeMonths":
-                    ShowMonthsFishing();
+                    ShowMonthsFishingEx();
                     break;
 
                 case "nodePeak":
-                    ShowMonthsPeak();
+                    ShowPeakMonthsFishingEx();
                     break;
 
                 case "nodeCPUE":
-                    ShowCPUE();
+                    //ShowCPUE();
+                    ShowGearCPUE();
                     break;
 
                 case "nodeGearCPUEHistory":
@@ -98,11 +108,11 @@ namespace FAD3.Database.Forms
                     break;
 
                 case "nodeCatchComp":
-                    ShowCatchComposition();
+                    ShowCatchCompositionEx();
                     break;
 
                 case "nodeAccessories":
-                    ShowFishingAccessories();
+                    ShowFishingAccessoriesEx();
                     break;
 
                 case "nodeExpenses":
@@ -110,129 +120,44 @@ namespace FAD3.Database.Forms
                     break;
 
                 case "nodeNotes":
-                    ShowNotes();
+                    ShowNotesEx();
                     break;
 
                 case "nodeRespondents":
-                    ShowRespondents();
+                    FillHeaderRowsEx(showRespondents:true);
                     break;
             }
         }
 
         private void ShowCPUEHistory()
         {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
             FillHeaderRows(showCPUETrend: true);
-        }
-
-        private void ShowNotes()
-        {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            FillHeaderRows();
-            listResults.Columns.Add("Notes");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                lvi.SubItems.Add(_inventoryData[lvi.Name].Notes);
-            }
             SizeColumns(listResults, false);
         }
 
-        private void ShowFishingAccessories()
+        private void ShowNotesEx()
         {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            FillHeaderRows();
-            listResults.Columns.Add("Accessories used in fishing");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                var accessories = "";
-                foreach (var accessory in _inventory.GetFishingAccessories(lvi.Name))
-                {
-                    accessories += accessory + ", ";
-                }
-                lvi.SubItems.Add(accessories.Trim(new char[] { ',', ' ' }));
-            }
+            FillHeaderRows(showNotes: true);
             SizeColumns(listResults, false);
         }
 
-        private void ShowCatchComposition()
+        private void ShowFishingAccessoriesEx()
         {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            ColumnHeader col = new ColumnHeader();
-            FillHeaderRows();
-            listResults.Columns.Add("Composition of dominant catch");
-            listResults.Columns.Add("Composition of non-dominant catch");
-            col = listResults.Columns.Add("Percentage of dominance");
-            AddColumnDataType(col, "int");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                var catchComp = _inventory.GetCatchComposition(lvi.Name);
-                var names = "";
-                foreach (var name in _inventory.GetCatchComposition(lvi.Name))
-                {
-                    if (name.isDominant)
-                    {
-                        names += name.localName + ", ";
-                    }
-                }
-                lvi.SubItems.Add(names.Trim(new char[] { ',', ' ' }));
-
-                names = "";
-                foreach (var name in _inventory.GetCatchComposition(lvi.Name))
-                {
-                    if (!name.isDominant)
-                    {
-                        names += name.localName + ", ";
-                    }
-                }
-                lvi.SubItems.Add(names.Trim(new char[] { ',', ' ' }));
-
-                lvi.SubItems.Add(_inventoryData[lvi.Name].dominantPercent.ToString());
-            }
+            FillHeaderRows(showFishingAccessories: true);
             SizeColumns(listResults, false);
         }
 
-        private void ShowCPUE()
+        private void ShowCatchCompositionEx()
         {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            var col = new ColumnHeader();
-            FillHeaderRows();
-            col = listResults.Columns.Add("Maximum CPUE");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Minimum CPUE");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Average CPUE");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Upper CPUE mode");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Lower CPUE mode");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("CPUE mode");
-            AddColumnDataType(col, "int");
-            listResults.Columns.Add("Unit");
-            col = listResults.Columns.Add("Equivalent kg");
-            AddColumnDataType(col, "double");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                lvi.SubItems.Add(_inventoryData[lvi.Name].maxCPUE.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].minCPUE.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].averageCPUE.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].upperMode.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].lowerMode.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].cpueMode.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].cpueUnit);
-                lvi.SubItems.Add(_inventoryData[lvi.Name].equivalentKg.ToString());
-            }
+            FillHeaderRows(showCatchComposition: true);
             SizeColumns(listResults, false);
         }
+
 
         private void ShowExpenses()
         {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
             FillHeaderRows(showExpenses: true);
+            SizeColumns(listResults, false);
         }
 
         private void AddColumnDataType(ColumnHeader col, string type)
@@ -244,7 +169,7 @@ namespace FAD3.Database.Forms
             }
         }
 
-        private void FillHeaderRows(bool showExpenses = false, bool showCPUETrend = false)
+        private void FillHeaderRowsEx(bool showVesselCounts=false, bool showRespondents=false)
         {
             var col = new ColumnHeader();
             listResults.Visible = false;
@@ -260,9 +185,117 @@ namespace FAD3.Database.Forms
             listResults.Columns.Add("Enumerator");
             col = listResults.Columns.Add("Date surveyed");
             AddColumnDataType(col, "date");
+
+            if(showVesselCounts)
+            {
+                col = listResults.Columns.Add("Number of fishers");
+                AddColumnDataType(col, "int");
+                col = listResults.Columns.Add("Number of commercial vessels");
+                AddColumnDataType(col, "int");
+                col = listResults.Columns.Add("Number of municipal motorized vessels");
+                AddColumnDataType(col, "int");
+                col = listResults.Columns.Add("Number of municipal non motorized vessels");
+                AddColumnDataType(col, "int");
+
+                
+            }
+
+            if(showRespondents)
+            {
+                listResults.Columns.Add("Respondent");
+            }
+
+            SizeColumns(listResults);
+
+            tsProgressBar.Maximum = _inventoryViewModel.InventoryCollection.Count;
+
+            int counter = 0;
+            foreach(var item in InventoryEntities.InventoryViewModel.InventoryCollection)
+            {
+                
+                tsProgressBar.Value = ++counter;
+
+                var lvi = listResults.Items.Add(_inventoryViewModel.InventoryProject.Name);
+                lvi.SubItems.Add(item.Location.Province);
+                lvi.SubItems.Add(item.Location.Municipality);
+                lvi.SubItems.Add(item.Location.Barangay);
+                var sitio = item.Location.Sitio ;
+                if (sitio.Length > 0)
+                {
+                    lvi.SubItems.Add(sitio);
+                }
+                else
+                {
+                    lvi.SubItems.Add("Entire barangay");
+                }
+                lvi.SubItems.Add(item.Enumerator);
+                lvi.SubItems.Add(string.Format("{0:MMM-dd-yyyy}", item.DateEnumerated));
+
+                if (showVesselCounts)
+                {
+                    lvi.SubItems.Add(item.NumberOfFishers.ToString());
+                    lvi.SubItems.Add(item.NumberCommercial.ToString());
+                    lvi.SubItems.Add(item.NumberMunicipalMotorized.ToString());
+                    lvi.SubItems.Add(item.NumberMunicipalNonMotorized.ToString());
+                }
+
+                if(showRespondents)
+                {
+                    int rowCount = 0;
+                    foreach (var responder in (item.Respondents))
+                    {
+                        if (rowCount == 0)
+                        {
+                            lvi.SubItems.Add(responder);
+                        }
+                        else
+                        {
+                            for (int n = 0; n < 7; n++)
+                            {
+                                if (n == 0)
+                                {
+                                    lvi = listResults.Items.Add("");
+                                }
+                                else
+                                {
+                                    lvi.SubItems.Add("");
+                                }
+                            }
+                            lvi.SubItems.Add(responder);
+                        }
+                        rowCount++;
+                    }
+                }
+            }
+            SizeColumns(listResults, false);
+            tsProgressBar.Value = 0;
+        }
+
+        private void FillHeaderRows(bool showExpenses = false, bool showCPUETrend = false, bool showCPUE = false,
+            bool showCounts = false, bool showMonthsFishing = false, bool showPeakFishingMonths = false, bool showDaysInsUse = false,
+            bool showCatchComposition = false, bool showFishingAccessories = false, bool showNotes = false)
+        {
+            var col = new ColumnHeader();
+            listResults.Visible = false;
+            listResults.Clear();
+            if (ShowProjectColumn)
+            {
+                listResults.Columns.Add("Project");
+            }
+            listResults.Columns.Add("Province");
+            listResults.Columns.Add("LGU");
+            listResults.Columns.Add("Barangay");
+            listResults.Columns.Add("Sitio");
+            listResults.Columns.Add("Enumerator");
+            col = listResults.Columns.Add("Date surveyed");
+            AddColumnDataType(col, "date");
+
+
             listResults.Columns.Add("Gear class");
             listResults.Columns.Add("Gear variation");
             listResults.Columns.Add("Local names");
+
+
 
             if (showExpenses)
             {
@@ -271,7 +304,7 @@ namespace FAD3.Database.Forms
                 AddColumnDataType(col, "double");
                 listResults.Columns.Add("Source");
                 listResults.Columns.Add("Notes");
-                SizeColumns(listResults);
+
             }
 
             if (showCPUETrend)
@@ -282,115 +315,299 @@ namespace FAD3.Database.Forms
                 AddColumnDataType(col, "int");
                 listResults.Columns.Add("Unit");
                 listResults.Columns.Add("Notes");
-                SizeColumns(listResults);
+
             }
+
+            if (showCPUE)
+            {
+                listResults.Columns.Add("Maximum CPUE");
+                listResults.Columns.Add("Minimum CPUE");
+                listResults.Columns.Add("Average CPUE");
+                listResults.Columns.Add("Upper CPUE mode");
+                listResults.Columns.Add("Lower CPUE mode");
+                listResults.Columns.Add("CPUE mode");
+                listResults.Columns.Add("Unit");
+                listResults.Columns.Add("Equivalent kg");
+            }
+
+            if (showCounts)
+            {
+                listResults.Columns.Add("Count in commercial vessels");
+                listResults.Columns.Add("Count in motorized municipal vessels");
+                listResults.Columns.Add("Count in non-motorized municipal vessels");
+                listResults.Columns.Add("Count in no vessels");
+                listResults.Columns.Add("Total number of gears");
+            }
+
+            if (showMonthsFishing || showPeakFishingMonths)
+            {
+                listResults.Columns.Add("Jan");
+                listResults.Columns.Add("Feb");
+                listResults.Columns.Add("Mar");
+                listResults.Columns.Add("Apr");
+                listResults.Columns.Add("May");
+                listResults.Columns.Add("Jun");
+                listResults.Columns.Add("Jul");
+                listResults.Columns.Add("Aug");
+                listResults.Columns.Add("Sep");
+                listResults.Columns.Add("Oct");
+                listResults.Columns.Add("Nov");
+                listResults.Columns.Add("Dec");
+            }
+
+            if (showDaysInsUse)
+            {
+                listResults.Columns.Add("Number of days used per month");
+            }
+
+            if (showCatchComposition)
+            {
+                listResults.Columns.Add("Composition of dominant catch");
+                listResults.Columns.Add("Composition of non-dominant catch");
+                listResults.Columns.Add("Percentage of dominance");
+            }
+
+            if (showFishingAccessories)
+            {
+                listResults.Columns.Add("Accessories used in fishing");
+            }
+
+            if (showNotes)
+            {
+                listResults.Columns.Add("Notes");
+            }
+
+            SizeColumns(listResults);
 
             ListViewItem lvi = new ListViewItem();
-            foreach (var item in _headers)
+            tsProgressBar.Maximum = _inventoryViewModel.InventoryCollection.Count;
+            
+
+            int counter = 0;
+            foreach (var item in _inventoryViewModel.InventoryCollection)
             {
-                if (ShowProjectColumn)
-                {
-                    lvi = listResults.Items.Add(item.Key, item.Value.projectName, null);
-                    lvi.SubItems.Add(item.Value.province);
-                }
-                else
-                {
-                    lvi = listResults.Items.Add(item.Key, item.Value.province, null);
-                }
-                lvi.SubItems.Add(item.Value.lgu);
-                lvi.SubItems.Add(item.Value.barangay);
-                var sitio = item.Value.sitio;
-                if (sitio.Length > 0)
-                {
-                    lvi.SubItems.Add(sitio);
-                }
-                else
-                {
-                    lvi.SubItems.Add("Entire barangay");
-                }
-                lvi.SubItems.Add(item.Value.enumerator);
-                lvi.SubItems.Add(string.Format("{0:MMM-dd-yyyy}", item.Value.surveyDate));
-                lvi.SubItems.Add(item.Value.gearClass);
-                lvi.SubItems.Add(item.Value.gearVariation);
-                lvi.SubItems.Add(item.Value.localNames);
+                tsProgressBar.Value = ++counter;
 
-                if (showExpenses)
+                foreach (var gear in item.GearInventories)
                 {
-                    var costLine = 0;
-                    foreach (var expense in _inventory.GetExpenses(lvi.Name))
+                    
+                    if (ShowProjectColumn)
                     {
-                        if (costLine > 0)
-                        {
-                            for (int n = 1; n < 11; n++)
-                            {
-                                if (n == 1)
-                                {
-                                    lvi = listResults.Items.Add("");
-                                }
-                                else
-                                {
-                                    lvi.SubItems.Add("");
-                                }
-                            }
-                        }
-                        lvi.SubItems.Add(expense.expenseItem);
-                        lvi.SubItems.Add(expense.cost.ToString());
-                        lvi.SubItems.Add(expense.source);
-                        lvi.SubItems.Add(expense.notes);
-                        costLine++;
+                        lvi = listResults.Items.Add(gear.BrgyGearInventoryGuid, _inventoryViewModel.InventoryProject.Name, null);
+                        lvi.SubItems.Add(item.Location.Province);
                     }
-                }
-
-                if (showCPUETrend)
-                {
-                    var cpueLine = 0;
-                    foreach (var cpue in _inventory.GetCPUEHistorical(lvi.Name))
+                    else
                     {
-                        if (cpueLine > 0)
+                        lvi = listResults.Items.Add(gear.BrgyGearInventoryGuid, item.Location.Province, null);
+                    }
+                    lvi.SubItems.Add(item.Location.Municipality);
+                    lvi.SubItems.Add(item.Location.Barangay);
+                    var sitio = item.Location.Sitio;
+                    if (sitio.Length > 0)
+                    {
+                        lvi.SubItems.Add(sitio);
+                    }
+                    else
+                    {
+                        lvi.SubItems.Add("Entire barangay");
+                    }
+                    lvi.SubItems.Add(item.Enumerator);
+                    lvi.SubItems.Add(string.Format("{0:MMM-dd-yyyy}", item.DateEnumerated));
+
+
+                    lvi.SubItems.Add(gear.GearClass);
+                    lvi.SubItems.Add(gear.GearName);
+                    lvi.SubItems.Add(gear.GearLocalNames);
+
+
+                    if (showExpenses)
+                    {
+                        var costLine = 0;
+                        foreach (var expense in gear.Expenses)
                         {
-                            for (int n = 1; n < 11; n++)
+                            if (costLine > 0)
                             {
-                                if (n == 1)
+                                for (int n = 1; n < 11; n++)
                                 {
-                                    lvi = listResults.Items.Add("");
-                                }
-                                else
-                                {
-                                    lvi.SubItems.Add("");
+                                    if (n == 1)
+                                    {
+                                        lvi = listResults.Items.Add("");
+                                    }
+                                    else
+                                    {
+                                        lvi.SubItems.Add("");
+                                    }
                                 }
                             }
+                            lvi.SubItems.Add(expense.ExpenseItem);
+                            lvi.SubItems.Add(expense.Cost.ToString());
+                            lvi.SubItems.Add(expense.Source);
+                            lvi.SubItems.Add(expense.Notes);
+                            costLine++;
                         }
-                        var sDecade = cpue.decade.ToString();
-                        if (sDecade.Length > 0)
+                    }
+
+                    if (showCPUETrend)
+                    {
+                        var cpueLine = 0;
+                        foreach(var cpue in gear.CPUEHistories)
                         {
-                            sDecade += "s";
+                            if(cpueLine>0)
+                            {
+                                for (int n = 1; n < 11; n++)
+                                {
+                                    if (n == 1)
+                                    {
+                                        lvi = listResults.Items.Add("");
+                                    }
+                                    else
+                                    {
+                                        lvi.SubItems.Add("");
+                                    }
+                                }
+                            }
+
+                            var sDecade = cpue.Decade.ToString();
+                            if (sDecade.Length > 0)
+                            {
+                                sDecade += "s";
+                            }
+                            lvi.SubItems.Add(sDecade);
+                            lvi.SubItems.Add(cpue.HistoryYear.ToString());
+                            lvi.SubItems.Add(cpue.CPUE.ToString());
+                            lvi.SubItems.Add(cpue.CPUEUnit);
+                            lvi.SubItems.Add(cpue.Notes);
+
+                            cpueLine++;
                         }
-                        lvi.SubItems.Add(sDecade);
-                        lvi.SubItems.Add(cpue.historyYear.ToString());
-                        lvi.SubItems.Add(cpue.cpue.ToString());
-                        lvi.SubItems.Add(cpue.unit);
-                        lvi.SubItems.Add(cpue.notes);
-                        cpueLine++;
+                    }
+
+                    if (showCPUE)
+                    {
+                        lvi.SubItems.Add(gear.MaxCPUE.ToString());
+                        lvi.SubItems.Add(gear.MinCPUE.ToString());
+                        lvi.SubItems.Add(gear.AverageCPUE.ToString());
+                        lvi.SubItems.Add(gear.ModeUpper.ToString());
+                        lvi.SubItems.Add(gear.ModeLower.ToString());
+                        lvi.SubItems.Add(gear.Mode.ToString());
+                        lvi.SubItems.Add(gear.CPUEUnit.ToString());
+                        lvi.SubItems.Add(gear.EquivalentKg.ToString());
+
+                    }
+
+                    if (showCounts)
+                    {
+                        lvi.SubItems.Add(gear.CountCommercial.ToString());
+                        lvi.SubItems.Add(gear.CountMunicipalMotorized.ToString());
+                        lvi.SubItems.Add(gear.CountMunicipalNonMotorized.ToString());
+                        lvi.SubItems.Add(gear.CountNoBoat.ToString());
+                        lvi.SubItems.Add(gear.CountTotal.ToString());
+                    }
+
+                    if (showMonthsFishing || showPeakFishingMonths)
+                    {
+
+                        if (showMonthsFishing)
+                        {
+                            foreach (var m in gear.ArrFishingMonths)
+                            {
+                                lvi.SubItems.Add(m);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var m in gear.ArrFishingMonthsPeak)
+                            {
+                                lvi.SubItems.Add(m);
+                            }
+                        }
+
+                        //if (showMonthsFishing)
+                        //{
+                        //    foreach(var m in gear.FishingMonthsArr())
+                        //    {
+                        //      lvi.SubItems.Add(m);
+                        //    }
+                        //}
+                        //else
+                        //{
+                        //    foreach (var m in gear.PeakFishingMonthsArr())
+                        //    {
+                        //        lvi.SubItems.Add(m);
+                        //    }
+                        //}
+                    }
+
+
+
+
+
+                    if (showDaysInsUse)
+                    {
+                        lvi.SubItems.Add(gear.NumberDaysUsedPerMonth.ToString());
+                    }
+
+                    if (showCatchComposition)
+                    {
+                        lvi.SubItems.Add(gear.CatchCompositionDominant);
+                        lvi.SubItems.Add(gear.CatchComposition);
+                        lvi.SubItems.Add(gear.DominantCatchPercent.ToString());
+
+                    }
+
+                    if (showFishingAccessories)
+                    {
+                        lvi.SubItems.Add(gear.GearAccessories);
+                    }
+
+                    if (showNotes)
+                    {
+                        lvi.SubItems.Add(gear.Notes);
                     }
                 }
             }
-
-            if (showExpenses || showCPUETrend)
-            {
-                SizeColumns(listResults, false);
-            }
+            tsProgressBar.Value = 0;
         }
-
-        private void OnFormLoad(object sender, EventArgs e)
+        public async Task GetInventoryViewModel()
         {
-            treeInventory.SelectedNode = treeInventory.Nodes["treeInventory"];
-            _inventoryData = _inventory.GetInventoryData(_inventoryGuid);
-            _headers = _inventory.GetGearRowHeaders(_inventoryGuid);
-            ShowProject();
-            global.LoadFormSettings(this);
-            Text = "Inventory of fishers, fishing vessels and gears tables";
+            _readHelper = new InventoryReadHelper();
+            _readHelper.OnInventoryRecordRead += OnRecordRead;
+            _inventoryViewModel = await Task.Run(() => new InventoryViewModel(_inventoryGuid, _readHelper));
+            tsLabel.Text = "Finished retrieving inventory records!";
         }
 
+
+
+        private void OnRecordRead(object sender, InventoryReadEventArg e)
+        {
+
+            if (tsProgressBar.GetCurrentParent().InvokeRequired)
+            {
+
+                tsProgressBar.GetCurrentParent().Invoke(new MethodInvoker(delegate
+                {
+                    tsProgressBar.Maximum = e.Records;
+                    tsProgressBar.Value = e.CurrentRecord;
+                    if (_isGettingInventoryFromdb)
+                    {
+                        tsLabel.Text = $"Retrieving inventory record {e.CurrentRecord} of {e.Records} from {e.CurrentLocation}";
+                    }
+                }));
+
+            }
+
+        }
+
+        private async void OnFormLoad(object sender, EventArgs e)
+        {
+            _isGettingInventoryFromdb = true;
+            global.LoadFormSettings(this);
+            treeInventory.SelectedNode = treeInventory.Nodes["treeInventory"];
+            await GetInventoryViewModel();
+            ShowProject();
+            Text = "Inventory of fishers, fishing vessels and gears tables";
+
+        }
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             _instance = null;
@@ -408,23 +625,28 @@ namespace FAD3.Database.Forms
         /// </summary>
         private void SizeColumns(ListView lv, bool init = true)
         {
-            foreach (ColumnHeader c in lv.Columns)
+            try
             {
-                if (init)
+                foreach (ColumnHeader c in lv.Columns)
                 {
-                    c.AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
-                    c.Tag = c.Width;
-                }
-                else
-                {
-                    c.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-                    if (c.Tag != null)
+                    if (init)
                     {
-                        c.Width = c.Width > (int)c.Tag ? c.Width : (int)c.Tag;
+                        c.AutoResize(ColumnHeaderAutoResizeStyle.HeaderSize);
+                        c.Tag = c.Width;
+                    }
+                    else
+                    {
+                        c.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+                        if (c.Tag != null)
+                        {
+                            c.Width = c.Width > (int)c.Tag ? c.Width : (int)c.Tag;
+                        }
                     }
                 }
+                lv.Visible = !init;
             }
-            lv.Visible = !init;
+            catch { lv.Visible = true; }
+
         }
 
         private void ShowProject()
@@ -442,100 +664,29 @@ namespace FAD3.Database.Forms
             SizeColumns(listResults, false);
         }
 
-        private void ShowMonthsPeak()
+        private void ShowMonthsFishingEx()
         {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            FillHeaderRows();
-            listResults.Columns.Add("Jan");
-            listResults.Columns.Add("Feb");
-            listResults.Columns.Add("Mar");
-            listResults.Columns.Add("Apr");
-            listResults.Columns.Add("May");
-            listResults.Columns.Add("Jun");
-            listResults.Columns.Add("Jul");
-            listResults.Columns.Add("Aug");
-            listResults.Columns.Add("Sep");
-            listResults.Columns.Add("Oct");
-            listResults.Columns.Add("Nov");
-            listResults.Columns.Add("Dec");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                for (int n = 1; n < 13; n++)
-                {
-                    lvi.SubItems.Add("");
-                }
-
-                foreach (var month in _inventory.GetMonthsFishing(lvi.Name, true))
-                {
-                    lvi.SubItems[month + 9].Text = "x";
-                }
-            }
+            FillHeaderRows(showMonthsFishing: true);
             SizeColumns(listResults, false);
         }
 
-        private void ShowMonthsFishing()
+        private void ShowPeakMonthsFishingEx()
         {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            FillHeaderRows();
-            listResults.Columns.Add("Jan");
-            listResults.Columns.Add("Feb");
-            listResults.Columns.Add("Mar");
-            listResults.Columns.Add("Apr");
-            listResults.Columns.Add("May");
-            listResults.Columns.Add("Jun");
-            listResults.Columns.Add("Jul");
-            listResults.Columns.Add("Aug");
-            listResults.Columns.Add("Sep");
-            listResults.Columns.Add("Oct");
-            listResults.Columns.Add("Nov");
-            listResults.Columns.Add("Dec");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                for (int n = 1; n < 13; n++)
-                {
-                    lvi.SubItems.Add("");
-                }
-
-                foreach (var month in _inventory.GetMonthsFishing(lvi.Name))
-                {
-                    lvi.SubItems[month + 9].Text = "x";
-                }
-            }
+            FillHeaderRows(showPeakFishingMonths: true);
+            SizeColumns(listResults, false);
+        }
+        private void ShowGearCountsEx()
+        {
+            FillHeaderRows(showCounts: true);
             SizeColumns(listResults, false);
         }
 
-        private void ShowGearCounts()
+        private void ShowGearCPUE()
         {
             Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            var col = new ColumnHeader();
-            FillHeaderRows();
-            col = listResults.Columns.Add("Count in commercial vessels");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Count in motorized municipal vessels");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Count in non-motorized municipal vessels");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Count in no vessels");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Total number of gears");
-            AddColumnDataType(col, "int");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                lvi.SubItems.Add(_inventoryData[lvi.Name].countCommercial.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].countMotorized.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].countNonMotorized.ToString());
-                lvi.SubItems.Add(_inventoryData[lvi.Name].countNoBoat.ToString());
-                lvi.SubItems.Add((_inventoryData[lvi.Name].countNoBoat +
-                    _inventoryData[lvi.Name].countCommercial +
-                    _inventoryData[lvi.Name].countMotorized +
-                    _inventoryData[lvi.Name].countNonMotorized).ToString());
-            }
+            FillHeaderRows(showCPUE: true);
             SizeColumns(listResults, false);
         }
-
         private void ShowGearLocalNames()
         {
             Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
@@ -543,193 +694,16 @@ namespace FAD3.Database.Forms
             SizeColumns(listResults, false);
         }
 
-        /// <summary>
-        /// returns month string based on inputted month number
-        /// </summary>
-        /// <param name="m"></param>
-        /// <returns></returns>
-        private string MonthFromNumber(int m)
+
+        private void ShowGearDaysInUseEx()
         {
-            string month = "";
-            switch (m)
-            {
-                case 1:
-                    month = "January";
-                    break;
-
-                case 2:
-                    month = "February";
-                    break;
-
-                case 3:
-                    month = "March";
-                    break;
-
-                case 4:
-                    month = "April";
-                    break;
-
-                case 5:
-                    month = "May";
-                    break;
-
-                case 6:
-                    month = "June";
-                    break;
-
-                case 7:
-                    month = "July";
-                    break;
-
-                case 8:
-                    month = "August";
-                    break;
-
-                case 9:
-                    month = "September";
-                    break;
-
-                case 10:
-                    month = "October";
-                    break;
-
-                case 11:
-                    month = "November";
-                    break;
-
-                case 12:
-                    month = "December";
-                    break;
-            }
-            return month;
-        }
-
-        private void ShowGearDaysInUse()
-        {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            var col = new ColumnHeader();
-            FillHeaderRows();
-            col = listResults.Columns.Add("Number of days in use per month");
-            AddColumnDataType(col, "int");
-            SizeColumns(listResults);
-            foreach (ListViewItem lvi in listResults.Items)
-            {
-                lvi.SubItems.Add(_inventoryData[lvi.Name].numberDaysUsed.ToString());
-            }
+            FillHeaderRows(showDaysInsUse: true);
             SizeColumns(listResults, false);
         }
 
-        private void ShowRespondents()
-        {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            var col = new ColumnHeader();
-            var rowCount = 0;
-            listResults.Clear();
-            listResults.Columns.Add("Project");
-            listResults.Columns.Add("Province");
-            listResults.Columns.Add("LGU");
-            listResults.Columns.Add("Barangay");
-            listResults.Columns.Add("Sitio");
-            listResults.Columns.Add("Enumerator");
-            col = listResults.Columns.Add("Date surveyed");
-            AddColumnDataType(col, "date");
-            col = listResults.Columns.Add("Respondents");
-            AddColumnDataType(col, "string");
-            SizeColumns(listResults);
-            foreach (var item in _inventory.GetFisherVesselInventory(_inventoryGuid))
-            {
-                var lvi = listResults.Items.Add(item.brgyInventoryGuid, item.project, null);
-                lvi.SubItems.Add(item.province);
-                lvi.SubItems.Add(item.lgu);
-                lvi.SubItems.Add(item.barangay);
-                var sitio = item.sitio;
-                if (sitio.Length > 0)
-                {
-                    lvi.SubItems.Add(sitio);
-                }
-                else
-                {
-                    lvi.SubItems.Add("Entire barangay");
-                }
-                lvi.SubItems.Add(item.enumerator);
-                lvi.SubItems.Add(string.Format("{0:MMM-dd-yyyy}", item.dateSurveyed));
 
-                rowCount = 0;
-                foreach (var responder in (_inventory.GetSitioRespondents(lvi.Name)))
-                {
-                    if (rowCount == 0)
-                    {
-                        lvi.SubItems.Add(responder);
-                    }
-                    else
-                    {
-                        for (int n = 0; n < 7; n++)
-                        {
-                            if (n == 0)
-                            {
-                                lvi = listResults.Items.Add("");
-                            }
-                            else
-                            {
-                                lvi.SubItems.Add("");
-                            }
-                        }
-                        lvi.SubItems.Add(responder);
-                    }
-                    rowCount++;
-                }
-            }
-            SizeColumns(listResults, false);
-        }
 
-        private void ShowFisherVessel()
-        {
-            Debug.WriteLine($"{GetType().Name} {MethodBase.GetCurrentMethod().Name} {DateTime.Now.ToString()}");
-            var col = new ColumnHeader();
-            listResults.Clear();
-            listResults.Columns.Add("Project");
-            listResults.Columns.Add("Province");
-            listResults.Columns.Add("LGU");
-            listResults.Columns.Add("Barangay");
-            listResults.Columns.Add("Sitio");
-            listResults.Columns.Add("Enumerator");
-            col = listResults.Columns.Add("Date surveyed");
-            AddColumnDataType(col, "date");
-            col = listResults.Columns.Add("Number of fishers");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Number of commercial vessels");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Number of municipal motorized vessels");
-            AddColumnDataType(col, "int");
-            col = listResults.Columns.Add("Number of municipal non motorized vessels");
-            AddColumnDataType(col, "int");
 
-            SizeColumns(listResults);
-
-            foreach (var item in _inventory.GetFisherVesselInventory(_inventoryGuid))
-            {
-                var lvi = listResults.Items.Add(item.project);
-                lvi.SubItems.Add(item.province);
-                lvi.SubItems.Add(item.lgu);
-                lvi.SubItems.Add(item.barangay);
-                var sitio = item.sitio;
-                if (sitio.Length > 0)
-                {
-                    lvi.SubItems.Add(sitio);
-                }
-                else
-                {
-                    lvi.SubItems.Add("Entire barangay");
-                }
-                lvi.SubItems.Add(item.enumerator);
-                lvi.SubItems.Add(string.Format("{0:MMM-dd-yyyy}", item.dateSurveyed));
-                lvi.SubItems.Add(item.fisherCount.ToString());
-                lvi.SubItems.Add(item.commercialCount.ToString());
-                lvi.SubItems.Add(item.motorizedCount.ToString());
-                lvi.SubItems.Add(item.nonMotorizedCount.ToString());
-            }
-            SizeColumns(listResults, false);
-        }
 
         private DataTable ListViewToDataTable(ListView lv, string tableName)
         {
@@ -787,6 +761,7 @@ namespace FAD3.Database.Forms
             OnNodeAfterSelect(null, e);
             try
             {
+                LogExport(nd.Text);
                 var wks = wb.Worksheets.Add(ListViewToDataTable(listResults, nd.Text));
                 wks.Name = nd.Text;
             }
@@ -800,12 +775,21 @@ namespace FAD3.Database.Forms
             }
         }
 
+        private void LogExport(string logText)
+        {
+            string filepath = Application.StartupPath + "\\export.log";
+            using (StreamWriter writer = new StreamWriter(filepath, true))
+            {
+                writer.WriteLine($"{logText} | Date:{DateTime.Now.ToString()}");
+            }
+        }
         private void ExportInventoryXL(string fileName)
         {
+            _isGettingInventoryFromdb = false;     
             try
             {
                 var wb = new XLWorkbook();
-
+                LogExport($"file: {global.MDBPath}");
                 foreach (TreeNode nd in treeInventory.Nodes)
                 {
                     PrintNodesRecursive(nd, wb);

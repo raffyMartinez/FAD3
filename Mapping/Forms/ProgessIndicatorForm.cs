@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using FAD3.Database.Classes;
+using FAD3.Database.Classes.gearinventory;
 
 namespace FAD3.Mapping.Forms
 {
@@ -26,8 +27,16 @@ namespace FAD3.Mapping.Forms
         private string _titleText;
         private string _targetAreaName;
         private int _exportImportCount;
+
+
+
         public ExportImportDataType ExportImportDataType { get; set; }
         public ExportImportDeleteAction ExportImportDeleteAction { get; set; }
+
+
+
+
+
 
         public ProgessIndicatorForm(SamplingToFromXML esxml, TargetArea targetArea, bool importing = false)
         {
@@ -371,8 +380,11 @@ namespace FAD3.Mapping.Forms
             }
         }
 
-        private void OnFormLoad(object sender, EventArgs e)
+
+        private  void OnFormLoad(object sender, EventArgs e)
         {
+
+            
             string dataDescription = "";
             lblDownloadFile.Text = _fileName;
             if (_url.Length > 0)

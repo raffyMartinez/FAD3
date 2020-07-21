@@ -40,7 +40,7 @@ namespace FAD3.Database.Forms
                         break;
                 }
             }
-
+            lvTable.Columns.Add("");
             SizeColumns(lvTable);
 
             bool done = false;

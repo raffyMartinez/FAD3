@@ -11,6 +11,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace FAD3
 {
@@ -63,7 +64,16 @@ namespace FAD3
                 }
             }
         }
+        public static async Task LogAsync(Exception ex)
+        {
+            string filepath = Application.StartupPath + "\\fad.log";
 
+            using (StreamWriter writer = new StreamWriter(filepath, true))
+            {
+                await writer.WriteLineAsync(ex.Message);
+            }
+            
+        }
         public static void LogError(Exception ex)
         {
             string filepath = Application.StartupPath + "\\fad.log";

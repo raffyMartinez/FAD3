@@ -181,15 +181,7 @@ namespace FAD3
                 }
                 else
                 {
-                    var lpf = LayerPropertyForm.GetInstance(this, layerHandle);
-                    if (!lpf.Visible)
-                    {
-                        lpf.Show(this);
-                    }
-                    else
-                    {
-                        lpf.BringToFront();
-                    }
+                    ShowLayerProperties();
                 }
             }
         }
@@ -324,6 +316,18 @@ namespace FAD3
             }
         }
 
+        private void ShowLayerProperties()
+        {
+            var lpf = LayerPropertyForm.GetInstance(this, (int)layerGrid[0, _rowIndexFromMouseDown].Tag);
+            if (!lpf.Visible)
+            {
+                lpf.Show(this);
+            }
+            else
+            {
+                lpf.BringToFront();
+            }
+        }
         /// <summary>
         /// makes the layer name on the clicked row bold and makes the rest of the names not bold
         /// </summary>
@@ -373,15 +377,7 @@ namespace FAD3
                     break;
 
                 case "itemLayerProperty":
-                    var lpf = LayerPropertyForm.GetInstance(this, (int)layerGrid[0, _rowIndexFromMouseDown].Tag);
-                    if (!lpf.Visible)
-                    {
-                        lpf.Show(this);
-                    }
-                    else
-                    {
-                        lpf.BringToFront();
-                    }
+                    ShowLayerProperties();
                     break;
 
                 case "itemLayerExport":
@@ -559,8 +555,6 @@ namespace FAD3
             RefreshLayerList();
         }
 
-        private void onCheckStateChange(object sender, EventArgs e)
-        {
-        }
+
     }
 }

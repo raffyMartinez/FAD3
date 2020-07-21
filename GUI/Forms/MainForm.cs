@@ -1965,6 +1965,28 @@ namespace FAD3
             e.ClickedItem.Owner.Hide();
             switch (tsi.Tag)
             {
+                case "mergeDatabases":
+                    openFileDialog1.Title = "Select database file to merge";
+                    openFileDialog1.FilterIndex = 1;
+                    openFileDialog1.Filter = "Access database file (*.mdb)|*.mdb|Other files(*.*)|*.*";
+                    openFileDialog1.FileName = "";
+                    DialogResult dr = openFileDialog1.ShowDialog();
+                    if(dr!=DialogResult.Cancel)
+                    {
+                        if(File.Exists(openFileDialog1.FileName))
+                        {
+                            if (openFileDialog1.FileName != global.MDBPath)
+                            {
+                                MergeDataBases.OtherDatabaseFileName = openFileDialog1.FileName;
+                                MessageBox.Show(MergeDataBases.MergeResultMessage, "Merging databases", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Selected database must be different from the current database", "Merging database", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                    }
+                    break;
                 case "resetRefNos":
                     if (ReferenceNumberManager.ResetReferenceNumbers())
                     {

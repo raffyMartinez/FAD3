@@ -327,7 +327,14 @@ namespace FAD3
                 }
                 catch (Exception ex)
                 {
-                    Logger.Log(ex.Message, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    try
+                    {
+                        Logger.Log(ex.Message, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                    }
+                    catch
+                    {
+                        //ignore
+                    }
                 }
                 return list;
             }

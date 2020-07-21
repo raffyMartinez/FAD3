@@ -271,10 +271,13 @@ namespace FAD3.Mapping.Forms
 
                 AutoFitColumns();
                 int nn = 0;
-                foreach (DataGridViewColumn ch in gridAttributes.Columns)
+                if (colNames.Count > 0)
                 {
-                    ch.Tag = colNames[nn];
-                    nn++;
+                    foreach (DataGridViewColumn ch in gridAttributes.Columns)
+                    {
+                        ch.Tag = colNames[nn];
+                        nn++;
+                    }
                 }
                 gridAttributes.Visible = true;
             }

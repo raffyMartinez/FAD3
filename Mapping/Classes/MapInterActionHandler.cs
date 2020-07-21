@@ -41,6 +41,8 @@ namespace FAD3
             }
         }
 
+        public AxMap MapControl { get { return _axMap; } }
+
         public ContextMenuStrip MapContextMenuStrip
         {
             get { return _mapContextMenuStrip; }
@@ -176,16 +178,20 @@ namespace FAD3
             _mapLayersHandler = layersHandler;
             _mapLayersHandler.CurrentLayer += OnCurrentMapLayer;
             _axMap = mapControl;
-            _axMap.MouseUpEvent += OnMapMouseUp;
-            _axMap.MouseDownEvent += OnMapMouseDown;
-            _axMap.SelectBoxFinal += OnMapSelectBoxFinal;
-            _axMap.MouseMoveEvent += OnMapMouseMove;
-            _axMap.DblClick += OnMapDoubleClick;
-            _axMap.SelectionChanged += OnMapSelectionChanged;
+
             _axMap.SendMouseDown = true;
             _axMap.SendMouseMove = true;
             _axMap.SendSelectBoxFinal = true;
             _axMap.SendMouseUp = true;
+
+            _axMap.MouseUpEvent += OnMapMouseUp;
+            _axMap.MouseDownEvent += OnMapMouseDown;
+            _axMap.SelectBoxFinal += OnMapSelectBoxFinal;
+            _axMap.MouseMoveEvent += OnMapMouseMove;
+
+            _axMap.DblClick += OnMapDoubleClick;
+            _axMap.SelectionChanged += OnMapSelectionChanged;
+
             EnableMapInteraction = true;
         }
 

@@ -419,9 +419,6 @@ namespace FAD3.Database.Forms
             menuItem.Name = "itemAddFishingGear";
             menuItem.Enabled = _treeLevel == "sitio";
 
-            menuItem = contextMenu.Items.Add("Add fishing gear inventory");
-            menuItem.Name = "itemAddFishingGear";
-            menuItem.Enabled = _treeLevel == "sitio";
 
             if (_treeLevel == "gearVariationSummary")
             {
@@ -771,7 +768,8 @@ namespace FAD3.Database.Forms
             lvi.SubItems.Add(item.noBoatCount.ToString());
             lvi = lvInventory.Items.Add("Total number of gears");
             lvi.SubItems.Add((item.noBoatCount + item.commercialCount + item.motorizedCount + item.nonMotorizedCount).ToString());
-            lvi = lvInventory.Items.Add("");
+            
+            lvInventory.Items.Add("");
 
             //months and seasonality
             for (int m = 1; m < 13; m++)
@@ -790,6 +788,8 @@ namespace FAD3.Database.Forms
                     lvi.SubItems.Add("x");
                 }
             }
+
+             lvInventory.Items.Add("");
 
             for (int m = 1; m < 13; m++)
             {

@@ -92,6 +92,7 @@ namespace FAD3
             this.tsButtonReport = new System.Windows.Forms.ToolStripButton();
             this.tsButtonMap = new System.Windows.Forms.ToolStripButton();
             this.tsButtonExit = new System.Windows.Forms.ToolStripButton();
+            this.mergeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuMenuBar.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.tblLayout.SuspendLayout();
@@ -102,6 +103,7 @@ namespace FAD3
             // 
             // menuDropDown
             // 
+            this.menuDropDown.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuDropDown.Name = "menuDropDown";
             this.menuDropDown.Size = new System.Drawing.Size(61, 4);
             this.menuDropDown.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnMenuDropDown_ItemClicked);
@@ -142,22 +144,24 @@ namespace FAD3
             // 
             this.labelErrorDetail.BackColor = System.Drawing.SystemColors.Window;
             this.labelErrorDetail.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelErrorDetail.Location = new System.Drawing.Point(241, 287);
+            this.labelErrorDetail.Location = new System.Drawing.Point(321, 353);
+            this.labelErrorDetail.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelErrorDetail.Name = "labelErrorDetail";
-            this.labelErrorDetail.Size = new System.Drawing.Size(284, 108);
+            this.labelErrorDetail.Size = new System.Drawing.Size(379, 133);
             this.labelErrorDetail.TabIndex = 6;
             this.labelErrorDetail.Text = "label1";
             this.labelErrorDetail.Visible = false;
             // 
             // menuMenuBar
             // 
+            this.menuMenuBar.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuMenuBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuFile,
             this.menuTools,
             this.menuHelp});
             this.menuMenuBar.Location = new System.Drawing.Point(0, 0);
             this.menuMenuBar.Name = "menuMenuBar";
-            this.menuMenuBar.Size = new System.Drawing.Size(970, 24);
+            this.menuMenuBar.Size = new System.Drawing.Size(1293, 28);
             this.menuMenuBar.TabIndex = 1;
             this.menuMenuBar.Text = "menuStrip1";
             this.menuMenuBar.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnmenuMenuBar_ItemClicked);
@@ -172,7 +176,7 @@ namespace FAD3
             this.toolStripSeparator1,
             this.exitToolStripMenuItem});
             this.menuFile.Name = "menuFile";
-            this.menuFile.Size = new System.Drawing.Size(37, 20);
+            this.menuFile.Size = new System.Drawing.Size(46, 24);
             this.menuFile.Text = "File";
             this.menuFile.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnMenuFile_DropDownItemClicked);
             // 
@@ -180,7 +184,7 @@ namespace FAD3
             // 
             this.toolStripFileNewMenuItem.Image = global::FAD3.Properties.Resources.VSO_NewFile_16x;
             this.toolStripFileNewMenuItem.Name = "toolStripFileNewMenuItem";
-            this.toolStripFileNewMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.toolStripFileNewMenuItem.Size = new System.Drawing.Size(203, 26);
             this.toolStripFileNewMenuItem.Tag = "new";
             this.toolStripFileNewMenuItem.Text = "New ...";
             // 
@@ -188,7 +192,7 @@ namespace FAD3
             // 
             this.toolStripFileOpen.Image = global::FAD3.Properties.Resources.OpenFileFromProject_16x;
             this.toolStripFileOpen.Name = "toolStripFileOpen";
-            this.toolStripFileOpen.Size = new System.Drawing.Size(162, 22);
+            this.toolStripFileOpen.Size = new System.Drawing.Size(203, 26);
             this.toolStripFileOpen.Tag = "open";
             this.toolStripFileOpen.Text = "Open ...";
             // 
@@ -198,25 +202,25 @@ namespace FAD3
             this.testToolStripRecentOpenedList});
             this.toolStripRecentlyOpened.Image = global::FAD3.Properties.Resources.History_16x;
             this.toolStripRecentlyOpened.Name = "toolStripRecentlyOpened";
-            this.toolStripRecentlyOpened.Size = new System.Drawing.Size(162, 22);
+            this.toolStripRecentlyOpened.Size = new System.Drawing.Size(203, 26);
             this.toolStripRecentlyOpened.Text = "Recently opened";
             // 
             // testToolStripRecentOpenedList
             // 
             this.testToolStripRecentOpenedList.Name = "testToolStripRecentOpenedList";
-            this.testToolStripRecentOpenedList.Size = new System.Drawing.Size(93, 22);
+            this.testToolStripRecentOpenedList.Size = new System.Drawing.Size(116, 26);
             this.testToolStripRecentOpenedList.Text = "test";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(200, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::FAD3.Properties.Resources.Close_16x;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(203, 26);
             this.exitToolStripMenuItem.Tag = "exit";
             this.exitToolStripMenuItem.Text = "Exit";
             // 
@@ -228,6 +232,7 @@ namespace FAD3
             this.coordinateFormatToolStripMenuItem,
             this.symbolFontsToolStripMenuItem,
             this.showErrorMessagesToolStripMenuItem,
+            this.mergeToolStripMenuItem,
             this.toolStripSeparator2,
             this.generateInlandDbToolStripMenuItem,
             this.generateGridMapToolStripMenuItem,
@@ -235,54 +240,54 @@ namespace FAD3
             this.downloadSpatiotemporalDataToolStripMenuItem,
             this.menuItemBrowseLGUs});
             this.menuTools.Name = "menuTools";
-            this.menuTools.Size = new System.Drawing.Size(48, 20);
+            this.menuTools.Size = new System.Drawing.Size(58, 24);
             this.menuTools.Text = "Tools";
             this.menuTools.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnMenuTools_DropDownItemClicked);
             // 
             // resetReferenceNumbersToolStripMenuItem
             // 
             this.resetReferenceNumbersToolStripMenuItem.Name = "resetReferenceNumbersToolStripMenuItem";
-            this.resetReferenceNumbersToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.resetReferenceNumbersToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.resetReferenceNumbersToolStripMenuItem.Tag = "resetRefNos";
             this.resetReferenceNumbersToolStripMenuItem.Text = "Reset reference numbers";
             // 
             // referenceNumberRangeToolStripMenuItem
             // 
             this.referenceNumberRangeToolStripMenuItem.Name = "referenceNumberRangeToolStripMenuItem";
-            this.referenceNumberRangeToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.referenceNumberRangeToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.referenceNumberRangeToolStripMenuItem.Tag = "refNoRange";
             this.referenceNumberRangeToolStripMenuItem.Text = "Reference number range";
             // 
             // coordinateFormatToolStripMenuItem
             // 
             this.coordinateFormatToolStripMenuItem.Name = "coordinateFormatToolStripMenuItem";
-            this.coordinateFormatToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.coordinateFormatToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.coordinateFormatToolStripMenuItem.Tag = "coordFormat";
             this.coordinateFormatToolStripMenuItem.Text = "Coordinate format";
             // 
             // symbolFontsToolStripMenuItem
             // 
             this.symbolFontsToolStripMenuItem.Name = "symbolFontsToolStripMenuItem";
-            this.symbolFontsToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.symbolFontsToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.symbolFontsToolStripMenuItem.Tag = "symbolFonts";
             this.symbolFontsToolStripMenuItem.Text = "Symbol fonts";
             // 
             // showErrorMessagesToolStripMenuItem
             // 
             this.showErrorMessagesToolStripMenuItem.Name = "showErrorMessagesToolStripMenuItem";
-            this.showErrorMessagesToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.showErrorMessagesToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.showErrorMessagesToolStripMenuItem.Tag = "showError";
             this.showErrorMessagesToolStripMenuItem.Text = "Show error messages";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(239, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(304, 6);
             // 
             // generateInlandDbToolStripMenuItem
             // 
             this.generateInlandDbToolStripMenuItem.Name = "generateInlandDbToolStripMenuItem";
-            this.generateInlandDbToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.generateInlandDbToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.generateInlandDbToolStripMenuItem.Tag = "createInland";
             this.generateInlandDbToolStripMenuItem.Text = "Create inland grid database";
             this.generateInlandDbToolStripMenuItem.ToolTipText = "Creates a database containing minor grids that are located inland";
@@ -294,7 +299,7 @@ namespace FAD3
             this.menuItemZone51,
             this.menuItemLayoutTemplateOpen});
             this.generateGridMapToolStripMenuItem.Name = "generateGridMapToolStripMenuItem";
-            this.generateGridMapToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.generateGridMapToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.generateGridMapToolStripMenuItem.Text = "Generate grid map";
             this.generateGridMapToolStripMenuItem.DropDownOpening += new System.EventHandler(this.OnDropDownOpening);
             this.generateGridMapToolStripMenuItem.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnGenerateGridMapToolStripMenuItem_DropDownItemClicked);
@@ -302,21 +307,21 @@ namespace FAD3
             // menuItemZone50
             // 
             this.menuItemZone50.Name = "menuItemZone50";
-            this.menuItemZone50.Size = new System.Drawing.Size(189, 22);
+            this.menuItemZone50.Size = new System.Drawing.Size(237, 26);
             this.menuItemZone50.Tag = "zone50";
             this.menuItemZone50.Text = "UTM zone 50";
             // 
             // menuItemZone51
             // 
             this.menuItemZone51.Name = "menuItemZone51";
-            this.menuItemZone51.Size = new System.Drawing.Size(189, 22);
+            this.menuItemZone51.Size = new System.Drawing.Size(237, 26);
             this.menuItemZone51.Tag = "zone51";
             this.menuItemZone51.Text = "UTM zone 51";
             // 
             // menuItemLayoutTemplateOpen
             // 
             this.menuItemLayoutTemplateOpen.Name = "menuItemLayoutTemplateOpen";
-            this.menuItemLayoutTemplateOpen.Size = new System.Drawing.Size(189, 22);
+            this.menuItemLayoutTemplateOpen.Size = new System.Drawing.Size(237, 26);
             this.menuItemLayoutTemplateOpen.Tag = "layoutTemplate";
             this.menuItemLayoutTemplateOpen.Text = "Open layout template";
             // 
@@ -324,7 +329,7 @@ namespace FAD3
             // 
             this.spatioTemporalMapMenuItem.Enabled = false;
             this.spatioTemporalMapMenuItem.Name = "spatioTemporalMapMenuItem";
-            this.spatioTemporalMapMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.spatioTemporalMapMenuItem.Size = new System.Drawing.Size(307, 26);
             this.spatioTemporalMapMenuItem.Tag = "spatio-temporal";
             this.spatioTemporalMapMenuItem.Text = "Spatio-temporal mapping";
             // 
@@ -332,14 +337,14 @@ namespace FAD3
             // 
             this.downloadSpatiotemporalDataToolStripMenuItem.Enabled = false;
             this.downloadSpatiotemporalDataToolStripMenuItem.Name = "downloadSpatiotemporalDataToolStripMenuItem";
-            this.downloadSpatiotemporalDataToolStripMenuItem.Size = new System.Drawing.Size(242, 22);
+            this.downloadSpatiotemporalDataToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
             this.downloadSpatiotemporalDataToolStripMenuItem.Tag = "downloadSpatioTemporal";
             this.downloadSpatiotemporalDataToolStripMenuItem.Text = "Download spatio-temporal data";
             // 
             // menuItemBrowseLGUs
             // 
             this.menuItemBrowseLGUs.Name = "menuItemBrowseLGUs";
-            this.menuItemBrowseLGUs.Size = new System.Drawing.Size(242, 22);
+            this.menuItemBrowseLGUs.Size = new System.Drawing.Size(307, 26);
             this.menuItemBrowseLGUs.Tag = "browseLGUs";
             this.menuItemBrowseLGUs.Text = "LGUs";
             // 
@@ -350,42 +355,44 @@ namespace FAD3
             this.onlineManualToolStripMenuItem,
             this.diagnosticMenuItem});
             this.menuHelp.Name = "menuHelp";
-            this.menuHelp.Size = new System.Drawing.Size(44, 20);
+            this.menuHelp.Size = new System.Drawing.Size(55, 24);
             this.menuHelp.Text = "Help";
             this.menuHelp.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.OnMenuHelp_DropDownItemClicked);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(261, 26);
             this.aboutToolStripMenuItem.Tag = "about";
             this.aboutToolStripMenuItem.Text = "About...";
             // 
             // onlineManualToolStripMenuItem
             // 
             this.onlineManualToolStripMenuItem.Name = "onlineManualToolStripMenuItem";
-            this.onlineManualToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.onlineManualToolStripMenuItem.Size = new System.Drawing.Size(261, 26);
             this.onlineManualToolStripMenuItem.Tag = "onlineManual";
             this.onlineManualToolStripMenuItem.Text = "Online manual";
             // 
             // diagnosticMenuItem
             // 
             this.diagnosticMenuItem.Name = "diagnosticMenuItem";
-            this.diagnosticMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.diagnosticMenuItem.Size = new System.Drawing.Size(261, 26);
             this.diagnosticMenuItem.Tag = "diagnostics";
             this.diagnosticMenuItem.Text = "Log database diagnostics";
             // 
             // statusStrip1
             // 
             this.statusStrip1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusPanelDBPath,
             this.statusPanelTargetArea,
             this.statusPanelLandingSite,
             this.statusPanelGearUsed});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 539);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 665);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(970, 26);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(1293, 30);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -397,7 +404,7 @@ namespace FAD3
             this.statusPanelDBPath.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.statusPanelDBPath.DoubleClickEnabled = true;
             this.statusPanelDBPath.Name = "statusPanelDBPath";
-            this.statusPanelDBPath.Size = new System.Drawing.Size(50, 21);
+            this.statusPanelDBPath.Size = new System.Drawing.Size(61, 24);
             this.statusPanelDBPath.Text = "DBPath";
             this.statusPanelDBPath.DoubleClick += new System.EventHandler(this.statusPanelDBPath_DoubleClick);
             // 
@@ -409,7 +416,7 @@ namespace FAD3
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.statusPanelTargetArea.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.statusPanelTargetArea.Name = "statusPanelTargetArea";
-            this.statusPanelTargetArea.Size = new System.Drawing.Size(80, 21);
+            this.statusPanelTargetArea.Size = new System.Drawing.Size(80, 24);
             this.statusPanelTargetArea.Text = "Target area";
             this.statusPanelTargetArea.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -421,7 +428,7 @@ namespace FAD3
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.statusPanelLandingSite.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.statusPanelLandingSite.Name = "statusPanelLandingSite";
-            this.statusPanelLandingSite.Size = new System.Drawing.Size(4, 21);
+            this.statusPanelLandingSite.Size = new System.Drawing.Size(4, 24);
             this.statusPanelLandingSite.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // statusPanelGearUsed
@@ -432,7 +439,7 @@ namespace FAD3
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.statusPanelGearUsed.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.statusPanelGearUsed.Name = "statusPanelGearUsed";
-            this.statusPanelGearUsed.Size = new System.Drawing.Size(4, 21);
+            this.statusPanelGearUsed.Size = new System.Drawing.Size(4, 24);
             this.statusPanelGearUsed.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // openFileDialog1
@@ -445,16 +452,17 @@ namespace FAD3
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tblLayout.ColumnCount = 2;
-            this.tblLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
+            this.tblLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 333F));
             this.tblLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tblLayout.Controls.Add(this.treeMain, 0, 0);
             this.tblLayout.Controls.Add(this.panel1, 1, 0);
-            this.tblLayout.Location = new System.Drawing.Point(0, 58);
+            this.tblLayout.Location = new System.Drawing.Point(0, 71);
+            this.tblLayout.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tblLayout.Name = "tblLayout";
             this.tblLayout.RowCount = 1;
             this.tblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 478F));
-            this.tblLayout.Size = new System.Drawing.Size(970, 478);
+            this.tblLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 588F));
+            this.tblLayout.Size = new System.Drawing.Size(1293, 588);
             this.tblLayout.TabIndex = 4;
             // 
             // treeMain
@@ -466,11 +474,12 @@ namespace FAD3
             this.treeMain.HideSelection = false;
             this.treeMain.ImageIndex = 0;
             this.treeMain.ImageList = this.imageList16;
-            this.treeMain.Location = new System.Drawing.Point(3, 3);
+            this.treeMain.Location = new System.Drawing.Point(4, 4);
+            this.treeMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.treeMain.Name = "treeMain";
             this.treeMain.RightToLeftLayout = true;
             this.treeMain.SelectedImageIndex = 0;
-            this.treeMain.Size = new System.Drawing.Size(244, 472);
+            this.treeMain.Size = new System.Drawing.Size(325, 580);
             this.treeMain.TabIndex = 5;
             this.treeMain.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.OntreeMainAfterExpand);
             this.treeMain.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.OnItemDrag);
@@ -489,17 +498,19 @@ namespace FAD3
             this.panel1.Controls.Add(this.labelErrorDetail);
             this.panel1.Controls.Add(this.lvMain);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(253, 3);
+            this.panel1.Location = new System.Drawing.Point(337, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(714, 472);
+            this.panel1.Size = new System.Drawing.Size(952, 580);
             this.panel1.TabIndex = 12;
             // 
             // lblTitle
             // 
             this.lblTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(629, 27);
+            this.lblTitle.Size = new System.Drawing.Size(839, 33);
             this.lblTitle.TabIndex = 13;
             // 
             // lblErrorFormOpen
@@ -507,9 +518,10 @@ namespace FAD3
             this.lblErrorFormOpen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblErrorFormOpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblErrorFormOpen.Location = new System.Drawing.Point(3, 204);
+            this.lblErrorFormOpen.Location = new System.Drawing.Point(4, 251);
+            this.lblErrorFormOpen.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblErrorFormOpen.Name = "lblErrorFormOpen";
-            this.lblErrorFormOpen.Size = new System.Drawing.Size(705, 83);
+            this.lblErrorFormOpen.Size = new System.Drawing.Size(940, 102);
             this.lblErrorFormOpen.TabIndex = 12;
             this.lblErrorFormOpen.Text = "label1";
             this.lblErrorFormOpen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -522,18 +534,20 @@ namespace FAD3
             this.panelSamplingButtons.Controls.Add(this.buttonMap);
             this.panelSamplingButtons.Controls.Add(this.buttonCatch);
             this.panelSamplingButtons.Controls.Add(this.buttonOK);
-            this.panelSamplingButtons.Location = new System.Drawing.Point(627, 30);
+            this.panelSamplingButtons.Location = new System.Drawing.Point(836, 37);
+            this.panelSamplingButtons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panelSamplingButtons.Name = "panelSamplingButtons";
-            this.panelSamplingButtons.Size = new System.Drawing.Size(70, 130);
+            this.panelSamplingButtons.Size = new System.Drawing.Size(93, 160);
             this.panelSamplingButtons.TabIndex = 11;
             this.panelSamplingButtons.Visible = false;
             // 
             // buttonMap
             // 
             this.buttonMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonMap.Location = new System.Drawing.Point(7, 87);
+            this.buttonMap.Location = new System.Drawing.Point(9, 107);
+            this.buttonMap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonMap.Name = "buttonMap";
-            this.buttonMap.Size = new System.Drawing.Size(57, 30);
+            this.buttonMap.Size = new System.Drawing.Size(76, 37);
             this.buttonMap.TabIndex = 2;
             this.buttonMap.Text = "Map";
             this.buttonMap.UseVisualStyleBackColor = true;
@@ -542,9 +556,10 @@ namespace FAD3
             // buttonCatch
             // 
             this.buttonCatch.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCatch.Location = new System.Drawing.Point(7, 51);
+            this.buttonCatch.Location = new System.Drawing.Point(9, 63);
+            this.buttonCatch.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonCatch.Name = "buttonCatch";
-            this.buttonCatch.Size = new System.Drawing.Size(57, 30);
+            this.buttonCatch.Size = new System.Drawing.Size(76, 37);
             this.buttonCatch.TabIndex = 1;
             this.buttonCatch.Text = "Catch";
             this.buttonCatch.UseVisualStyleBackColor = true;
@@ -553,9 +568,10 @@ namespace FAD3
             // buttonOK
             // 
             this.buttonOK.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonOK.Location = new System.Drawing.Point(7, 15);
+            this.buttonOK.Location = new System.Drawing.Point(9, 18);
+            this.buttonOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(57, 30);
+            this.buttonOK.Size = new System.Drawing.Size(76, 37);
             this.buttonOK.TabIndex = 0;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
@@ -570,11 +586,12 @@ namespace FAD3
             this.lvMain.ContextMenuStrip = this.menuDropDown;
             this.lvMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvMain.HideSelection = false;
-            this.lvMain.Location = new System.Drawing.Point(0, 30);
+            this.lvMain.Location = new System.Drawing.Point(0, 37);
+            this.lvMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lvMain.MultiSelect = false;
             this.lvMain.Name = "lvMain";
             this.lvMain.ShowItemToolTips = true;
-            this.lvMain.Size = new System.Drawing.Size(711, 442);
+            this.lvMain.Size = new System.Drawing.Size(947, 543);
             this.lvMain.TabIndex = 11;
             this.lvMain.UseCompatibleStateImageBehavior = false;
             this.lvMain.View = System.Windows.Forms.View.Details;
@@ -595,9 +612,9 @@ namespace FAD3
             this.tsButtonReport,
             this.tsButtonMap,
             this.tsButtonExit});
-            this.toolbar.Location = new System.Drawing.Point(0, 24);
+            this.toolbar.Location = new System.Drawing.Point(0, 28);
             this.toolbar.Name = "toolbar";
-            this.toolbar.Size = new System.Drawing.Size(970, 35);
+            this.toolbar.Size = new System.Drawing.Size(1293, 35);
             this.toolbar.SuppressHighlighting = true;
             this.toolbar.TabIndex = 3;
             this.toolbar.Text = "toolStripEx1";
@@ -674,11 +691,18 @@ namespace FAD3
             this.tsButtonExit.Text = "toolStripButton6";
             this.tsButtonExit.ToolTipText = "Exit";
             // 
+            // mergeToolStripMenuItem
+            // 
+            this.mergeToolStripMenuItem.Name = "mergeToolStripMenuItem";
+            this.mergeToolStripMenuItem.Size = new System.Drawing.Size(307, 26);
+            this.mergeToolStripMenuItem.Tag = "mergeDatabases";
+            this.mergeToolStripMenuItem.Text = "Merge";
+            // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(970, 565);
+            this.ClientSize = new System.Drawing.Size(1293, 695);
             this.Controls.Add(this.tblLayout);
             this.Controls.Add(this.toolbar);
             this.Controls.Add(this.statusStrip1);
@@ -686,6 +710,7 @@ namespace FAD3
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.menuMenuBar;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "MainForm";
             this.Text = "Fisheries Assessment Database";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -759,5 +784,6 @@ namespace FAD3
         private System.Windows.Forms.ToolStripMenuItem diagnosticMenuItem;
         private System.Windows.Forms.ToolStripMenuItem downloadSpatiotemporalDataToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuItemLayoutTemplateOpen;
+        private System.Windows.Forms.ToolStripMenuItem mergeToolStripMenuItem;
     }
 }

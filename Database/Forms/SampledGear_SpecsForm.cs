@@ -360,11 +360,7 @@ namespace FAD3
         /// </summary>
         private void PreSaveSampledGearSpecs()
         {
-            //test if data is edited
-            //TestForEdits();
 
-            //if (_sampledGearSpecDataIsEdited)
-            //{
             ManageGearSpecsClass.SetSampledGearSpecsForPreSave();
             foreach (Control c in panelUI.Controls)
             {
@@ -387,7 +383,7 @@ namespace FAD3
                 }
             }
             _parent_form.SampledGearSpecIsEdited = true;
-            //}
+           
         }
 
         private void Onbutton_Click(object sender, EventArgs e)
@@ -401,6 +397,15 @@ namespace FAD3
 
                 case "buttonCancel":
                     Close();
+                    break;
+                case "buttonDelete":
+                    foreach(Control c in panelUI.Controls)
+                    {
+                        if(c.GetType().Name=="TextBox")
+                        {
+                            c.Text = "";
+                        }
+                    }
                     break;
             }
         }

@@ -51,6 +51,7 @@ namespace FAD3.Database.Forms
             var ndRoot = tvTopics.Nodes.Add("root", "Topics");
             ndRoot.Nodes.Add("nodeEffort", "Effort");
             ndRoot.Nodes.Add("nodeCatch", "Catch composition");
+            //ndRoot.Nodes.Add("nodeGearSpecs", "Specifications of fishing gears");
             Text = $"Reports: {_targetArea.TargetAreaName}";
 
             lvYears.View = View.Details;
@@ -138,6 +139,24 @@ namespace FAD3.Database.Forms
                     _topicDescription = $"Effort data of {TargetArea.TargetAreaName} target area.";
                     lvi.SubItems.Add(_topicDescription);
                     _topic = "effort";
+
+                    row = lvReports.Items.Count + 1;
+                    lvi = lvReports.Items.Add("gear_specs", row.ToString(), null);
+                    _topicDescription = $"Specifications of fishing gears in {TargetArea.TargetAreaName} target area.";
+                    lvi.SubItems.Add(_topicDescription);
+                    _topic = "gear_specs";
+
+                    row = lvReports.Items.Count + 1;
+                    lvi = lvReports.Items.Add("fishing_expense", row.ToString(), null);
+                    _topicDescription = $"Cost of fishing operation in {TargetArea.TargetAreaName} target area.";
+                    lvi.SubItems.Add(_topicDescription);
+                    _topic = "fishing_expense";
+
+                    row = lvReports.Items.Count + 1;
+                    lvi = lvReports.Items.Add("fishing_expense_items", row.ToString(), null);
+                    _topicDescription = $"Fishing expense items in {TargetArea.TargetAreaName} target area.";
+                    lvi.SubItems.Add(_topicDescription);
+                    _topic = "fishing_expense_items";
                     break;
 
                 case "nodeCatch":
@@ -147,6 +166,7 @@ namespace FAD3.Database.Forms
                     lvi.SubItems.Add(_topicDescription);
                     _topic = "catch";
                     break;
+
             }
             if (lvReports.Items.Count > 0)
             {
@@ -166,8 +186,9 @@ namespace FAD3.Database.Forms
             }
             if (years.Count > 0)
             {
+                _topic = ((ListView)sender).SelectedItems[0].Name;
                 ReportTableForm rtf = ReportTableForm.GetInstance(TargetArea, _topic, years);
-                rtf.TopicDescription = _topicDescription;
+                rtf.TopicDescription = ((ListView)sender).SelectedItems[0].SubItems[1].Text;
                 if (rtf.Visible)
                 {
                     rtf.BringToFront();

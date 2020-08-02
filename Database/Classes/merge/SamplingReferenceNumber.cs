@@ -11,15 +11,39 @@ namespace FAD3.Database.Classes.merge
         public SamplingReferenceNumber(string refNo, Sampling s)
         {
             Sampling = s;
-            Generate(refNo);        
+            ReferenceNumber = refNo;
+            Parse();
+            //Generate(refNo);        
         }
         public SamplingReferenceNumber(Sampling s)
         {
             Sampling = s;
-             Generate();
+            //Generate();
+             
             
         }
 
+        private void Parse()
+        {
+            try
+            {
+                var result = ReferenceNumber.Split('-');
+                if (result.Count() ==3)
+                {
+                    YearCode = int.Parse(result[0].Substring(result[0].Length - 2, 2));
+                    AOICode = result[0].Substring(0, result[0].Length - 2);
+                    SerialNumber = int.Parse(result[2]);
+                    GearCode = result[1];
+                }
+            }
+            catch(Exception ex)
+            {
+                Logger.Log(ex);
+            }
+        }
+        public string GearCode { get; private set; }
+        public int YearCode { get; set; }
+        public string AOICode { get; private set; }
         public Sampling Sampling { get; set; }
 
         public void Generate(string refNo="")
@@ -30,7 +54,7 @@ namespace FAD3.Database.Classes.merge
             //}
             //else
             //{
-            //    ReferenceNumber = refNo;
+            //ReferenceNumber = refNo;
             //}
         }
         public int SerialNumber { get; set; }

@@ -10,10 +10,12 @@ namespace FAD3.Database.Classes.merge
 {
     public class TaxaRepository
     {
+        private FADEntities _fadEntities;
         public List<Taxa> Taxas { get; set; }
 
-        public TaxaRepository()
+        public TaxaRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             Taxas = getTaxa();
         }
 
@@ -21,7 +23,7 @@ namespace FAD3.Database.Classes.merge
         {
             List<Taxa> listTaxa = new List<Taxa>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -55,7 +57,7 @@ namespace FAD3.Database.Classes.merge
         public bool Add(Taxa t)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Insert into tblTaxa (TaxaNo,Taxa)
@@ -72,7 +74,7 @@ namespace FAD3.Database.Classes.merge
         public bool Update(Taxa t)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $"Update tblTaxa set Taxa = '{t.TaxaName}' WHERE TaxaNo = {t.TaxaID}";
@@ -87,7 +89,7 @@ namespace FAD3.Database.Classes.merge
         public bool Delete(int id)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $"Delete * from tblTaxa where TaxaNo={id}";

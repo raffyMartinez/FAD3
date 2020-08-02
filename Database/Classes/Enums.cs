@@ -270,7 +270,8 @@
     {
         Juvenile,
         Male,
-        Female
+        Female,
+        NotDetermined
     }
 
     public enum fad3DataStatus

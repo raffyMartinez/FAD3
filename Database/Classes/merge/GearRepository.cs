@@ -11,10 +11,12 @@ namespace FAD3.Database.Classes.merge
 {
     public class GearRepository
     {
+        private FADEntities _fadEntities;
         public List<Gear> Gears{ get; set; }
 
-        public GearRepository()
+        public GearRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             Gears = getGears();
         }
 
@@ -22,7 +24,7 @@ namespace FAD3.Database.Classes.merge
         {
             List<Gear> listGears = new List<Gear>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -40,8 +42,7 @@ namespace FAD3.Database.Classes.merge
                             Gear g = new Gear();
                             g.GearID = dr["GearVarGUID"].ToString();
                             g.GearName = dr["Variation"].ToString();
-                            g.Code = dr["GearCode"].ToString();
-                            g.GearClass = FADEntities.GearClassViewModel.GetGearClass(dr["GearClass"].ToString());
+                            g.GearClass = _fadEntities.GearClassViewModel.GetGearClass(dr["GearClass"].ToString());
 
                             listGears.Add(g);
                         }
@@ -59,12 +60,12 @@ namespace FAD3.Database.Classes.merge
         public bool Add(Gear g)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
-                var sql = $@"Insert into tblGearVariations (GearName,GearCode,GearID,GearClass)
+                var sql = $@"Insert into tblGearVariations (Variation,GearVarGUID,GearClass,Name2)
                            Values 
-                           ('{g.GearName}','{g.Code}',{{{g.GearID}}}, {{{g.GearClass.GearClassGuid}}})";
+                           ('{g.GearName}',{{{g.GearID}}}, {{{g.GearClass.GearClassGuid}}},'{(g.GearName.Replace(" ",""))}')";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
                     success = update.ExecuteNonQuery() > 0;
@@ -76,12 +77,11 @@ namespace FAD3.Database.Classes.merge
         public bool Update(Gear g)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Update tblGearVariations set
                                 GearName = '{g.GearName}',
-                                GearCode = '{g.Code}',
                                 GearClass={{{g.GearClass.GearClassGuid}}}
                             WHERE GearID = {{{g.GearID}}}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
@@ -92,13 +92,92 @@ namespace FAD3.Database.Classes.merge
             return success;
         }
 
+
+        /// <summary>
+        /// modify gear name by appending _1 to it.
+        /// </summary>
+        /// <param name="gear"></param>
+        /// <returns></returns>
+        public bool ModifyGearName(Gear gear)
+        {
+            bool success = false;
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
+            {
+                conn.Open();
+                var sql = $@"Update tblGearVariations set
+                                Variation = '{gear.GearName}_1',
+                                Name2 = '{gear.GearName.Replace(" ","")}_1'
+                            WHERE Variation = '{gear.GearName}'";
+                using (OleDbCommand update = new OleDbCommand(sql, conn))
+                {
+                    success = update.ExecuteNonQuery() > 0;
+                }
+            }
+            return success;
+        }
+
+        public bool UpdateGearIDFromDestinationGearID(Gear gear)
+        {
+            string oldGearID = "";
+            bool success = false;
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
+            {
+                conn.Open();
+
+                var sql = $"Select GearVarGUID from tblGearVariations where Variation = '{gear.GearName}'";
+                using (OleDbCommand getID = new OleDbCommand(sql,conn))
+                {
+                    oldGearID = getID.ExecuteScalar().ToString();
+                }
+
+
+                sql = $@"Update tblGearVariations set
+                            Variation='{gear.GearName}_1',
+                            Name2 = '{gear.GearName.Replace(" ","")}_1'
+                        WHERE Variation = '{gear.GearName}'";
+                using (OleDbCommand update = new OleDbCommand(sql, conn))
+                {
+                    success = update.ExecuteNonQuery() > 0;
+                }
+
+                if(success)
+                {
+                    sql = $@"INSERT INTO tblGearVariations (Variation,GearVarGUID,GearClass,Name2)
+                           Values 
+                           ('{gear.GearName}',{{{gear.GearID}}}, {{{gear.GearClass.GearClassGuid}}},'{(gear.GearName.Replace(" ", ""))}')";
+
+                    using (OleDbCommand update = new OleDbCommand(sql, conn))
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+
+                    if(success)
+                    {
+                        sql = $@"Update tblSampling set GearVarGUID={{{gear.GearID}}} where GearVarGUID = {{{oldGearID}}}";
+                        using (OleDbCommand update = new OleDbCommand(sql, conn))
+                        {
+                            success = update.ExecuteNonQuery() > 0;
+                        }
+
+                        sql = $@"Update tblGearSpecs set GearVarGuid={{{gear.GearID}}} where GearVarGUID = {{{oldGearID}}}";
+                        using (OleDbCommand update = new OleDbCommand(sql, conn))
+                        {
+                            success = update.ExecuteNonQuery() > 0;
+                        }
+                    }
+                }
+
+                sql = $"Delete * from tblGearVariations where Variation = '{gear.GearName}_1'";
+            }
+            return success;
+        }
         public bool Delete(string gearID)
         {
             bool success = false;
             using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
             {
                 conn.Open();
-                var sql = $"Delete * from tblGearVariations where GearID='{gearID}'";
+                var sql = $"Delete * from tblGearVariations where GearID={{{gearID}}}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
                     try

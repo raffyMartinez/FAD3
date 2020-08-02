@@ -181,7 +181,14 @@ namespace FAD3
                 }
                 else
                 {
-                    ShowLayerProperties();
+                    if (MapLayers[layerHandle].LayerType == "ShapefileClass")
+                    {
+                        ShowLayerProperties();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Cannot display properties for image layer");
+                    }
                 }
             }
         }

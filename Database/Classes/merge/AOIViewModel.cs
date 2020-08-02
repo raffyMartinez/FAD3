@@ -11,42 +11,53 @@ namespace FAD3.Database.Classes.merge
 {
     public class AOIViewModel
     {
+        public bool AddSucceeded { get; set; }
         public ObservableCollection<AOI> AOICollection { get; set; }
-        private AOIRepository AOIs{ get; set; }
+        private AOIRepository AOIs { get; set; }
 
-        public AOIViewModel()
+        public AOIViewModel(FADEntities fadEntitites)
         {
-            AOIs = new AOIRepository();
+            AOIs = new AOIRepository(fadEntitites);
             AOICollection = new ObservableCollection<AOI>(AOIs.AOIs);
             AOICollection.CollectionChanged += AOIs_CollectionChanged;
         }
 
         private void AOIs_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            switch(e.Action)
+            switch (e.Action)
             {
                 case NotifyCollectionChangedAction.Add:
                     int newIndex = e.NewStartingIndex;
-                    AOIs.Add(AOICollection[newIndex]);
+                    AddSucceeded= AOIs.Add(AOICollection[newIndex]);
                     break;
-                    case NotifyCollectionChangedAction.Remove:
+                case NotifyCollectionChangedAction.Remove:
                     List<AOI> tempListOfRemovedItems = e.OldItems.OfType<AOI>().ToList();
                     AOIs.Delete(tempListOfRemovedItems[0].AOIGuid);
                     break;
-                    case NotifyCollectionChangedAction.Replace:
+                case NotifyCollectionChangedAction.Replace:
                     List<AOI> tempListOfAOIs = e.NewItems.OfType<AOI>().ToList();
                     AOIs.Update(tempListOfAOIs[0]);      // As the IDs are unique, only one row will be effected hence first index only
                     break;
             }
         }
-        public List<AOI>GetAllAOIs()
+        public List<AOI> GetAllAOIs()
         {
             return AOICollection.ToList();
         }
 
+        public bool AOIExists(AOI aoi)
+        {
+            return AOICollection.FirstOrDefault(n => n.Equals(aoi)) != null;
+        }
+
+        public AOI GetEqual(AOI aoi)
+        {
+            return AOICollection.FirstOrDefault(n => n.Equals(aoi));
+        }
+
         public bool NameExists(string name)
         {
-            foreach(var aoi in AOICollection)
+            foreach (var aoi in AOICollection)
             {
                 if (aoi.AOIName == name)
                     return true;
@@ -68,11 +79,13 @@ namespace FAD3.Database.Classes.merge
         {
             return false;
         }
-        public void AddRecordToRepo(AOI aoi)
+        public bool AddRecordToRepo(AOI aoi)
         {
             if (aoi == null)
                 throw new ArgumentNullException("Error: The argument is Null");
+            
             AOICollection.Add(aoi);
+            return AddSucceeded;
         }
 
         public void UpdateRecordInRepo(AOI aoi)
@@ -83,7 +96,7 @@ namespace FAD3.Database.Classes.merge
             int index = 0;
             while (index < AOICollection.Count)
             {
-                if (AOICollection[index].AOIGuid== aoi.AOIGuid)
+                if (AOICollection[index].AOIGuid == aoi.AOIGuid)
                 {
                     AOICollection[index] = aoi;
                     break;
@@ -100,7 +113,7 @@ namespace FAD3.Database.Classes.merge
             int index = 0;
             while (index < AOICollection.Count)
             {
-                if (AOICollection[index].AOIGuid== id)
+                if (AOICollection[index].AOIGuid == id)
                 {
                     AOICollection.RemoveAt(index);
                     break;

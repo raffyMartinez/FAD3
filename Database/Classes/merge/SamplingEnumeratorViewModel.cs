@@ -10,14 +10,15 @@ namespace FAD3.Database.Classes.merge
 {
     public class SamplingEnumeratorViewModel
     {
+        public bool AddSucceeded { get; set; }
         public ObservableCollection<SamplingEnumerator> SamplingEnumeratorCollection { get; set; }
         private SamplingEnumeratorRepository SamplingEnumerators{ get; set; }
 
 
 
-        public SamplingEnumeratorViewModel()
+        public SamplingEnumeratorViewModel(FADEntities fadEntities)
         {
-            SamplingEnumerators = new SamplingEnumeratorRepository();
+            SamplingEnumerators = new SamplingEnumeratorRepository(fadEntities);
             SamplingEnumeratorCollection = new ObservableCollection<SamplingEnumerator>(SamplingEnumerators.SamplingEnumerators);
             SamplingEnumeratorCollection.CollectionChanged += SamplingEnumeratorCollection_CollectionChanged;
         }
@@ -25,11 +26,7 @@ namespace FAD3.Database.Classes.merge
         {
             return SamplingEnumeratorCollection.ToList();
         }
-        public bool CanDeleteEntity(SamplingEnumerator se)
-        {
-            return FADEntities.SamplingViewModel.SamplingCollection
-                .Where(t => t.SamplingEnumerator.EnumeratorID == se.EnumeratorID).ToList().Count == 0;
-        }
+
 
         public SamplingEnumerator GetSamplingEnumerator(string id)
         {
@@ -43,7 +40,7 @@ namespace FAD3.Database.Classes.merge
                 case NotifyCollectionChangedAction.Add:
                     {
                         int newIndex = e.NewStartingIndex;
-                        SamplingEnumerators.Add(SamplingEnumeratorCollection[newIndex]);
+                        AddSucceeded= SamplingEnumerators.Add(SamplingEnumeratorCollection[newIndex]);
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -66,11 +63,12 @@ namespace FAD3.Database.Classes.merge
             get { return SamplingEnumeratorCollection.Count; }
         }
 
-        public void AddRecordToRepo(SamplingEnumerator se)
+        public bool AddRecordToRepo(SamplingEnumerator se)
         {
             if (se == null)
                 throw new ArgumentNullException("Error: The argument is Null");
             SamplingEnumeratorCollection.Add(se);
+            return AddSucceeded;
         }
 
         public void UpdateRecordInRepo(SamplingEnumerator se)

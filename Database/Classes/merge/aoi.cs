@@ -16,6 +16,19 @@ namespace FAD3.Database.Classes.merge
 
     public class AOI
     {
+        public override bool Equals(object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                AOI aoi = (AOI)obj;
+                return (AOIName == aoi.AOIName) && (AOIGuid == aoi.AOIGuid);
+            }
+        }
         public bool IsGrid25 { get; set; }
         public string AOIName { get; set; }
         public string Code { get; set; }

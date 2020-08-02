@@ -15,20 +15,15 @@ namespace FAD3.Database.Classes.merge
 
 
 
-        public GearClassViewModel()
+        public GearClassViewModel(FADEntities fadEntities)
         {
-            GearClasses = new GearClassRepository();
+            GearClasses = new GearClassRepository(fadEntities);
             GearClassCollection = new ObservableCollection<GearClass>(GearClasses.GearClasses);
             GearClassCollection.CollectionChanged += GearClasses_CollectionChanged;
         }
         public List<GearClass> GetAllGearClasses()
         {
             return GearClassCollection.ToList();
-        }
-        public bool CanDeleteEntity(GearClass gc)
-        {
-            return FADEntities.GearViewModel.GearCollection
-                .Where(t => t.GearClass.GearClassGuid == gc.GearClassGuid).ToList().Count == 0;
         }
         public bool NameExists(string gearClassName)
         {

@@ -120,15 +120,24 @@ namespace FAD3.Database.Classes.merge
             char col = '0';
             UTMZone = utmZone;
             var arr = gridString.Split('-');
-            ushort gridNumber = ushort.Parse(arr[0]);
-
-            try
+            ushort gridNumber = 0;
+            if (arr.Length >= 2)
             {
-                col = arr[1][0];
-                proceed = true;
+                gridNumber = ushort.Parse(arr[0]);
+
                 try
                 {
-                    row = byte.Parse(arr[1].Substring(1));
+                    col = arr[1][0];
+                    proceed = true;
+                    try
+                    {
+                        row = byte.Parse(arr[1].Substring(1));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(ex);
+                        proceed = false;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -136,12 +145,11 @@ namespace FAD3.Database.Classes.merge
                     proceed = false;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                Logger.Log(ex);
                 proceed = false;
+                IsValid = false;
             }
-
 
 
             if (proceed)

@@ -41,6 +41,7 @@ namespace FAD3
                 {
                     if (tdTemplate.Name.Length > 4 && tdTemplate.Name.Substring(0, 4) != "MSys" && tdTemplate.Name.Substring(0, 5) != "temp_")
                     {
+                        Console.WriteLine(tdTemplate.Name);
                         tdName = tdTemplate.Name;
                         if (!TableList.Contains(tdTemplate.Name))
                         {

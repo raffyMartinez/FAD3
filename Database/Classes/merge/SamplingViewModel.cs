@@ -10,20 +10,80 @@ namespace FAD3.Database.Classes.merge
 {
     public class SamplingViewModel
     {
+        public bool AddSucceeded { get; set; }
         public ObservableCollection<Sampling> SamplingCollection { get; set; }
         private SamplingRepository Samplings { get; set; }
 
         public EditedEntity EditedEntity { get; private set; }
 
-        public SamplingViewModel()
+        public SamplingViewModel(FADEntities fadEntities)
         {
-            Samplings = new SamplingRepository();
+            Samplings = new SamplingRepository(fadEntities);
             SamplingCollection = new ObservableCollection<Sampling>(Samplings.Samplings);
             SamplingCollection.CollectionChanged += SamplingCollection_CollectionChanged;
         }
 
+        public Sampling GetEarliestSampling(AOI aoi)
+        {
+            Sampling sampling = null;
+            foreach (var item in SamplingCollection
+                .Where(t=>t.AOI.AOIGuid==aoi.AOIGuid)
+                .OrderBy(t => t.DateTimeSampled))
+            {
+                sampling = item;
+                break;
+            }
+            return sampling;
+        }
 
+        public Sampling GetLatestSampling(AOI aoi)
+        {
+            Sampling sampling = null;
+            foreach (var item in SamplingCollection
+                .Where(t=>t.AOI.AOIGuid==aoi.AOIGuid)
+                .OrderByDescending(t => t.DateTimeSampled))
+            {
+                sampling = item;
+                break;
+            }
+            return sampling;
+        }
 
+        public int SerialNumberMinima(AOI aoi)
+        {
+
+            int minima = 0;
+
+            foreach (var item in SamplingCollection
+                .Where(t => t.AOI.AOIGuid == aoi.AOIGuid)
+                .OrderBy(t => t.ReferenceNumber.SerialNumber))
+            {
+                minima = item.ReferenceNumber.SerialNumber;
+                break;
+            }
+
+            return minima;
+        }
+
+            public int SerialNumberMaxima(AOI aoi)
+            {
+
+                int maxima = 0;
+
+                foreach (var item in SamplingCollection
+                    .Where(t => t.AOI.AOIGuid == aoi.AOIGuid)
+                    .OrderByDescending(t => t.ReferenceNumber.SerialNumber))
+                {
+                maxima = item.ReferenceNumber.SerialNumber;
+                    break;
+                }
+
+                return maxima;
+            }
+            public int CountByAOI(AOI aoi)
+        {
+            return SamplingCollection.Count(t => t.AOI.AOIGuid == aoi.AOIGuid);
+        }
         public SamplingForEdit GetSamplingFoEdit(Sampling s, bool isNew = false)
         {
             if (isNew)
@@ -81,15 +141,15 @@ namespace FAD3.Database.Classes.merge
         }
 
 
-        public List<SamplingQuickView>GetQuickViews(AOI aoi, LandingSite ls, Gear g, DateTime samplingMonth)
+        public List<SamplingQuickView> GetQuickViews(AOI aoi, LandingSite ls, Gear g, DateTime samplingMonth)
         {
             List<SamplingQuickView> listQV = new List<SamplingQuickView>();
             foreach (Sampling s in SamplingCollection
-                .Where(t=>t.AOI.AOIGuid==aoi.AOIGuid)
+                .Where(t => t.AOI.AOIGuid == aoi.AOIGuid)
                 .Where(t => t.LandingSite.LandingSiteGuid == ls.LandingSiteGuid)
                 .Where(t => t.Gear.GearID == g.GearID)
-                .Where(t => t.DateTimeSampled.Month==samplingMonth.Month)
-                .Where(t => t.DateTimeSampled.Year==samplingMonth.Year))
+                .Where(t => t.DateTimeSampled.Month == samplingMonth.Month)
+                .Where(t => t.DateTimeSampled.Year == samplingMonth.Year))
             {
                 listQV.Add(new SamplingQuickView(s.RowID, s.AOI, s.ReferenceNumber, s.DateTimeSampled, s.WeightOfCatch, s.Gear, s.LandingSite, s.FishingGround));
             }
@@ -105,7 +165,7 @@ namespace FAD3.Database.Classes.merge
         public List<SamplingQuickView> GetQuickViews()
         {
             List<SamplingQuickView> listQV = new List<SamplingQuickView>();
-            foreach(Sampling s in SamplingCollection)
+            foreach (Sampling s in SamplingCollection)
             {
                 listQV.Add(new SamplingQuickView(s.RowID, s.AOI, s.ReferenceNumber, s.DateTimeSampled, s.WeightOfCatch, s.Gear, s.LandingSite, s.FishingGround));
             }
@@ -148,6 +208,15 @@ namespace FAD3.Database.Classes.merge
 
         }
 
+        public int SamplingCountByAOI(AOI aoi)
+        {
+            return SamplingCollection.Where(t => t.AOI.AOIGuid == aoi.AOIGuid).Count();
+        }
+
+        public (int Min,int Max) SerialNumberRange(AOI aoi)
+        {
+            return (SerialNumberMinima(aoi), SerialNumberMaxima(aoi));
+        }
         public List<Sampling> GetAllSamplings()
         {
             return SamplingCollection.ToList();
@@ -162,7 +231,10 @@ namespace FAD3.Database.Classes.merge
                         int newIndex = e.NewStartingIndex;
                         Sampling editedEntity = SamplingCollection[newIndex];
                         if (Samplings.Add(editedEntity))
+                        {
                             EditedEntity = new EditedEntity(EditAction.Add, editedEntity);
+                            AddSucceeded = true;
+                        }
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -184,12 +256,13 @@ namespace FAD3.Database.Classes.merge
             }
         }
 
-        public void AddRecordToRepo(Sampling s)
+        public bool AddRecordToRepo(Sampling s)
         {
             EditedEntity = null;
             if (s == null)
                 throw new ArgumentNullException("Error: The argument is Null");
             SamplingCollection.Add(s);
+            return AddSucceeded;
         }
 
         public void UpdateRecordInRepo(Sampling s)
@@ -235,11 +308,11 @@ namespace FAD3.Database.Classes.merge
 
 
 
-            if(sampling.LandingSite==null)
+            if (sampling.LandingSite == null)
                 messages.Add(new EntityValidationMessage("Landing site cannot be empty"));
-            
 
-            if (sampling.Gear==null)
+
+            if (sampling.Gear == null)
                 messages.Add(new EntityValidationMessage("Gear used cannot be empty"));
 
             return messages.Count == 0;

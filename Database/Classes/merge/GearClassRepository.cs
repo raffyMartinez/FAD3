@@ -11,10 +11,12 @@ namespace FAD3.Database.Classes.merge
 {
    public class GearClassRepository
     {
+        private FADEntities _fadEntities;
         public List<GearClass> GearClasses{ get; set; }
 
-        public GearClassRepository()
+        public GearClassRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             GearClasses = getGearClasses();
         }
 
@@ -22,7 +24,7 @@ namespace FAD3.Database.Classes.merge
         {
             List<GearClass> listGearClasses = new List<GearClass>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -59,7 +61,7 @@ namespace FAD3.Database.Classes.merge
         public bool Add(GearClass gc)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Insert into tblGearClass (GearClass,GearClassName, GearLetter)
@@ -76,7 +78,7 @@ namespace FAD3.Database.Classes.merge
         public bool Update(GearClass gc)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Update tblGearClass set
@@ -94,10 +96,10 @@ namespace FAD3.Database.Classes.merge
         public bool Delete(string id)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
-                var sql = $"Delete * from tblGearClass where GearClass='{id}'";
+                var sql = $"Delete * from tblGearClass where GearClass={{{id}}}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
                     try

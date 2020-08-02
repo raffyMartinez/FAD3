@@ -14,6 +14,7 @@ using FAD3.Mapping.Forms;
 using System.Text;
 using FAD3.Mapping.Classes;
 using System.Threading.Tasks;
+using FAD3.Database.Classes.merge.views;
 
 namespace FAD3
 {
@@ -74,6 +75,10 @@ namespace FAD3
         private Grid25GenerateForm _grid25GenerateForm;
         private string _referenceNumber = "";
 
+        public string TreeLevel
+        {
+            get { return _treeLevel; }
+        }
         public bool SpecAndExpenseFormVisible
         {
             get { return _specAndExpenseFormVisible; }
@@ -1966,25 +1971,22 @@ namespace FAD3
             switch (tsi.Tag)
             {
                 case "mergeDatabases":
-                    openFileDialog1.Title = "Select database file to merge";
-                    openFileDialog1.FilterIndex = 1;
-                    openFileDialog1.Filter = "Access database file (*.mdb)|*.mdb|Other files(*.*)|*.*";
-                    openFileDialog1.FileName = "";
-                    DialogResult dr = openFileDialog1.ShowDialog();
-                    if(dr!=DialogResult.Cancel)
+                    if (global.mainForm.TreeLevel == "target_area" && global.mainForm.TargetArea != null)
                     {
-                        if(File.Exists(openFileDialog1.FileName))
+                        MergeDbForm mergeForm = MergeDbForm.GetInstance();
+                        if (mergeForm.Visible)
                         {
-                            if (openFileDialog1.FileName != global.MDBPath)
-                            {
-                                MergeDataBases.OtherDatabaseFileName = openFileDialog1.FileName;
-                                MessageBox.Show(MergeDataBases.MergeResultMessage, "Merging databases", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
-                            else
-                            {
-                                MessageBox.Show("Selected database must be different from the current database", "Merging database", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            }
+                            mergeForm.BringToFront();
                         }
+                        else
+
+                        {
+                            mergeForm.Show(this);
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please select a target area", "Merging database", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     break;
                 case "resetRefNos":

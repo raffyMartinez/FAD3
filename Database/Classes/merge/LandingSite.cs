@@ -9,6 +9,20 @@ namespace FAD3.Database.Classes.merge
 {
     public class LandingSite
     {
+        public override bool Equals(object obj)
+        {
+            //Check for null and compare run-time types.
+            if ((obj == null) || !this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                LandingSite ls = (LandingSite)obj;
+                
+                return (LandingSiteName == ls.LandingSiteName) && (LandingSiteGuid == ls.LandingSiteGuid) && (Municipality.MunicipalityID==ls.Municipality.MunicipalityID);
+            }
+        }
         public string LandingSiteGuid { get; set; }
         public string LandingSiteName { get; set; }
 

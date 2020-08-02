@@ -16,9 +16,9 @@ namespace FAD3.Database.Classes.merge
 
 
 
-        public ProvinceViewModel()
+        public ProvinceViewModel(FADEntities fadEntities)
         {
-            Provinces = new ProvinceRepository();
+            Provinces = new ProvinceRepository(fadEntities);
             ProvinceCollection = new ObservableCollection<Province>(Provinces.Provinces);
             ProvinceCollection.CollectionChanged += Provinces_CollectionChanged;
         }

@@ -11,10 +11,12 @@ namespace FAD3.Database.Classes.merge
 {
     class AOIRepository
     {
+        private FADEntities _fadEntities;
         public List<AOI> AOIs{ get; set; }
 
-        public AOIRepository()
+        public AOIRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             AOIs = getAOIs();
         }
 
@@ -22,7 +24,7 @@ namespace FAD3.Database.Classes.merge
         {
             List<AOI> listAOIs = new List<AOI>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -36,20 +38,27 @@ namespace FAD3.Database.Classes.merge
                         listAOIs.Clear();
                         foreach (DataRow dr in dt.Rows)
                         {
-                            AOI a = new AOI();
-                            a.IsGrid25 = (bool)dr["UseGrid25"];
-                            a.AOIGuid = dr["AOIGuid"].ToString();
-                            a.AOIName= dr["AOIName"].ToString();
-                            a.Code = dr["Letter"].ToString();
-                            a.SetSubGridStyleFromString(dr["SubgridStyle"].ToString());
-                            string utmZone = dr["UTMZone"].ToString();
-                            if (utmZone.Length > 0)
+                            try
                             {
-                                a.UTMZone = new UTMZone(dr["UTMZone"].ToString());
-                                a.AddMBR( new MBR(new Grid25GridCell(a.UTMZone, dr["UpperLeftGrid"].ToString()), new Grid25GridCell(a.UTMZone, dr["LowerRightGrid"].ToString())));
-                            }
+                                AOI a = new AOI();
+                                a.IsGrid25 = (bool)dr["UseGrid25"];
+                                a.AOIGuid = dr["AOIGuid"].ToString();
+                                a.AOIName = dr["AOIName"].ToString();
+                                a.Code = dr["Letter"].ToString();
+                                a.SetSubGridStyleFromString(dr["SubgridStyle"].ToString());
+                                string utmZone = dr["UTMZone"].ToString();
+                                if (utmZone.Length > 0)
+                                {
+                                    a.UTMZone = new UTMZone(dr["UTMZone"].ToString());
+                                    a.AddMBR(new MBR(new Grid25GridCell(a.UTMZone, dr["UpperLeftGrid"].ToString()), new Grid25GridCell(a.UTMZone, dr["LowerRightGrid"].ToString())));
+                                }
 
-                            listAOIs.Add(a);
+                                listAOIs.Add(a);
+                            }
+                            catch(Exception ex)
+                            {
+                                Logger.Log(ex);
+                            }
                         }
                     }
                 }
@@ -66,7 +75,7 @@ namespace FAD3.Database.Classes.merge
         public bool Add(AOI aoi)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Insert into tblAOI (AOIGuid, AOIName,Letter, UTMZone, UpperLeftGrid, LowerRightGrid, UseGrid25)
@@ -83,7 +92,7 @@ namespace FAD3.Database.Classes.merge
         public bool Update(AOI aoi)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Update tblAOI set
@@ -105,7 +114,7 @@ namespace FAD3.Database.Classes.merge
         public bool Delete(string id)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $"Delete * from tblAOI where AOIGuid={{{id}}}";

@@ -10,10 +10,12 @@ namespace FAD3.Database.Classes.merge
 {
     public class SamplingEnumeratorRepository
     {
+        private FADEntities _fadEntities;
         public List<SamplingEnumerator> SamplingEnumerators{ get; set; }
 
-        public SamplingEnumeratorRepository()
+        public SamplingEnumeratorRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             SamplingEnumerators = getSamplingEnumerators();
         }
 
@@ -21,7 +23,7 @@ namespace FAD3.Database.Classes.merge
         {
             List<SamplingEnumerator> listSamplingEnumerator = new List<SamplingEnumerator>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -40,7 +42,7 @@ namespace FAD3.Database.Classes.merge
                             se.Name = dr["EnumeratorName"].ToString();
                             se.IsActive = (bool)dr["Active"];
                             se.HireDate = (DateTime)dr["HireDate"];
-                            se.AOI = FADEntities.AOIViewModel.GetAOI(dr["TargetArea"].ToString());
+                            se.AOI = _fadEntities.AOIViewModel.GetAOI(dr["TargetArea"].ToString());
                             listSamplingEnumerator.Add(se);
                         }
                     }
@@ -57,7 +59,7 @@ namespace FAD3.Database.Classes.merge
         public bool Add(SamplingEnumerator se)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Insert into tblEnumerators (EnumeratorID,EnumeratorName, Active, HireDate, TargetArea)
@@ -74,7 +76,7 @@ namespace FAD3.Database.Classes.merge
         public bool Update(SamplingEnumerator se)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Update tblEnumerators set
@@ -94,10 +96,10 @@ namespace FAD3.Database.Classes.merge
         public bool Delete(string id)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
-                var sql = $"Delete * from tblEnumerators where EnumeratorID='{id}'";
+                var sql = $"Delete * from tblEnumerators where EnumeratorID={{{id}}}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
                     try

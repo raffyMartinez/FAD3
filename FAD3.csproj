@@ -144,6 +144,25 @@
     <Compile Include="Database\Classes\CatchNameURLGenerator.cs" />
     <Compile Include="Database\Classes\EffortEventArg.cs" />
     <Compile Include="Database\Classes\ExpensePerOperation.cs" />
+    <Compile Include="Database\Classes\merge\AdditionalExtent.cs" />
+    <Compile Include="Database\Classes\merge\AdditionalExtentRepository.cs" />
+    <Compile Include="Database\Classes\merge\AdditionalExtentViewModel.cs" />
+    <Compile Include="Database\Classes\merge\AdditionalFishingGround.cs" />
+    <Compile Include="Database\Classes\merge\AdditionalFishingGroundViewModel.cs" />
+    <Compile Include="Database\Classes\merge\FishingExpenseViewModel.cs" />
+    <Compile Include="Database\Classes\merge\GearSpec.cs" />
+    <Compile Include="Database\Classes\merge\CatchComposition.cs" />
+    <Compile Include="Database\Classes\merge\CatchCompositionRepository.cs" />
+    <Compile Include="Database\Classes\merge\CatchCompositionViewModel.cs" />
+    <Compile Include="Database\Classes\merge\CatchDetail.cs" />
+    <Compile Include="Database\Classes\merge\CatchDetailRepository.cs" />
+    <Compile Include="Database\Classes\merge\CatchDetailViewModel.cs" />
+    <Compile Include="Database\Classes\merge\CatchName.cs" />
+    <Compile Include="Database\Classes\merge\CatchNameViewModel.cs" />
+    <Compile Include="Database\Classes\merge\DestinationTargetAreaQuickView.cs" />
+    <Compile Include="Database\Classes\merge\FishingExpense.cs" />
+    <Compile Include="Database\Classes\merge\FishingExpenseItemRepository.cs" />
+    <Compile Include="Database\Classes\merge\FishingExpenseItem.cs" />
     <Compile Include="Database\Classes\FishingExpenseItemsPerOperation.cs" />
     <Compile Include="Database\Classes\FishingGround.cs" />
     <Compile Include="Database\Classes\GearInventoryData.cs" />
@@ -174,15 +193,31 @@
     <Compile Include="Database\Classes\gearinventory\ProvinceRepository.cs" />
     <Compile Include="Database\Classes\gearinventory\ProvinceViewModel.cs" />
     <Compile Include="Database\Classes\GearSpecification.cs" />
-    <Compile Include="Database\Classes\MergeDataBases.cs" />
-    <Compile Include="Database\Classes\merge\AdditionalFishingGrounds.cs" />
-    <Compile Include="Database\Classes\merge\aoi.cs" />
+    <Compile Include="Database\Classes\merge\CatchLocalName.cs" />
+    <Compile Include="Database\Classes\merge\GearLocalName.cs" />
+    <Compile Include="Database\Classes\merge\CatchLocalNameRepository.cs" />
+    <Compile Include="Database\Classes\merge\GearLocalNameRepository.cs" />
+    <Compile Include="Database\Classes\merge\CatchLocalNameViewModel.cs" />
+    <Compile Include="Database\Classes\merge\GearLocalNameViewModel.cs" />
+    <Compile Include="Database\Classes\merge\GearSpecRepository.cs" />
+    <Compile Include="Database\Classes\merge\GearSpecViewModel.cs" />
+    <Compile Include="Database\Classes\merge\GonadalMaturiryStage.cs" />
+    <Compile Include="Database\Classes\merge\GonadalMaturityStageRepository.cs" />
+    <Compile Include="Database\Classes\merge\GonadMaturityStageViewModel.cs" />
+    <Compile Include="Database\Classes\merge\LenFreq.cs" />
+    <Compile Include="Database\Classes\merge\LenFreqRepository.cs" />
+    <Compile Include="Database\Classes\merge\LenFreqViewModel.cs" />
+    <Compile Include="Database\Classes\merge\MergeDataBases.cs" />
+    <Compile Include="Database\Classes\merge\AdditionalFishingGroundRepository.cs" />
+    <Compile Include="Database\Classes\merge\AOI.cs" />
     <Compile Include="Database\Classes\merge\AOIRepository.cs" />
     <Compile Include="Database\Classes\merge\AOIViewModel.cs" />
     <Compile Include="Database\Classes\merge\EditedEntity.cs" />
     <Compile Include="Database\Classes\merge\EntityChangedEventArgs.cs" />
     <Compile Include="Database\Classes\merge\EntityValidationMessage.cs" />
     <Compile Include="Database\Classes\merge\FADEntities.cs" />
+    <Compile Include="Database\Classes\merge\FishingExpenseItemViewModel.cs" />
+    <Compile Include="Database\Classes\merge\FishingExpenseRepository.cs" />
     <Compile Include="Database\Classes\merge\FishingGround.cs" />
     <Compile Include="Database\Classes\merge\Gear.cs" />
     <Compile Include="Database\Classes\merge\GearClass.cs" />
@@ -196,12 +231,26 @@
     <Compile Include="Database\Classes\merge\LandingSiteRepository.cs" />
     <Compile Include="Database\Classes\merge\LandingSiteViewModel.cs" />
     <Compile Include="Database\Classes\merge\MBR.cs" />
+    <Compile Include="Database\Classes\merge\MergeDBEventArgs.cs" />
+    <Compile Include="Database\Classes\merge\MergeDBHelper.cs" />
     <Compile Include="Database\Classes\merge\Municipality.cs" />
     <Compile Include="Database\Classes\merge\MunicipalityRepository.cs" />
     <Compile Include="Database\Classes\merge\MunicipalityViewModel.cs" />
     <Compile Include="Database\Classes\merge\Province.cs" />
     <Compile Include="Database\Classes\merge\ProvinceRepository.cs" />
     <Compile Include="Database\Classes\merge\ProvinceViewModel.cs" />
+    <Compile Include="Database\Classes\merge\RangeObject.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCode.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeRepository.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeUsage.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeUsageLocalName.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeUsageLocalNameRepository.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeUsageRepository.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeUsageViewModel.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeViewModel.cs" />
+    <Compile Include="Database\Classes\merge\SampledGearSpec.cs" />
+    <Compile Include="Database\Classes\merge\SampledGearSpecRepository.cs" />
+    <Compile Include="Database\Classes\merge\SampledGearSpecViewModel.cs" />
     <Compile Include="Database\Classes\merge\Sampling.cs" />
     <Compile Include="Database\Classes\merge\SamplingEnumerator.cs" />
     <Compile Include="Database\Classes\merge\SamplingEnumeratorRepository.cs" />
@@ -219,7 +268,26 @@
     <Compile Include="Database\Classes\merge\TaxaViewModel.cs" />
     <Compile Include="Database\Classes\merge\UTMCoordinate.cs" />
     <Compile Include="Database\Classes\merge\UTMZone.cs" />
+    <Compile Include="Database\Classes\merge\views\ActualMergingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Database\Classes\merge\views\ActualMergingForm.Designer.cs">
+      <DependentUpon>ActualMergingForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Classes\merge\views\GraphSerialNumberForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Database\Classes\merge\views\GraphSerialNumberForm.Designer.cs">
+      <DependentUpon>GraphSerialNumberForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Database\Classes\merge\views\MergeDbForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Database\Classes\merge\views\MergeDbForm.Designer.cs">
+      <DependentUpon>MergeDbForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Database\Classes\OperatingExpenses.cs" />
+    <Compile Include="Database\Classes\merge\RefGearCodeUsageLocalNameViewModel.cs" />
     <Compile Include="Database\Classes\SamplingEventArgs.cs" />
     <Compile Include="Database\Classes\SamplingSummary.cs" />
     <Compile Include="Database\Classes\SamplingToFromXML.cs" />
@@ -957,6 +1025,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Database\Classes\merge\views\ActualMergingForm.resx">
+      <DependentUpon>ActualMergingForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Database\Classes\merge\views\GraphSerialNumberForm.resx">
+      <DependentUpon>GraphSerialNumberForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Database\Classes\merge\views\MergeDbForm.resx">
+      <DependentUpon>MergeDbForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Database\Forms\AllSpeciesForm.resx">
       <DependentUpon>AllSpeciesForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -1277,6 +1354,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <None Include=".editorconfig" />
     <None Include="app.config" />
     <None Include="diagrams\all classes.cd" />
     <None Include="diagrams\graticule classes.cd" />
@@ -1519,6 +1597,8 @@
       <Name>Owf.Controls.Office2007ColorPicker</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="updates\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

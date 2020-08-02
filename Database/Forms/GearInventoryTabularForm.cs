@@ -22,26 +22,10 @@ namespace FAD3.Database.Forms
         private FishingGearInventory _inventory;
         private Dictionary<string, (string month, string type)> _monthsFishing = new Dictionary<string, (string month, string type)>();
 
+        private bool _isExportingInventory = false;
         private bool _isGettingInventoryFromdb = false;
         private InventoryReadHelper _readHelper;
         private InventoryViewModel _inventoryViewModel;
-        //private Dictionary<string, GearInventoryMonthsFishing> _monthsFishingEx;
-
-        //private Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
-        //    int countNoBoat, int? maxCPUE, int? minCPUE,
-        //    int? upperMode, int? lowerMode, int numberDaysUsed,
-        //    string cpueUnit, string Notes, int? dominantPercent,
-        //    int? averageCPUE, int? cpueMode, double? equivalentKg)> _inventoryData = new
-        //    Dictionary<string, (int countCommercial, int countMotorized, int countNonMotorized,
-        //    int countNoBoat, int? maxCPUE, int? minCPUE,
-        //    int? upperMode, int? lowerMode, int numberDaysUsed,
-        //    string cpueUnit, string Notes, int? dominantPercent,
-        //    int? averageCPUE, int? cpueMode, double? equivalentKg)>();
-
-        //private Dictionary<string, (string projectName, string province, string lgu, string barangay, string sitio,
-        //    string enumerator, DateTime surveyDate, string gearClass, string gearVariation, string localNames)> _headers = new
-        //    Dictionary<string, (string projectName, string province, string lgu, string barangay, string sitio,
-        //    string enumerator, DateTime surveyDate, string gearClass, string gearVariation, string localNames)>();
 
         public bool ShowProjectColumn { get; set; }
         public string InventoryProjectName { get; set; }
@@ -68,6 +52,11 @@ namespace FAD3.Database.Forms
         private void OnNodeAfterSelect(object sender, TreeViewEventArgs e)
         {
             tsLabel.Text = "";
+            if (_isExportingInventory)
+            {
+                tsLabel.Text = $"Exporting {e.Node.Text}";
+                statusStrip1.Refresh();
+            }
             switch (e.Node.Name)
             {
                 case "nodeProject":
@@ -127,6 +116,7 @@ namespace FAD3.Database.Forms
                     FillHeaderRowsEx(showRespondents:true);
                     break;
             }
+
         }
 
         private void ShowCPUEHistory()
@@ -521,21 +511,6 @@ namespace FAD3.Database.Forms
                                 lvi.SubItems.Add(m);
                             }
                         }
-
-                        //if (showMonthsFishing)
-                        //{
-                        //    foreach(var m in gear.FishingMonthsArr())
-                        //    {
-                        //      lvi.SubItems.Add(m);
-                        //    }
-                        //}
-                        //else
-                        //{
-                        //    foreach (var m in gear.PeakFishingMonthsArr())
-                        //    {
-                        //        lvi.SubItems.Add(m);
-                        //    }
-                        //}
                     }
 
 
@@ -568,13 +543,7 @@ namespace FAD3.Database.Forms
             }
             tsProgressBar.Value = 0;
         }
-        public async Task GetInventoryViewModel()
-        {
-            _readHelper = new InventoryReadHelper();
-            _readHelper.OnInventoryRecordRead += OnRecordRead;
-            _inventoryViewModel = await Task.Run(() => new InventoryViewModel(_inventoryGuid, _readHelper));
-            tsLabel.Text = "Finished retrieving inventory records!";
-        }
+
 
 
 
@@ -608,6 +577,15 @@ namespace FAD3.Database.Forms
             Text = "Inventory of fishers, fishing vessels and gears tables";
 
         }
+
+        public async Task GetInventoryViewModel()
+        {
+            _readHelper = new InventoryReadHelper();
+            _readHelper.OnInventoryRecordRead += OnRecordRead;
+            _inventoryViewModel = await Task.Run(() => new InventoryViewModel(_inventoryGuid, _readHelper));
+            tsLabel.Text = "Finished retrieving inventory records!";
+        }
+
         private void OnFormClosed(object sender, FormClosedEventArgs e)
         {
             _instance = null;
@@ -761,7 +739,6 @@ namespace FAD3.Database.Forms
             OnNodeAfterSelect(null, e);
             try
             {
-                LogExport(nd.Text);
                 var wks = wb.Worksheets.Add(ListViewToDataTable(listResults, nd.Text));
                 wks.Name = nd.Text;
             }
@@ -785,7 +762,8 @@ namespace FAD3.Database.Forms
         }
         private void ExportInventoryXL(string fileName)
         {
-            _isGettingInventoryFromdb = false;     
+            _isGettingInventoryFromdb = false;
+            _isExportingInventory = true;
             try
             {
                 var wb = new XLWorkbook();
@@ -793,11 +771,12 @@ namespace FAD3.Database.Forms
                 foreach (TreeNode nd in treeInventory.Nodes)
                 {
                     PrintNodesRecursive(nd, wb);
+
                 }
                 wb.SaveAs(fileName);
                 treeInventory.SelectedNode = treeInventory.Nodes["nodeProject"];
                 ShowProject();
-                MessageBox.Show($"Inventory data successfully save to {fileName}");
+                MessageBox.Show($"Inventory data successfully saved to {fileName}");
             }
             catch (Exception ex)
             {

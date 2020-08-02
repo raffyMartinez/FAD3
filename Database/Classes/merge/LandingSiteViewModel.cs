@@ -11,15 +11,16 @@ namespace FAD3.Database.Classes.merge
 {
     public class LandingSiteViewModel
     {
+        public bool AddSucceeded { get; set; }
         public ObservableCollection<LandingSite> LandingSiteCollection { get; set; }
         private LandingSiteRepository LandingSites { get; set; }
 
         public event EventHandler<EntityChangedEventArgs> EntityChanged;
 
-        public LandingSiteViewModel()
+        public LandingSiteViewModel(FADEntities fadEntities)
         {
 
-            LandingSites = new LandingSiteRepository();
+            LandingSites = new LandingSiteRepository(fadEntities);
             LandingSiteCollection = new ObservableCollection<LandingSite>(LandingSites.LandingSites);
             LandingSiteCollection.CollectionChanged += LandingSiteCollection_CollectionChanged;
         }
@@ -30,6 +31,14 @@ namespace FAD3.Database.Classes.merge
             get { return LandingSiteCollection.Count; }
         }
 
+        public int CountByAOI(AOI aoi)
+        {
+            return LandingSiteCollection.Count(t => t.AOI.AOIGuid == aoi.AOIGuid);
+        }
+        public LandingSite GetEqual(LandingSite ls)
+        {
+            return LandingSiteCollection.FirstOrDefault(n => n.Equals(ls));
+        }
         public bool NameExists(string landingSiteName)
         {
             foreach (LandingSite ls in LandingSiteCollection)
@@ -48,11 +57,6 @@ namespace FAD3.Database.Classes.merge
 
         }
 
-        public bool CanDeleteEntity(LandingSite ls)
-        {
-            return FADEntities.SamplingViewModel.SamplingCollection
-                .Where(t => t.LandingSite.LandingSiteGuid == ls.LandingSiteGuid).ToList().Count == 0;
-        }
         public List<LandingSite> GetAllLandingSites()
         {
             return LandingSiteCollection.ToList();
@@ -67,7 +71,7 @@ namespace FAD3.Database.Classes.merge
                     {
                         int newIndex = e.NewStartingIndex;
                         editedLandingSite = LandingSiteCollection[newIndex];
-                        LandingSites.Add(editedLandingSite);
+                        AddSucceeded= LandingSites.Add(editedLandingSite);
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -89,11 +93,13 @@ namespace FAD3.Database.Classes.merge
             EntityChanged?.Invoke(this, args);
         }
 
-        public void AddRecordToRepo(LandingSite ls)
+        public bool AddRecordToRepo(LandingSite ls)
         {
             if (ls == null)
                 throw new ArgumentNullException("Error: The argument is Null");
+
             LandingSiteCollection.Add(ls);
+            return AddSucceeded;
         }
 
         public void UpdateRecordInRepo(LandingSite ls)

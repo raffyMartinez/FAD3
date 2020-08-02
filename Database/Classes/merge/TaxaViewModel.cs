@@ -15,9 +15,9 @@ namespace FAD3.Database.Classes.merge
 
 
 
-        public TaxaViewModel()
+        public TaxaViewModel(FADEntities fadEntities)
         {
-            Taxas = new TaxaRepository();
+            Taxas = new TaxaRepository(fadEntities);
             TaxaCollection = new ObservableCollection<Taxa>(Taxas.Taxas);
             TaxaCollection.CollectionChanged += Taxa_CollectionChanged;
         }

@@ -268,6 +268,9 @@ namespace FAD3
             TreeSubNodes(string treeLevel, string landingSiteGuid, string gearVariationGuid = "")
         {
             var list = new List<(string GearClassName, string Variation, string LandingSiteGuid, string GearVariationGuid, string SamplingMonthYear)>();
+
+            if (treeLevel != "landing_site" && treeLevel != "gear") return list;
+            
             var query = "";
             using (var dataTable = new DataTable())
             {
@@ -325,11 +328,15 @@ namespace FAD3
                         }
                     }
                 }
+                catch (OleDbException odbEx)
+                {
+                    Logger.Log(odbEx.Message);
+                }
                 catch (Exception ex)
                 {
                     try
                     {
-                        Logger.Log(ex.Message, MethodBase.GetCurrentMethod().DeclaringType.Name, MethodBase.GetCurrentMethod().Name);
+                        Logger.Log(ex);
                     }
                     catch
                     {
@@ -459,7 +466,22 @@ namespace FAD3
                 _tempFiles.Add(fileName);
             }
         }
+        private static string _fileToMerge;
 
+        public static string FileToMerge 
+        {
+            get {return _fileToMerge; }
+            set 
+            {
+                _fileToMerge = value;
+                _connectionString = "Provider=Microsoft.JET.OLEDB.4.0;data source=" + _fileToMerge;
+            } 
+        }
+
+        public static void ResetConnectionString()
+        {
+            _connectionString = "Provider=Microsoft.JET.OLEDB.4.0;data source=" + _mdbPath;
+        }
         /// <summary>
         /// Class constructor
         /// </summary>

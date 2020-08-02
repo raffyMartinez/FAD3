@@ -63,7 +63,7 @@ namespace FAD3.Database.Classes.merge
         public FishingGround(string fg, Sampling s)
         {
             Sampling = s;
-            if(Sampling.AOI.IsGrid25)
+            if(Sampling.AOI.IsGrid25 && Sampling.AOI.UTMZone!=null)
             {
                 IsGrid25 = true;
                 Grid25GridCell g25 = new Grid25GridCell(s.AOI.UTMZone, fg);

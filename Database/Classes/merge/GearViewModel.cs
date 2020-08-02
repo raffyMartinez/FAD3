@@ -11,14 +11,15 @@ namespace FAD3.Database.Classes.merge
 {
     public class GearViewModel
     {
+        public bool AddSucceeded { get; set; }
         public ObservableCollection<Gear> GearCollection { get; set; }
         private GearRepository Gears { get; set; }
 
 
 
-        public GearViewModel()
+        public GearViewModel(FADEntities fadEntities)
         {
-            Gears = new GearRepository();
+            Gears = new GearRepository(fadEntities);
             GearCollection = new ObservableCollection<Gear>(Gears.Gears);
             GearCollection.CollectionChanged += Gearss_CollectionChanged;
         }
@@ -35,11 +36,6 @@ namespace FAD3.Database.Classes.merge
         {
             return GearCollection
                 .Where(t => t.GearID == g.GearID).FirstOrDefault().GearClass;
-        }
-        public bool CanDeleteEntity(Gear g)
-        {
-            return FADEntities.SamplingViewModel.SamplingCollection
-                .Where(t => t.Gear.GearName == g.GearName).ToList().Count == 0;
         }
         public bool NameExists(string gearName)
         {
@@ -65,15 +61,33 @@ namespace FAD3.Database.Classes.merge
             return false;
         }
 
+        public bool ModifyGearName (Gear gear)
+        {
+            var success =  Gears.ModifyGearName(gear);
+            if(success)
+            {
+                GearCollection.Where(t => t.GearName == gear.GearName).FirstOrDefault().GearName = $"{gear.GearName}_1";
+            }
+            return success;
+        }
+        public bool ReplaceGearName(Gear gear)
+        {
+             return Gears.UpdateGearIDFromDestinationGearID(gear);
+        }
+
         public List<Gear>GetAllGears(GearClass gc)
         {
             return GearCollection
                 .Where(t => t.GearClass.GearClassGuid == gc.GearClassGuid).ToList();
         }
+
+        public Gear GetGearEx(string gearName)
+        {
+            return GearCollection.FirstOrDefault(n => n.GearName == gearName);
+        }
         public Gear GetGear(string id)
         {
             return GearCollection.FirstOrDefault(n => n.GearID == id);
-
         }
         private void Gearss_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -82,7 +96,7 @@ namespace FAD3.Database.Classes.merge
                 case NotifyCollectionChangedAction.Add:
                     {
                         int newIndex = e.NewStartingIndex;
-                        Gears.Add(GearCollection[newIndex]);
+                       AddSucceeded= Gears.Add(GearCollection[newIndex]);
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -105,11 +119,12 @@ namespace FAD3.Database.Classes.merge
             get { return GearCollection.Count; }
         }
 
-        public void AddRecordToRepo(Gear gear)
+        public bool AddRecordToRepo(Gear gear)
         {
             if (gear == null)
                 throw new ArgumentNullException("Error: The argument is Null");
             GearCollection.Add(gear);
+            return AddSucceeded;
         }
 
         public void UpdateRecordInRepo(Gear gear)

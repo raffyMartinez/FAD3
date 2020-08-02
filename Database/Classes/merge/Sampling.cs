@@ -60,7 +60,7 @@ namespace FAD3.Database.Classes.merge
         
         public override string ToString()
         {
-            return ReferenceNumber.ToString();
+            return $"{AOI.AOIName} - {ReferenceNumber.ToString()}";
         }
         
     }

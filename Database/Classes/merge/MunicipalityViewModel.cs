@@ -15,9 +15,9 @@ namespace FAD3.Database.Classes.merge
 
 
 
-        public MunicipalityViewModel()
+        public MunicipalityViewModel(FADEntities fadEntities)
         {
-            Municipalities = new MunicipalityRepository();
+            Municipalities = new MunicipalityRepository(fadEntities);
             MunicipalityCollection = new ObservableCollection<Municipality>(Municipalities.Municipalities);
             MunicipalityCollection.CollectionChanged += Municipalities_CollectionChanged;
         }

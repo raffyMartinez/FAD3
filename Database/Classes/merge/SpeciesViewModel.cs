@@ -10,15 +10,16 @@ namespace FAD3.Database.Classes.merge
 {
     public class SpeciesViewModel
     {
+        public bool AddSucceeded { get; set; }
         public ObservableCollection<Species> SpeciesCollection { get; set; }
         private SpeciesRepository Specieses { get; set; }
 
         public event EventHandler<EntityChangedEventArgs> EntityChanged;
 
-        public SpeciesViewModel()
+        public SpeciesViewModel(FADEntities fadEntities)
         {
 
-            Specieses = new SpeciesRepository();
+            Specieses = new SpeciesRepository(fadEntities);
             SpeciesCollection = new ObservableCollection<Species>(Specieses.SpeciesList);
             SpeciesCollection.CollectionChanged += SpeciesCollectionn_CollectionChanged;
         }
@@ -67,7 +68,7 @@ namespace FAD3.Database.Classes.merge
                     {
                         int newIndex = e.NewStartingIndex;
                         editedSpecies = SpeciesCollection[newIndex];
-                        Specieses.Add(editedSpecies);
+                        AddSucceeded= Specieses.Add(editedSpecies);
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -89,11 +90,12 @@ namespace FAD3.Database.Classes.merge
             EntityChanged?.Invoke(this, args);
         }
 
-        public void AddRecordToRepo(Species sp)
+        public bool AddRecordToRepo(Species sp)
         {
             if (sp == null)
                 throw new ArgumentNullException("Error: The argument is Null");
             SpeciesCollection.Add(sp);
+            return AddSucceeded;
         }
 
         public void UpdateRecordInRepo(Species sp)

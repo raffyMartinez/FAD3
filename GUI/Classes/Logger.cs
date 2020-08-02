@@ -12,7 +12,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
-
+using FAD3.Database.Classes;
+using FAD3.Database.Classes.merge;
 namespace FAD3
 {
     /// <summary>
@@ -24,6 +25,31 @@ namespace FAD3
         {
         }
 
+        public static void LogMerge(FADEntities source, FADEntities destination)
+        {
+            string filepath = Application.StartupPath + "\\merge.log";
+
+            using (StreamWriter writer = new StreamWriter(filepath, true))
+            {
+                writer.WriteLine($"source: {source.MDBPath} destination:{destination.MDBPath} - {DateTime.Now.ToString()}");
+            }
+        }
+        public static void LogMerge(string s, bool isError=false)
+        {
+            var logPreMessage = "merge message";
+            if(isError)
+            {
+                logPreMessage = "merge error";
+            }
+            {
+                string filepath = Application.StartupPath + "\\merge.log";
+
+                    using (StreamWriter writer = new StreamWriter(filepath, true))
+                    {
+                        writer.WriteLine($"{logPreMessage}: {s} - {DateTime.Now.ToString()}");
+                    }
+            }
+        }
         public static void Log(Exception ex, Boolean ShowMessage = false)
         {
             string filepath = Application.StartupPath + "\\fad.log";

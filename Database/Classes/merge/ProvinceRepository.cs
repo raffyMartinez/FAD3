@@ -11,10 +11,12 @@ namespace FAD3.Database.Classes.merge
 {
     class ProvinceRepository
     {
+        private FADEntities _fadEntities;
         public List<Province> Provinces {get; set; }
 
-        public ProvinceRepository()
+        public ProvinceRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             Provinces = getProvinces();
         }
 
@@ -22,7 +24,7 @@ namespace FAD3.Database.Classes.merge
         {
             List<Province> listProvinces = new List<Province>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -57,7 +59,7 @@ namespace FAD3.Database.Classes.merge
         public bool Add(Province p)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Insert into Provinces (ProvNo, ProvinceName)
@@ -74,7 +76,7 @@ namespace FAD3.Database.Classes.merge
         public bool Update(Province  p)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Update Provinces set
@@ -88,13 +90,13 @@ namespace FAD3.Database.Classes.merge
             return success;
         }
 
-        public bool Delete(int ID)
+        public bool Delete(int id)
         {
             bool success = false;
             using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
             {
                 conn.Open();
-                var sql = $"Delete * from Provinces where ProvNo={ID}";
+                var sql = $"Delete * from Provinces where ProvNo={id}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
                     try

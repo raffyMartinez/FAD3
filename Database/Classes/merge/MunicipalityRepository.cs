@@ -11,10 +11,12 @@ namespace FAD3.Database.Classes.merge
 {
     public class MunicipalityRepository
     {
+        private FADEntities _fadEntities;
         public List<Municipality> Municipalities{ get; set; }
 
-        public MunicipalityRepository()
+        public MunicipalityRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             Municipalities = getMunicipalities();
         }
 
@@ -22,7 +24,7 @@ namespace FAD3.Database.Classes.merge
         {
             List<Municipality> listMunicipalities = new List<Municipality>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -38,7 +40,7 @@ namespace FAD3.Database.Classes.merge
                         foreach (DataRow dr in dt.Rows)
                         {
                             Municipality m = new Municipality();
-                            m.Province = FADEntities.ProvinceViewModel.GetProvince(Convert.ToInt32( dr["ProvNo"]));
+                            m.Province = _fadEntities.ProvinceViewModel.GetProvince(Convert.ToInt32( dr["ProvNo"]));
                             m.MunicipalityID = (int)dr["MunNo"];
                             m.MunicipalityName = dr["Municipality"].ToString();
                             if (dr["yCoord"].ToString().Length > 0 && dr["xCoord"].ToString().Length > 0)
@@ -63,7 +65,7 @@ namespace FAD3.Database.Classes.merge
         {
             bool success = false;
             string sql;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 if (m.Coordinate != null)
@@ -91,7 +93,7 @@ namespace FAD3.Database.Classes.merge
         {
             string sql;
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 if (m.Coordinate != null)
@@ -122,13 +124,13 @@ namespace FAD3.Database.Classes.merge
             return success;
         }
 
-        public bool Delete(int ID)
+        public bool Delete(int id)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
-                var sql = $"Delete * from Municipalities where MunNo={ID}";
+                var sql = $"Delete * from Municipalities where MunNo={id}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
                     try

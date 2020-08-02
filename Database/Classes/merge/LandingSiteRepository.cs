@@ -11,10 +11,12 @@ namespace FAD3.Database.Classes.merge
 {
     public class LandingSiteRepository
     {
+        private FADEntities _fadEntities;
         public List<LandingSite> LandingSites { get; set; }
 
-        public LandingSiteRepository()
+        public LandingSiteRepository(FADEntities fadEntities)
         {
+            _fadEntities = fadEntities;
             LandingSites = getLandingSites();
         }
 
@@ -24,7 +26,7 @@ namespace FAD3.Database.Classes.merge
             float lon;
             List<LandingSite> listLandingSites = new List<LandingSite>();
             var dt = new DataTable();
-            using (var conection = new OleDbConnection(global.ConnectionString))
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 try
                 {
@@ -40,9 +42,10 @@ namespace FAD3.Database.Classes.merge
                         foreach (DataRow dr in dt.Rows)
                         {
                             LandingSite  ls = new LandingSite();
+                            ls.AOI = _fadEntities.AOIViewModel.GetAOI(dr["AOIGuid"].ToString());
                             ls.LandingSiteGuid = dr["LSGUID"].ToString();
                             ls.LandingSiteName = dr["LSName"].ToString();
-                            ls.Municipality = FADEntities.MunicipalityViewModel.GetMunicipality(Convert.ToInt32( dr["MunNo"]));
+                            ls.Municipality = _fadEntities.MunicipalityViewModel.GetMunicipality(Convert.ToInt32( dr["MunNo"]));
                             if(!string.IsNullOrEmpty(dr["cx"].ToString()) && !string.IsNullOrEmpty(dr["cy"].ToString()))
                             {
                                 lat = Convert.ToSingle(dr["cy"]);
@@ -66,7 +69,7 @@ namespace FAD3.Database.Classes.merge
         {
             string sql;
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 if (ls.Coordinate != null)
@@ -94,7 +97,7 @@ namespace FAD3.Database.Classes.merge
         {
             string sql;
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 if (ls.Coordinate == null)
@@ -123,13 +126,13 @@ namespace FAD3.Database.Classes.merge
             return success;
         }
 
-        public bool Delete(string ID)
+        public bool Delete(string id)
         {
             bool success = false;
-            using (OleDbConnection conn = new OleDbConnection(global.ConnectionString))
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
-                var sql = $"Delete * from tblLandingSites where LSGUID={ID}";
+                var sql = $"Delete * from tblLandingSites where LSGUID={{{id}}}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
                     try

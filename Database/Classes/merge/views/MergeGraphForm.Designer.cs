@@ -1,6 +1,6 @@
 ﻿namespace FAD3.Database.Classes.merge.views
 {
-    partial class GraphSerialNumberForm
+    partial class MergeGraphForm
     {
         /// <summary>
         /// Required designer variable.

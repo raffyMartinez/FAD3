@@ -8,8 +8,13 @@ namespace FAD3.Database.Classes.merge
 {
     public static class MergeDataBases
     {
+        private static List<string> _entityTables;
+        public static Dictionary<string,int> DestinationBeforeCounts { get; set; }
+        public static Dictionary<string, int> SourceCounts { get; set; }
+        public static Dictionary<string, int> DestinationAfterCounts { get; set; }
         public static AOI SourceAOI { get; set; }
         public static AOI DestinationAOI { get; set; }
+
 
         private static string _sourceDatabaseFileName;
         private static string _desitantionDatabaseFileName;
@@ -33,11 +38,41 @@ namespace FAD3.Database.Classes.merge
             }
         }
 
+        private static void SetUpEntityList()
+        {
+            _entityTables = new List<string>();
+            _entityTables.Add("Samplings");
+            _entityTables.Add("Catch composition");
+            _entityTables.Add("Catch details");
+            _entityTables.Add("Length frequency");
+            _entityTables.Add("GMS");
+            _entityTables.Add("Fishing expense");
+            _entityTables.Add("Fishing expense items");
+            _entityTables.Add("Enumerators");
+            _entityTables.Add("Landing sites");
+            _entityTables.Add("Species");
+            _entityTables.Add("Gear class");
+            _entityTables.Add("Gears");
+            _entityTables.Add("Sampled gear specifications");
+            _entityTables.Add("Catch local names");
+            _entityTables.Add("Catch names");
+            _entityTables.Add("Gear local names");
+            _entityTables.Add("Additional extents");
+            _entityTables.Add("Additional fishing grounds");
+            _entityTables.Add("Gear specs");
+            _entityTables.Add("Municipalities");
+            _entityTables.Add("Provinces");
+            _entityTables.Add("Reference gear codes");
+            _entityTables.Add("Reference gear code usage");
+            _entityTables.Add("Reference gear code local names");
+        }
         public static void SetSourceAndDestination()
         {
             _desitantionDatabaseFileName = global.MDBPath;
             Destination = new FADEntities(_desitantionDatabaseFileName);
             Source = new FADEntities(_sourceDatabaseFileName);
+            SetUpEntityList();
+
         }
         public static FADEntities Destination { get; private set; }
         public static FADEntities Source { get; private set; }
@@ -157,6 +192,105 @@ namespace FAD3.Database.Classes.merge
             Source.SampledGearSpecViewModel = new SampledGearSpecViewModel(Source);
             mergeDBHelper.MergingTable("Gear spec of sampled gears");
             mergeDBHelper.IsDone();
+
+            SetupCounts();
+            PickupCounts();
+        }
+
+        private static void SetupCounts()
+        {
+            DestinationBeforeCounts = new Dictionary<string, int>();
+            SourceCounts = new Dictionary<string, int>();
+            DestinationAfterCounts = new Dictionary<string, int>();
+
+            foreach(var item in _entityTables)
+            {
+                DestinationBeforeCounts.Add(item, 0);
+                SourceCounts.Add(item, 0);
+                DestinationAfterCounts.Add(item, 0);
+            }
+        }
+        private static void PickupCounts(bool before=true)
+        {
+            if(before)
+            {
+                DestinationBeforeCounts["Samplings"] = Destination.SamplingViewModel.Count;
+                DestinationBeforeCounts["Catch composition"] = Destination.CatchCompositionViewModel.Count;
+                DestinationBeforeCounts["Catch details"] = Destination.CatchDetailViewModel.Count;
+                DestinationBeforeCounts["Length frequency"] = Destination.LenFreqViewModel.Count;
+                DestinationBeforeCounts["GMS"] = Destination.GonadMaturityStageViewModel.Count;
+                DestinationBeforeCounts["Fishing expense"] = Destination.FishingExpenseViewModel.Count;
+                DestinationBeforeCounts["Fishing expense items"] = Destination.FishingExpenseItemViewModel.Count;
+                DestinationBeforeCounts["Enumerators"] = Destination.SamplingEnumeratorViewModel.Count;
+                DestinationBeforeCounts["Landing sites"] = Destination.LandingSiteViewModel.Count;
+                DestinationBeforeCounts["Species"] = Destination.SpeciesViewModel.Count;
+                DestinationBeforeCounts["Gear class"] = Destination.GearClassViewModel.Count;
+                DestinationBeforeCounts["Gears"] = Destination.GearViewModel.Count;
+                DestinationBeforeCounts["Sampled gear specifications"] = Destination.SampledGearSpecViewModel.Count;
+                DestinationBeforeCounts["Catch local names"] = Destination.CatchLocalNameViewModel.Count;
+                DestinationBeforeCounts["Catch names"] = Destination.CatchNameViewModel.Count;
+                DestinationBeforeCounts["Geal local names"] = Destination.GearLocalNameViewModel.Count;
+                DestinationBeforeCounts["Additional extents"] = Destination.AdditionalExtentViewModel.Count;
+                DestinationBeforeCounts["Additional fishing grounds"] = Destination.AdditionalFishingGroundViewModel.Count;
+                DestinationBeforeCounts["Gear specs"] = Destination.GearSpecViewModel.Count;
+                DestinationBeforeCounts["Municipalities"] = Destination.MunicipalityViewModel.Count;
+                DestinationBeforeCounts["Provinces"] = Destination.ProvinceViewModel.Count;
+                DestinationBeforeCounts["Reference gear codes"] = Destination.RefGearCodeViewModel.Count;
+                DestinationBeforeCounts["Reference gear code usage"] = Destination.RefGearCodeUsageViewModel.Count;
+                DestinationBeforeCounts["Reference gear code local names"] = Destination.RefGearCodeUsageLocalNameViewModel.Count;
+
+                SourceCounts["Samplings"] = Source.SamplingViewModel.Count;
+                SourceCounts["Catch composition"] = Source.CatchCompositionViewModel.Count;
+                SourceCounts["Catch details"] = Source.CatchDetailViewModel.Count;
+                SourceCounts["Length frequency"] = Source.LenFreqViewModel.Count;
+                SourceCounts["GMS"] = Source.GonadMaturityStageViewModel.Count;
+                SourceCounts["Fishing expense"] = Source.FishingExpenseViewModel.Count;
+                SourceCounts["Fishing expense items"] = Source.FishingExpenseItemViewModel.Count;
+                SourceCounts["Enumerators"] = Source.SamplingEnumeratorViewModel.Count;
+                SourceCounts["Landing sites"] = Source.LandingSiteViewModel.Count;
+                SourceCounts["Species"] = Source.SpeciesViewModel.Count;
+                SourceCounts["Gear class"] = Source.GearClassViewModel.Count;
+                SourceCounts["Gears"] = Source.GearViewModel.Count;
+                SourceCounts["Sampled gear specifications"] = Source.SampledGearSpecViewModel.Count;
+                SourceCounts["Catch local names"] = Source.CatchLocalNameViewModel.Count;
+                SourceCounts["Catch names"] = Source.CatchNameViewModel.Count;
+                SourceCounts["Geal local names"] = Source.GearLocalNameViewModel.Count;
+                SourceCounts["Additional extents"] = Source.AdditionalExtentViewModel.Count;
+                SourceCounts["Additional fishing grounds"] = Source.AdditionalFishingGroundViewModel.Count;
+                SourceCounts["Gear specs"] = Source.GearSpecViewModel.Count;
+                SourceCounts["Municipalities"] = Source.MunicipalityViewModel.Count;
+                SourceCounts["Provinces"] = Source.ProvinceViewModel.Count;
+                SourceCounts["Reference gear codes"] = Source.RefGearCodeViewModel.Count;
+                SourceCounts["Reference gear code usage"] = Source.RefGearCodeUsageViewModel.Count;
+                SourceCounts["Reference gear code local names"] = Source.RefGearCodeUsageLocalNameViewModel.Count;
+            }
+            else
+            {
+                DestinationAfterCounts["Samplings"] = Destination.SamplingViewModel.Count;
+                DestinationAfterCounts["Catch composition"] = Destination.CatchCompositionViewModel.Count;
+                DestinationAfterCounts["Catch details"] = Destination.CatchDetailViewModel.Count;
+                DestinationAfterCounts["Length frequency"] = Destination.LenFreqViewModel.Count;
+                DestinationAfterCounts["GMS"] = Destination.GonadMaturityStageViewModel.Count;
+                DestinationAfterCounts["Fishing expense"] = Destination.FishingExpenseViewModel.Count;
+                DestinationAfterCounts["Fishing expense items"] = Destination.FishingExpenseItemViewModel.Count;
+                DestinationAfterCounts["Enumerators"] = Destination.SamplingEnumeratorViewModel.Count;
+                DestinationAfterCounts["Landing sites"] = Destination.LandingSiteViewModel.Count;
+                DestinationAfterCounts["Species"] = Destination.SpeciesViewModel.Count;
+                DestinationAfterCounts["Gear class"] = Destination.GearClassViewModel.Count;
+                DestinationAfterCounts["Gears"] = Destination.GearViewModel.Count;
+                DestinationAfterCounts["Sampled gear specifications"] = Destination.SampledGearSpecViewModel.Count;
+                DestinationAfterCounts["Catch local names"] = Destination.CatchLocalNameViewModel.Count;
+                DestinationAfterCounts["Catch names"] = Destination.CatchNameViewModel.Count;
+                DestinationAfterCounts["Geal local names"] = Destination.GearLocalNameViewModel.Count;
+                DestinationAfterCounts["Additional extents"] = Destination.AdditionalExtentViewModel.Count;
+                DestinationAfterCounts["Additional fishing grounds"] = Destination.AdditionalFishingGroundViewModel.Count;
+                DestinationAfterCounts["Gear specs"] = Destination.GearSpecViewModel.Count;
+                DestinationAfterCounts["Municipalities"] = Destination.MunicipalityViewModel.Count;
+                DestinationAfterCounts["Provinces"] = Destination.ProvinceViewModel.Count;
+                DestinationAfterCounts["Reference gear codes"] = Destination.RefGearCodeViewModel.Count;
+                DestinationAfterCounts["Reference gear code usage"] = Destination.RefGearCodeUsageViewModel.Count;
+                DestinationAfterCounts["Reference gear code local names"] = Destination.RefGearCodeUsageLocalNameViewModel.Count;
+            }
 
         }
         public static string MergeResultMessage { get; private set; }
@@ -455,6 +589,8 @@ namespace FAD3.Database.Classes.merge
             mergedbHelper.MergingTable("Gonadal maturity stage");
 
             mergedbHelper.IsDone();
+
+            PickupCounts(false);
 
             return true;
         }

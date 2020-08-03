@@ -38,6 +38,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tsLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonResultsGraph = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -144,11 +145,23 @@
             this.tsLabel.Size = new System.Drawing.Size(117, 20);
             this.tsLabel.Text = "this is status text";
             // 
+            // buttonResultsGraph
+            // 
+            this.buttonResultsGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonResultsGraph.Location = new System.Drawing.Point(611, 142);
+            this.buttonResultsGraph.Name = "buttonResultsGraph";
+            this.buttonResultsGraph.Size = new System.Drawing.Size(101, 33);
+            this.buttonResultsGraph.TabIndex = 11;
+            this.buttonResultsGraph.Text = "View results";
+            this.buttonResultsGraph.UseVisualStyleBackColor = true;
+            this.buttonResultsGraph.Click += new System.EventHandler(this.OnButtonClick);
+            // 
             // ActualMergingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(729, 470);
+            this.Controls.Add(this.buttonResultsGraph);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.buttonViewConflict);
             this.Controls.Add(this.buttonCancel);
@@ -180,5 +193,6 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar tsProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel tsLabel;
+        private System.Windows.Forms.Button buttonResultsGraph;
     }
 }

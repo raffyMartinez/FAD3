@@ -168,6 +168,18 @@ namespace FAD3.Database.Classes.merge.views
         {
             switch (((Button)sender).Name)
             {
+                case "buttonResultsGraph":
+                    var gsnf = MergeGraphForm.GetInstance(SourceAOI, DestinationAOI);
+                    if (gsnf.Visible)
+                    {
+                        gsnf.BringToFront();
+                    }
+                    else
+                    {
+                        gsnf.Show(this);
+                    }
+                    gsnf.ShowCounts();
+                    break;
                 case "buttonMerge":
                     if (checkProceed.Checked)
                     {
@@ -187,7 +199,7 @@ namespace FAD3.Database.Classes.merge.views
                     Close();
                     break;
                 case "buttonViewConflict":
-                    var gsnf = GraphSerialNumberForm.GetInstance(SourceAOI,DestinationAOI);
+                     gsnf = MergeGraphForm.GetInstance(SourceAOI,DestinationAOI);
                     if(gsnf.Visible)
                     {
                         gsnf.BringToFront();
@@ -196,7 +208,7 @@ namespace FAD3.Database.Classes.merge.views
                     {
                         gsnf.Show(this);
                     }
-                    gsnf.RefreshChart();
+                    gsnf.ShowRefSerialNumbers();
                     break;
             }
         }

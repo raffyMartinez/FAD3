@@ -2,7 +2,7 @@
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
+using FAD3.Mapping.Classes;
 namespace FAD3.Mapping.Forms
 {
     public partial class PolygonLineLayerSymbologyForm : Form

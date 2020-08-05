@@ -8,7 +8,7 @@ using System.Linq;
 using FAD3.Mapping.Classes;
 using System.Reflection;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     /// <summary>
     /// Helper class for saving a map to an image

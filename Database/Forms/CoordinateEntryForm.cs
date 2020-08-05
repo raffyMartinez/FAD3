@@ -7,7 +7,7 @@ using AxMapWinGIS;
 using MapWinGIS;
 using FAD3.Mapping.Classes;
 
-namespace FAD3
+namespace FAD3.Database.Forms
 {
     public partial class CoordinateEntryForm : Form
     {

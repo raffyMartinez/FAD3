@@ -1,4 +1,4 @@
-﻿using FAD3.Database.Classes;
+﻿
 using Oware;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Data.OleDb;
 using System.Reflection;
 using System.Drawing;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     /// <summary>
     /// Holds various functions useful in creating and validating fishing grids

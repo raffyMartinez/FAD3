@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     public static class Enumerators
     {

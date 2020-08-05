@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-
-namespace FAD3
+using FAD3.Database.Classes;
+namespace FAD3.Database.Forms
 {
     public partial class FishingGroundExtentsForm : Form
     {

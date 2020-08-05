@@ -12,7 +12,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace FAD3
+namespace FAD3.Database.Forms
 {
     public partial class GearCodesUsageForm : Form
     {

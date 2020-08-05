@@ -113,7 +113,7 @@ namespace FAD3.GUI.Forms
                             string seriesName = getBetween(line, ": ", " Color");
                             _series.Add(seriesNo, seriesName);
                             var chartSeries = chart.Series.Add(seriesName);
-                            chartSeries.Color = Mapping.Colors.FromARGBString($"{getAfter(line, "Color:")}");
+                            chartSeries.Color = Colors.FromARGBString($"{getAfter(line, "Color:")}");
                             chartSeries.ChartType = chartType;
                             seriesNo++;
                         }

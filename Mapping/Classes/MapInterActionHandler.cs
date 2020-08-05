@@ -4,7 +4,7 @@ using MapWinGIS;
 using System;
 using System.Windows.Forms;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     /// <summary>
     /// Handles interaction with the mouse control. However, interaction is disabled and is refered to grid25MajorClass when the class is active.

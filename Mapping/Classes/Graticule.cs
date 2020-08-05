@@ -4,7 +4,7 @@ using FAD3.Mapping.Classes;
 using MapWinGIS;
 using System;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     /// <summary>
     /// <para>Helper class for map graticules.</para>

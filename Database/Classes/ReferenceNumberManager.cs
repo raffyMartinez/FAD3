@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 using dao;
-using FAD3.Database.Classes;
 
-namespace FAD3
+
+namespace FAD3.Database.Classes
 {
     public static class ReferenceNumberManager
     {

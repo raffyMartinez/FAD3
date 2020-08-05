@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using FAD3.Database.Classes;
+using FAD3.GUI.Forms;
 namespace FAD3.Database.Forms
 {
     public partial class CatchCompositionForm2 : Form

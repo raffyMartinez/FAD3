@@ -3,8 +3,9 @@ using FAD3.Database.Forms;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-namespace FAD3
+using FAD3.GUI.Forms;
+using FAD3.Mapping.Classes;
+namespace FAD3.Mapping.Forms
 {
     public partial class MapEffortHelperForm : Form
     {

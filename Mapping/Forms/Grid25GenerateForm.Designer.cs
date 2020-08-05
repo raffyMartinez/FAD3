@@ -1,4 +1,4 @@
-﻿namespace FAD3
+﻿namespace FAD3.Mapping.Forms
 {
     partial class Grid25GenerateForm
     {

@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using FAD3.Database.Classes;
-using FAD3.Database.Forms;
+using FAD3.GUI.Forms;
 
-namespace FAD3
+namespace FAD3.Database.Forms
 {
     public partial class SamplingForm : Form
     {

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace FAD3
+namespace FAD3.Database.Forms
 {
     public partial class GearSpeciesSamplingsForm : Form
     {

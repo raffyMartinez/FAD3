@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
-
+using FAD3.GUI.Forms;
 namespace FAD3
 {
     public partial class ManageMRUForm : Form

@@ -1,7 +1,7 @@
-﻿using FAD3.Database.Classes;
+﻿
 using System;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     public class UIRowFromXML : EventArgs
     {

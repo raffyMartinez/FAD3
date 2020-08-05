@@ -1,4 +1,4 @@
-﻿using FAD3.Database.Classes;
+﻿
 using MetaphoneCOM;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Xml;
 using System.Text;
 using System.Collections;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     public static class Gears
     {

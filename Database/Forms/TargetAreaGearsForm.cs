@@ -1,8 +1,9 @@
 ﻿using FAD3.Database.Forms;
 using System;
 using System.Windows.Forms;
-
-namespace FAD3
+using FAD3.Database.Classes;
+using FAD3.Mapping.Forms;
+namespace FAD3.Database.Forms
 {
     public partial class TargetAreaGearsForm : Form
     {

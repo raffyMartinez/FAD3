@@ -1,7 +1,8 @@
 ﻿using AxMapWinGIS;
 using System;
 using System.Windows.Forms;
-
+using FAD3.Database.Classes;
+using FAD3.Mapping.Classes;
 namespace FAD3.Mapping.Forms
 {
     public partial class Grid25CoordinateForm : Form

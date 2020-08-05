@@ -4,7 +4,7 @@ using MapWinGIS;
 using System;
 using System.IO;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     /// <summary>
     /// Creates a database of minor grids that are within land areas. Used for validating fishing grounds for avoiding inland fishing grids.

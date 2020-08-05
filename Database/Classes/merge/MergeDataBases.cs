@@ -8,7 +8,7 @@ namespace FAD3.Database.Classes.merge
 {
     public static class MergeDataBases
     {
-        private static List<string> _entityTables;
+        public static List<string> EntityTables { get; private set; }
         public static Dictionary<string,int> DestinationBeforeCounts { get; set; }
         public static Dictionary<string, int> SourceCounts { get; set; }
         public static Dictionary<string, int> DestinationAfterCounts { get; set; }
@@ -40,31 +40,31 @@ namespace FAD3.Database.Classes.merge
 
         private static void SetUpEntityList()
         {
-            _entityTables = new List<string>();
-            _entityTables.Add("Samplings");
-            _entityTables.Add("Catch composition");
-            _entityTables.Add("Catch details");
-            _entityTables.Add("Length frequency");
-            _entityTables.Add("GMS");
-            _entityTables.Add("Fishing expense");
-            _entityTables.Add("Fishing expense items");
-            _entityTables.Add("Enumerators");
-            _entityTables.Add("Landing sites");
-            _entityTables.Add("Species");
-            _entityTables.Add("Gear class");
-            _entityTables.Add("Gears");
-            _entityTables.Add("Sampled gear specifications");
-            _entityTables.Add("Catch local names");
-            _entityTables.Add("Catch names");
-            _entityTables.Add("Gear local names");
-            _entityTables.Add("Additional extents");
-            _entityTables.Add("Additional fishing grounds");
-            _entityTables.Add("Gear specs");
-            _entityTables.Add("Municipalities");
-            _entityTables.Add("Provinces");
-            _entityTables.Add("Reference gear codes");
-            _entityTables.Add("Reference gear code usage");
-            _entityTables.Add("Reference gear code local names");
+            EntityTables = new List<string>();
+            EntityTables.Add("Samplings");
+            EntityTables.Add("Catch composition");
+            EntityTables.Add("Catch details");
+            EntityTables.Add("Length frequency");
+            EntityTables.Add("GMS");
+            EntityTables.Add("Fishing expense");
+            EntityTables.Add("Fishing expense items");
+            EntityTables.Add("Enumerators");
+            EntityTables.Add("Landing sites");
+            EntityTables.Add("Species");
+            EntityTables.Add("Gear class");
+            EntityTables.Add("Gears");
+            EntityTables.Add("Sampled gear specifications");
+            EntityTables.Add("Catch local names");
+            EntityTables.Add("Catch names");
+            EntityTables.Add("Gear local names");
+            EntityTables.Add("Additional extents");
+            EntityTables.Add("Additional fishing grounds");
+            EntityTables.Add("Gear specs");
+            EntityTables.Add("Municipalities");
+            EntityTables.Add("Provinces");
+            EntityTables.Add("Reference gear codes");
+            EntityTables.Add("Reference gear code usage");
+            EntityTables.Add("Reference gear code local names");
         }
         public static void SetSourceAndDestination()
         {
@@ -203,7 +203,7 @@ namespace FAD3.Database.Classes.merge
             SourceCounts = new Dictionary<string, int>();
             DestinationAfterCounts = new Dictionary<string, int>();
 
-            foreach(var item in _entityTables)
+            foreach(var item in EntityTables)
             {
                 DestinationBeforeCounts.Add(item, 0);
                 SourceCounts.Add(item, 0);

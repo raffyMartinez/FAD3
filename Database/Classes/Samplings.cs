@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using FAD3.Database.Classes;
+
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +15,7 @@ using System.Data.OleDb;
 using System.Reflection;
 using System.Xml;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     /// <summary>
     /// Description of Sampling.

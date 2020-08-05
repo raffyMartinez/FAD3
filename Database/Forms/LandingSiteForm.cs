@@ -12,8 +12,9 @@ using ISO_Classes;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
-namespace FAD3
+using FAD3.Database.Classes;
+using FAD3.GUI.Forms;
+namespace FAD3.Database.Forms
 {
     /// <summary>
     /// Description of frmLandingSite.

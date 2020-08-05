@@ -1,10 +1,10 @@
-﻿using FAD3.Database.Classes;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     public static class ManageGearSpecsClass
     {

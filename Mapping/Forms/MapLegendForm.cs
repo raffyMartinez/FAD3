@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MapWinGIS;
-
+using FAD3.Mapping.Classes;
 namespace FAD3.Mapping.Forms
 {
     public partial class MapLegendForm : Form

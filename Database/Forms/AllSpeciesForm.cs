@@ -1,6 +1,4 @@
-﻿using FAD3.Database.Classes;
-using FAD3.Database.Forms;
-using FAD3.Mapping.Classes;
+﻿using FAD3.Mapping.Classes;
 using FAD3.Mapping.Forms;
 using System;
 using System.Collections.Generic;
@@ -10,8 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
-
-namespace FAD3
+using FAD3.Database.Classes;
+using FAD3.GUI.Forms;
+namespace FAD3.Database.Forms
 {
     public partial class AllSpeciesForm : Form
     {

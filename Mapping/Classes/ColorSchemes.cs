@@ -7,7 +7,7 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 
-namespace FAD3.Mapping
+namespace FAD3.Mapping.Classes
 {
     public enum ColorSchemeType
     {

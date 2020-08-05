@@ -6,7 +6,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Reflection;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     public static class LandingSiteMappingHandler
     {

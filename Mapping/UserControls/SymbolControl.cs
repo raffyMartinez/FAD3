@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-
+using FAD3.Mapping.Classes;
 namespace FAD3.Mapping.UserControls
 {
     internal partial class SymbolControl : ListControl

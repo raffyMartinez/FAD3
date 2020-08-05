@@ -3,7 +3,7 @@ using FAD3.Mapping.Forms;
 using System;
 using System.Windows.Forms;
 
-namespace FAD3
+namespace FAD3.Mapping.Forms
 {
     public partial class GraticuleForm : Form
     {

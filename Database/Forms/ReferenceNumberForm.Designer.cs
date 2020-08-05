@@ -1,4 +1,4 @@
-﻿namespace FAD3
+﻿namespace FAD3.Database.Forms
 {
     partial class ReferenceNumberForm
     {

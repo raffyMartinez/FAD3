@@ -39,6 +39,8 @@
             this.tsProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tsLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.buttonResultsGraph = new System.Windows.Forms.Button();
+            this.buttonExport = new System.Windows.Forms.Button();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -61,7 +63,7 @@
             this.groupBox1.Controls.Add(this.buttonMerge);
             this.groupBox1.Location = new System.Drawing.Point(22, 311);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(566, 129);
+            this.groupBox1.Size = new System.Drawing.Size(588, 129);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Confirmation";
@@ -82,9 +84,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvDestination.HideSelection = false;
-            this.lvDestination.Location = new System.Drawing.Point(22, 41);
+            this.lvDestination.Location = new System.Drawing.Point(22, 67);
             this.lvDestination.Name = "lvDestination";
-            this.lvDestination.Size = new System.Drawing.Size(566, 248);
+            this.lvDestination.Size = new System.Drawing.Size(588, 222);
             this.lvDestination.TabIndex = 7;
             this.lvDestination.UseCompatibleStateImageBehavior = false;
             this.lvDestination.View = System.Windows.Forms.View.Details;
@@ -92,7 +94,7 @@
             // lblList
             // 
             this.lblList.AutoSize = true;
-            this.lblList.Location = new System.Drawing.Point(23, 16);
+            this.lblList.Location = new System.Drawing.Point(23, 41);
             this.lblList.Name = "lblList";
             this.lblList.Size = new System.Drawing.Size(236, 17);
             this.lblList.TabIndex = 6;
@@ -101,9 +103,9 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonCancel.Location = new System.Drawing.Point(611, 41);
+            this.buttonCancel.Location = new System.Drawing.Point(626, 69);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(101, 33);
+            this.buttonCancel.Size = new System.Drawing.Size(108, 33);
             this.buttonCancel.TabIndex = 8;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -113,9 +115,9 @@
             // 
             this.buttonViewConflict.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonViewConflict.Enabled = false;
-            this.buttonViewConflict.Location = new System.Drawing.Point(611, 92);
+            this.buttonViewConflict.Location = new System.Drawing.Point(626, 120);
             this.buttonViewConflict.Name = "buttonViewConflict";
-            this.buttonViewConflict.Size = new System.Drawing.Size(101, 33);
+            this.buttonViewConflict.Size = new System.Drawing.Size(108, 33);
             this.buttonViewConflict.TabIndex = 9;
             this.buttonViewConflict.Text = "View conflict";
             this.buttonViewConflict.UseVisualStyleBackColor = true;
@@ -129,7 +131,7 @@
             this.tsLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 444);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(729, 26);
+            this.statusStrip1.Size = new System.Drawing.Size(751, 26);
             this.statusStrip1.TabIndex = 10;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -148,19 +150,31 @@
             // buttonResultsGraph
             // 
             this.buttonResultsGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonResultsGraph.Location = new System.Drawing.Point(611, 142);
+            this.buttonResultsGraph.Location = new System.Drawing.Point(626, 170);
             this.buttonResultsGraph.Name = "buttonResultsGraph";
-            this.buttonResultsGraph.Size = new System.Drawing.Size(101, 33);
+            this.buttonResultsGraph.Size = new System.Drawing.Size(108, 33);
             this.buttonResultsGraph.TabIndex = 11;
             this.buttonResultsGraph.Text = "View results";
             this.buttonResultsGraph.UseVisualStyleBackColor = true;
             this.buttonResultsGraph.Click += new System.EventHandler(this.OnButtonClick);
             // 
+            // buttonExport
+            // 
+            this.buttonExport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonExport.Location = new System.Drawing.Point(626, 218);
+            this.buttonExport.Name = "buttonExport";
+            this.buttonExport.Size = new System.Drawing.Size(108, 33);
+            this.buttonExport.TabIndex = 12;
+            this.buttonExport.Text = "Export results";
+            this.buttonExport.UseVisualStyleBackColor = true;
+            this.buttonExport.Click += new System.EventHandler(this.OnButtonClick);
+            // 
             // ActualMergingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 470);
+            this.ClientSize = new System.Drawing.Size(751, 470);
+            this.Controls.Add(this.buttonExport);
             this.Controls.Add(this.buttonResultsGraph);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.buttonViewConflict);
@@ -194,5 +208,7 @@
         private System.Windows.Forms.ToolStripProgressBar tsProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel tsLabel;
         private System.Windows.Forms.Button buttonResultsGraph;
+        private System.Windows.Forms.Button buttonExport;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }

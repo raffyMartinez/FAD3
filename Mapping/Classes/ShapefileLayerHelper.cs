@@ -2,7 +2,7 @@
 using MapWinGIS;
 using System.Collections.Generic;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     public static class ShapefileLayerHelper
     {

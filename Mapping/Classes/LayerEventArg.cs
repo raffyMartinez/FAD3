@@ -1,7 +1,7 @@
 ﻿using System;
 using MapWinGIS;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     public class LayerEventArg : EventArgs
     {

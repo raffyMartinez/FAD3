@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace FAD3
+namespace FAD3.Mapping.Forms
 {
     public partial class SaveMapForm : Form
     {

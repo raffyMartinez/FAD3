@@ -3,8 +3,8 @@ using MapWinGIS;
 using System;
 using System.Windows.Forms;
 using System.IO;
-
-namespace FAD3
+using FAD3.Mapping.Classes;
+namespace FAD3.Mapping.Forms
 {
     /// <summary>
     /// access the properties of a shapefile layer

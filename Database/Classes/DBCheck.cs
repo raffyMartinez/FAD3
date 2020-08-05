@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     /// <summary>
     /// updates tables, indexes and relations in the data mdb based on contents of template mdb. Uses DAO because ADO will not work.

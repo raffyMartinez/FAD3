@@ -1,5 +1,4 @@
 ﻿using dao;
-using FAD3.Database.Classes;
 using HtmlAgilityPack;
 using MetaphoneCOM;
 using System;
@@ -12,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace FAD3
+namespace FAD3.Database.Classes
 {
     public static class Names
     {

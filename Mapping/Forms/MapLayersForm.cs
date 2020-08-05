@@ -7,7 +7,7 @@ using System.IO;
 using FAD3.Mapping.Classes;
 using FAD3.Mapping.Forms;
 
-namespace FAD3
+namespace FAD3.Mapping.Forms
 {
     /// <summary>
     /// shows layers that are on the map window and allows access to each layer's attributes and properties

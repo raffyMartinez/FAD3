@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using FAD3.Mapping.Forms;
-
+using FAD3.GUI.Forms;
 namespace FAD3.Database.Forms
 {
     public partial class CatchLocalNamesForm : Form

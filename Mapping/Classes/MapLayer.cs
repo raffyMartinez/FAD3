@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.IO;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {/// <summary>
 /// class for a layer that is shown on a map window
 /// </summary>

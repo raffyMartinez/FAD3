@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using FAD3.Mapping.Forms;
 
-namespace FAD3
+namespace FAD3.Mapping.Forms
 {
     public partial class MapperForm : Form
     {

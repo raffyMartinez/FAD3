@@ -1,6 +1,5 @@
 ﻿using AxMapWinGIS;
 using FAD3.Database.Classes;
-using FAD3.Mapping.Classes;
 using MapWinGIS;
 using System;
 using System.Collections.Generic;
@@ -8,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     /// <summary>
     /// 1. creates major grids.

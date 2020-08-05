@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Text;
 using FAD3.Mapping.Classes;
 using FAD3.Mapping.Forms;
-
+using FAD3.GUI.Forms;
 namespace FAD3.Database.Forms
 {
     /// <summary>

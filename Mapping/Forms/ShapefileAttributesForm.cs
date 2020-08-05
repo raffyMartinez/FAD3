@@ -3,8 +3,8 @@ using System;
 using System.Drawing;
 using System.Windows.Forms;
 using FAD3.Mapping.Forms;
-
-namespace FAD3
+using FAD3.Mapping.Classes;
+namespace FAD3.Mapping.Forms
 {
     /// <summary>
     /// non-editable view of the attributes of a shapefile

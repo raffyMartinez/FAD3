@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace FAD3.Mapping
+namespace FAD3.Mapping.Classes
 {
     public static class Colors
     {

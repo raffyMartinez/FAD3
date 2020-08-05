@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-
-namespace FAD3
+using FAD3.Mapping.Classes;
+namespace FAD3.Mapping.Forms
 {
     public partial class VisibilityQueryForm : Form
     {

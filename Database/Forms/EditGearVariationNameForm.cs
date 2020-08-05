@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+using FAD3.Database.Classes;
 namespace FAD3.Database.Forms
 {
     public partial class EditGearVariationNameForm : Form

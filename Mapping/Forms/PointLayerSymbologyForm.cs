@@ -3,8 +3,8 @@ using MapWinGIS;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
-
-namespace FAD3
+using FAD3.Mapping.Classes;
+namespace FAD3.Mapping.Forms
 {
     public partial class PointLayerSymbologyForm : Form
     {
@@ -58,7 +58,7 @@ namespace FAD3
             //int ptr = g.GetHdc().ToInt32();
 
             // creating shape to draw
-            _options.DrawPoint(ptr, 0.0f, 0.0f, rect.Width, rect.Height, FAD3.Mapping.Colors.ColorToUInteger(this.BackColor));
+            _options.DrawPoint(ptr, 0.0f, 0.0f, rect.Width, rect.Height, Colors.ColorToUInteger(this.BackColor));
 
             g.ReleaseHdc();
             picPreview.Image = bmp;
@@ -89,7 +89,7 @@ namespace FAD3
 
             udSize.SetValue(_options.PointSize);
             udRotation.SetValue(_options.PointRotation);
-            rectSymbolColor.FillColor = FAD3.Mapping.Colors.UintToColor(_options.FillColor);
+            rectSymbolColor.FillColor = Colors.UintToColor(_options.FillColor);
 
             //point
             comboPointType.SelectedIndex = (int)_options.PointShape;
@@ -101,9 +101,9 @@ namespace FAD3
             transpFillColor.Value = (byte)_options.FillTransparency;
             chkFillVisible.Checked = _options.FillVisible;
             chkOutlineVisible.Checked = _options.LineVisible;
-            rectOutlineColor.FillColor = FAD3.Mapping.Colors.UintToColor(_options.LineColor);
+            rectOutlineColor.FillColor = Colors.UintToColor(_options.LineColor);
 
-            var color = Mapping.Colors.UintToColor(_options.FillColor);
+            var color = Colors.UintToColor(_options.FillColor);
             symbolControl1.ForeColor = color;
             characterControl1.ForeColor = color;
             transpFillColor.BandColor = color;
@@ -206,8 +206,8 @@ namespace FAD3
             _options.PointSidesRatio = (float)udSideRatio.Value / 10;
             _options.PointShape = (tkPointShapeType)comboPointType.SelectedIndex;
 
-            _options.FillColor = Mapping.Colors.ColorToUInteger(rectSymbolColor.FillColor);
-            _options.LineColor = Mapping.Colors.ColorToUInteger(rectOutlineColor.FillColor);
+            _options.FillColor = Colors.ColorToUInteger(rectSymbolColor.FillColor);
+            _options.LineColor = Colors.ColorToUInteger(rectOutlineColor.FillColor);
 
             _options.FillVisible = chkFillVisible.Checked;
             _options.LineVisible = chkOutlineVisible.Checked;

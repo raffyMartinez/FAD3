@@ -8,7 +8,7 @@ using System.IO;
 using System.Windows.Forms;
 using FAD3.Mapping.Forms;
 
-namespace FAD3
+namespace FAD3.Mapping.Forms
 {
     public partial class Grid25GenerateForm : Form
     {

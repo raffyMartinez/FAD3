@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+using FAD3.Mapping.Forms;
 namespace FAD3.Database.Forms
 {
     public partial class MappingBatchForm : Form

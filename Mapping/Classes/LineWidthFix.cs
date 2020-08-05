@@ -1,6 +1,6 @@
 ﻿using MapWinGIS;
 
-namespace FAD3.Mapping
+namespace FAD3.Mapping.Classes
 {
     public static class LineWidthFix
     {

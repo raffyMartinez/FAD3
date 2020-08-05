@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace FAD3.Database.Classes.merge.views
 {
@@ -31,6 +32,7 @@ namespace FAD3.Database.Classes.merge.views
 
         private void OnFormLoad(object sender, EventArgs e)
         {
+            tsLabel.Text = "";
             global.LoadFormSettings(this);
             Text = $"Merging data from {SourceAOI.AOIName} to {global.mainForm.TargetArea.TargetAreaName}";
             checkProceed.Checked = false;
@@ -168,6 +170,37 @@ namespace FAD3.Database.Classes.merge.views
         {
             switch (((Button)sender).Name)
             {
+                case "buttonExport":
+                    StringBuilder sb = new StringBuilder("Row,Entity,Destination before,Source,Destination after\r\n");
+                    int counter = 0;
+                    foreach(var item in MergeDataBases.EntityTables)
+                    {
+                        sb.AppendLine($"{++counter},{item},{MergeDataBases.DestinationBeforeCounts[item]},{MergeDataBases.SourceCounts[item]},{MergeDataBases.DestinationAfterCounts[item]}"); ;
+                    }
+
+                    saveFileDialog.Title = "Provide filename and folder for exporting merge data results";
+                    saveFileDialog.DefaultExt = "csv";
+                    saveFileDialog.Filter = "csv|*.csv|txt|*.txt";
+                    DialogResult dr= saveFileDialog.ShowDialog();
+                    if (dr != DialogResult.Cancel)
+                    {
+                        if (File.Exists(saveFileDialog.FileName))
+                        { 
+                            File.Delete(saveFileDialog.FileName);
+                        }
+
+                        using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, true))
+                        {
+
+                            {
+                                writer.WriteLine(sb);
+                            }
+                            MessageBox.Show($"Finished exporting result to\r\n{saveFileDialog.FileName}", "Exporting merge results", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        }
+                    }
+                    break;
+
                 case "buttonResultsGraph":
                     var gsnf = MergeGraphForm.GetInstance(SourceAOI, DestinationAOI);
                     if (gsnf.Visible)

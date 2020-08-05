@@ -20,7 +20,8 @@ using System.Windows.Forms;
 using System.Net;
 using System.Linq;
 using System.Security.Cryptography;
-
+using FAD3.GUI.Forms;
+using FAD3.Mapping.Forms;
 namespace FAD3
 {
     /// <summary>

@@ -13,8 +13,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using FAD3.GUI.Classes;
 using ISO_Classes;
-
-namespace FAD3
+using FAD3.GUI.Forms;
+namespace FAD3.Database.Forms
 {
     /// <summary>
     /// Description of TargetAreaForm.

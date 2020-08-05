@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-
-namespace FAD3
+using FAD3.GUI.Forms;
+namespace FAD3.Database.Forms
 {
     public partial class CreateNewDatabaseForm : Form
     {

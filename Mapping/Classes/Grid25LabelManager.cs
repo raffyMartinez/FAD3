@@ -1,8 +1,8 @@
 ﻿using MapWinGIS;
 using System;
 using System.Collections.Generic;
-
-namespace FAD3
+using FAD3.Database.Classes;
+namespace FAD3.Mapping.Classes
 {
     public class Grid25LabelManager : IDisposable
     {

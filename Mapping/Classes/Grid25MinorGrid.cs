@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 using FAD3.Database.Classes;
 
-namespace FAD3
+namespace FAD3.Mapping.Classes
 {
     public class Grid25MinorGrid : IDisposable
     {

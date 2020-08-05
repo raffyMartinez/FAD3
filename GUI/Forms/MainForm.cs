@@ -16,7 +16,7 @@ using FAD3.Mapping.Classes;
 using System.Threading.Tasks;
 using FAD3.Database.Classes.merge.views;
 
-namespace FAD3
+namespace FAD3.GUI.Forms
 {
     /// <summary>
     /// Main form is the main window of FAD.

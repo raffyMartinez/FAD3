@@ -5,8 +5,8 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using FAD3.GUI.Classes;
-
-namespace FAD3
+using FAD3.GUI.Forms;
+namespace FAD3.Database.Forms
 {
     public partial class LengthFreqForm : Form
     {

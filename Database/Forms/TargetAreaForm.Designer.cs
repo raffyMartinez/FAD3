@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-namespace FAD3
+namespace FAD3.Database.Forms
 {
 	partial class TargetAreaForm
 	{

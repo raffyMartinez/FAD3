@@ -2428,9 +2428,21 @@ namespace FAD3.GUI.Forms
             }
         }
 
+        public void SetupLoadedDatabase(string fileName, bool refresh = false)
+        {
+            SetupTree(fileName);
+            UpdateLocationTables();
+
+            if (!refresh)
+            {
+                //add the recently opened file to the MRU
+                _mrulist.AddFile(fileName);
+            }
+            SetUPSamplings();
+        }
+
         private void ProcessFileOpen()
         {
-            string filename = "";
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Title = "Open an existing fisheries database file";
             if (global.MDBPath.Length == 0)
@@ -2445,13 +2457,14 @@ namespace FAD3.GUI.Forms
             DialogResult dr = ofd.ShowDialog();
             if (dr == DialogResult.OK && ofd.FileName.Length > 0)
             {
-                filename = ofd.FileName;
-                SetupTree(filename);
-                UpdateLocationTables();
+                SetupLoadedDatabase(ofd.FileName);
+                //filename = ofd.FileName;
+                //SetupTree(filename);
+                //UpdateLocationTables();
 
-                //add the recently opened file to the MRU
-                _mrulist.AddFile(filename);
-                SetUPSamplings();
+                ////add the recently opened file to the MRU
+                //_mrulist.AddFile(filename);
+                //SetUPSamplings();
             }
         }
 

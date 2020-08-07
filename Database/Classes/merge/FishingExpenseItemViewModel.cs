@@ -10,7 +10,7 @@ namespace FAD3.Database.Classes.merge
     public class FishingExpenseItemViewModel
     {
         public bool AddSucceeded { get; set; }
-        public ObservableCollection<FishingExpenseItem> FishingExpenseItemCollection{ get; set; }
+        public ObservableCollection<FishingExpenseItem> FishingExpenseItemCollection { get; set; }
         private FishingExpenseItemRepository FishingExpenseItems { get; set; }
 
 
@@ -38,7 +38,7 @@ namespace FAD3.Database.Classes.merge
                 case NotifyCollectionChangedAction.Add:
                     {
                         int newIndex = e.NewStartingIndex;
-                        AddSucceeded= FishingExpenseItems.Add(FishingExpenseItemCollection[newIndex]);
+                        AddSucceeded = FishingExpenseItems.Add(FishingExpenseItemCollection[newIndex]);
                     }
                     break;
                 case NotifyCollectionChangedAction.Remove:
@@ -71,7 +71,7 @@ namespace FAD3.Database.Classes.merge
 
         public void UpdateRecordInRepo(FishingExpenseItem item)
         {
-            if (item.ExpenseRowID== null)
+            if (item.ExpenseRowID == null)
                 throw new Exception("Error: ID cannot be null");
 
             int index = 0;

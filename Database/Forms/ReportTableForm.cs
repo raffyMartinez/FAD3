@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 using System.Text;
+using FAD3.Database.Classes.merge;
+using System.Threading.Tasks;
 
 namespace FAD3.Database.Forms
 {
@@ -17,8 +19,10 @@ namespace FAD3.Database.Forms
         public string TopicDescription { get; set; }
         private DataSet _dataSet;
 
-        public void ShowReport()
+
+        public bool Showreport()
         {
+            var samplingGUID = "";
             lvTable.Visible = false;
             ReportGeneratorClass.TargetArea = TargetArea;
             ReportGeneratorClass.Topic = Topic;
@@ -64,19 +68,13 @@ namespace FAD3.Database.Forms
 
                     switch (dr[n].GetType().Name)
                     {
+                        case "FishingVessel":
+                            lvi.SubItems.Add (((Classes.merge.FishingVessel)dr[n]).ToString());
+                            break;
                         case "DateTime":
                             DateTime dt = DateTime.Parse(dr[n].ToString());
-                            if (dt.Year == 1899)
-                            {
-                                lvi.SubItems.Add(string.Format("{0:HH:mm}", dt));
-                            }
-                            else
-                            {
-                                lvi.SubItems.Add(string.Format("{0:MMM-dd-yyyy}", dt));
-                            }
-
+                            lvi.SubItems.Add(string.Format("{0:MMM-dd-yyyy HH:mm}", dt));
                             break;
-
                         case "Double":
                             lvi.SubItems.Add(((double)dr[n]).ToString("N2"));
                             break;
@@ -86,7 +84,19 @@ namespace FAD3.Database.Forms
                             break;
 
                         default:
-                            lvi.SubItems.Add(dr[n].ToString());
+                            switch(_dataSet.Tables[0].Columns[n].ColumnName)
+                            {
+                                case "RowID":
+                                    samplingGUID = dr[n].ToString();
+                                    lvi.SubItems.Add(samplingGUID);
+                                    break;
+                                case "FishingGround":
+                                    lvi.SubItems.Add ( $"{dr[n].ToString()}, {new AdditionalFishingGroundsMerged(samplingGUID, MergeDataBases.Destination).MergedFishingGrounds}".Trim(new Char[] { ' ',','}));
+                                    break;
+                                default:
+                                    lvi.SubItems.Add(dr[n].ToString());
+                                    break;
+                            }
                             break;
                     }
 
@@ -95,28 +105,28 @@ namespace FAD3.Database.Forms
                     switch (Topic)
                     {
                         case "catch":
-                            if (colName == "From total")
+                            if (colName == "fromTotal1")
                             {
                                 countSpecies = null;
                                 subSampleCount = null;
                                 subSampleWeight = null;
                                 weightSample = null;
-                                weightCatch = (double)dr["Weight of catch"];
-                                if (double.TryParse(dr["Weight of sample"].ToString(), out double wtSample))
+                                weightCatch = (double)dr["catchTotalWt"];
+                                if (double.TryParse(dr["catchSampleWt"].ToString(), out double wtSample))
                                 {
                                     weightSample = wtSample;
                                 }
-                                weightSpecies = (double)dr["Weight"];
-                                fromTotal = (bool)dr["From total"];
+                                weightSpecies = (double)dr["catchWt"];
+                                fromTotal = (bool)dr["fromTotal"];
 
-                                if (int.TryParse(dr["Count"].ToString(), out int count))
+                                if (int.TryParse(dr["catchCt"].ToString(), out int count))
                                 {
                                     countSpecies = count;
                                 }
                                 if (countSpecies == null)
                                 {
-                                    subSampleWeight = (double)dr["Subsample weight"];
-                                    subSampleCount = (int)dr["Subsample count"];
+                                    subSampleWeight = (double)dr["catchSubSampleWt"];
+                                    subSampleCount = (int)dr["catchSubSampleCt"];
                                 }
                                 done = true;
                             }
@@ -127,7 +137,14 @@ namespace FAD3.Database.Forms
                                     lvi.SubItems[n + 1].Text = weightSpecies.ToString("N2");
                                     if (countSpecies == null)
                                     {
-                                        lvi.SubItems.Add(((int)((weightSpecies / subSampleWeight) * subSampleCount)).ToString());
+                                        if (subSampleWeight > 0 && subSampleCount>0)
+                                        { 
+                                            lvi.SubItems.Add(((int)((weightSpecies / subSampleWeight) * subSampleCount)).ToString());
+                                        }
+                                        else
+                                        {
+                                            lvi.SubItems.Add("");
+                                        }
                                     }
                                     else
                                     {
@@ -137,7 +154,13 @@ namespace FAD3.Database.Forms
                                 else if (countSpecies == null)
                                 {
                                     lvi.SubItems[n + 1].Text = weightSpecies.ToString("N2");
-                                    lvi.SubItems.Add(((int)((weightSpecies / subSampleWeight) * subSampleCount)).ToString());
+                                    lvi.SubItems.Add
+                                        (
+                                        subSampleWeight>0 ? 
+                                        ((int)((weightSpecies / subSampleWeight) * subSampleCount)).ToString() : ""
+                                        );
+
+
                                 }
                                 else
                                 {
@@ -154,14 +177,20 @@ namespace FAD3.Database.Forms
                                 }
                                 done = false;
                             }
-
                             break;
                     }
                 }
             }
 
+            switch(Topic)
+            {
+                case "catch":
+                    //lvTable.Columns.RemoveAt(lvTable.Columns.Count-1);
+                    break;
+            }
             SizeColumns(lvTable, false);
             lvTable.Visible = true;
+            return true;
         }
 
         public static ReportTableForm GetInstance(TargetArea targetArea, string topic, List<int> years)
@@ -177,14 +206,18 @@ namespace FAD3.Database.Forms
             Topic = topic;
             Years = years;
         }
-
-        private void OnFormLoad(object sender, EventArgs e)
+        public  async Task<bool> Report()
+        {
+            return await Task.Run(() => Showreport());
+        }
+        private async void OnFormLoad(object sender, EventArgs e)
         {
             global.LoadFormSettings(this);
             lvTable.View = View.Details;
             lvTable.FullRowSelect = true;
             Text = TopicDescription;
-            ShowReport();
+            //await Report();
+            //Showreport();
         }
 
         /// <summary>
@@ -202,7 +235,10 @@ namespace FAD3.Database.Forms
                 else
                 {
                     c.AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
-                    c.Width = c.Width > (int)c.Tag ? c.Width : (int)c.Tag;
+                    if (c.Tag != null)
+                    {
+                        c.Width = c.Width > (int)c.Tag ? c.Width : (int)c.Tag;
+                    }
                 }
             }
         }

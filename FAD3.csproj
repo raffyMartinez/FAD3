@@ -149,7 +149,10 @@
     <Compile Include="Database\Classes\merge\AdditionalExtentViewModel.cs" />
     <Compile Include="Database\Classes\merge\AdditionalFishingGround.cs" />
     <Compile Include="Database\Classes\merge\AdditionalFishingGroundViewModel.cs" />
+    <Compile Include="Database\Classes\merge\CustomLINQtoDataSetMethods.cs" />
     <Compile Include="Database\Classes\merge\FishingExpenseViewModel.cs" />
+    <Compile Include="Database\Classes\merge\FishingVessel.cs" />
+    <Compile Include="Database\Classes\merge\FishingVesselViewModel.cs" />
     <Compile Include="Database\Classes\merge\GearSpec.cs" />
     <Compile Include="Database\Classes\merge\CatchComposition.cs" />
     <Compile Include="Database\Classes\merge\CatchCompositionRepository.cs" />
@@ -236,6 +239,7 @@
     <Compile Include="Database\Classes\merge\Municipality.cs" />
     <Compile Include="Database\Classes\merge\MunicipalityRepository.cs" />
     <Compile Include="Database\Classes\merge\MunicipalityViewModel.cs" />
+    <Compile Include="Database\Classes\merge\ObjectShredder.cs" />
     <Compile Include="Database\Classes\merge\Province.cs" />
     <Compile Include="Database\Classes\merge\ProvinceRepository.cs" />
     <Compile Include="Database\Classes\merge\ProvinceViewModel.cs" />
@@ -274,6 +278,7 @@
     <Compile Include="Database\Classes\merge\views\ActualMergingForm.Designer.cs">
       <DependentUpon>ActualMergingForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Database\Classes\merge\AdditionalFishingGroundsMerged.cs" />
     <Compile Include="Database\Classes\merge\views\MergeGraphForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -322,6 +327,7 @@
     <Compile Include="Database\Classes\TreeLevels.cs" />
     <Compile Include="Database\Classes\TreeLevelTag.cs" />
     <Compile Include="Database\Classes\UpdatedSamplingCatchCompositionCount.cs" />
+    <Compile Include="Database\FishingVesselRepository.cs" />
     <Compile Include="Database\Forms\AllSpeciesForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1562,6 +1568,15 @@
       <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
       <EmbedInteropTypes>False</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="MapWinGIS">
+      <Guid>{C368D713-CC5F-40ED-9F53-F84FE197B96A}</Guid>
+      <VersionMajor>4</VersionMajor>
+      <VersionMinor>9</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
     <COMReference Include="MetaphoneCOM">
       <Guid>{845FE5AF-CC53-4C37-9464-EE20A866B9B0}</Guid>

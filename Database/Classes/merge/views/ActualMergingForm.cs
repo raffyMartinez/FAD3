@@ -225,6 +225,9 @@ namespace FAD3.Database.Classes.merge.views
                         if ( await MergeDataBases.Merge(_mergeDBHelper, true))
                         {
                             MessageBox.Show("Finished merging target area", "Merging database", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                            //reload database in order to reflect changes to the dashboard
+                            global.mainForm.SetupLoadedDatabase(MergeDataBases.Destination.MDBPath);
                         }
                     }
                     break;

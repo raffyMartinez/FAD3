@@ -7,7 +7,7 @@ namespace FAD3.Database.Classes.merge
     {
         public string RowID { get; set; }
 
-
+        public string Notes { get; set; }
         public SamplingReferenceNumber ReferenceNumber { get; set; }
 
 
@@ -55,6 +55,8 @@ namespace FAD3.Database.Classes.merge
         public bool HasLiveFish { get; set; }
 
         public Sampling() { }
+       
+        public FishingVessel FishingVessel { get; set; }
 
         public string Name { get { return ReferenceNumber.ToString(); } }
         

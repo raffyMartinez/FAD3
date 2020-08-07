@@ -18,6 +18,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "FADUpdaterJuly272020", "upd
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "UpdaterAug32020", "updaters\UpdaterAug32020\UpdaterAug32020.vdproj", "{CC97C27C-C3C1-4DDD-9EEC-6762D6093A02}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "UpdaterAug72020", "updaters\UpdaterAug72020\UpdaterAug72020.vdproj", "{814E00A4-1D5C-480F-9E58-D40F8F4F3E10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,8 @@ Global
 		{9023DD34-110A-4AEC-BF96-42F231467440}.Release|Any CPU.Build.0 = Release
 		{CC97C27C-C3C1-4DDD-9EEC-6762D6093A02}.Debug|Any CPU.ActiveCfg = Debug
 		{CC97C27C-C3C1-4DDD-9EEC-6762D6093A02}.Release|Any CPU.ActiveCfg = Release
+		{814E00A4-1D5C-480F-9E58-D40F8F4F3E10}.Debug|Any CPU.ActiveCfg = Debug
+		{814E00A4-1D5C-480F-9E58-D40F8F4F3E10}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -36,18 +36,20 @@
             this.txtCoord.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCoord.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCoord.Location = new System.Drawing.Point(0, 0);
+            this.txtCoord.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtCoord.Multiline = true;
             this.txtCoord.Name = "txtCoord";
-            this.txtCoord.Size = new System.Drawing.Size(253, 59);
+            this.txtCoord.Size = new System.Drawing.Size(337, 73);
             this.txtCoord.TabIndex = 0;
             // 
             // Grid25CoordinateForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(253, 59);
+            this.ClientSize = new System.Drawing.Size(337, 73);
             this.Controls.Add(this.txtCoord);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Grid25CoordinateForm";
             this.Text = "Grid25CoordinateForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);

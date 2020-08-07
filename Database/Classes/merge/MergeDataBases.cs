@@ -9,7 +9,7 @@ namespace FAD3.Database.Classes.merge
     public static class MergeDataBases
     {
         public static List<string> EntityTables { get; private set; }
-        public static Dictionary<string,int> DestinationBeforeCounts { get; set; }
+        public static Dictionary<string, int> DestinationBeforeCounts { get; set; }
         public static Dictionary<string, int> SourceCounts { get; set; }
         public static Dictionary<string, int> DestinationAfterCounts { get; set; }
         public static AOI SourceAOI { get; set; }
@@ -74,127 +74,144 @@ namespace FAD3.Database.Classes.merge
             SetUpEntityList();
 
         }
+
+        public static async void SetUpForReporting(MergeDBHelper mergedbHelper)
+        {
+            _desitantionDatabaseFileName = global.MDBPath;
+            Destination = new FADEntities(_desitantionDatabaseFileName);
+            await Setup(mergedbHelper, true);
+        }
         public static FADEntities Destination { get; private set; }
         public static FADEntities Source { get; private set; }
 
-        public static async Task Setup(MergeDBHelper mergedbHelper)
+        public static async Task Setup(MergeDBHelper mergedbHelper, bool destinationOnly = false)
         {
-            await Task.Run(() => SetUpEntities(mergedbHelper));
+            await Task.Run(() => SetUpEntities(mergedbHelper, destinationOnly));
         }
 
-        private static void SetUpEntities(MergeDBHelper mergeDBHelper)
+        private static void SetUpEntities(MergeDBHelper mergeDBHelper, bool destinationOnly = false)
         {
-            mergeDBHelper.TableLocation = "Destination";
-            Destination.AOIViewModel = new AOIViewModel(Destination);
-            mergeDBHelper.MergingTable("Target areas");
-            Destination.AdditionalExtentViewModel = new AdditionalExtentViewModel(Destination);
-            mergeDBHelper.MergingTable("Addtional extents");
-            Destination.ProvinceViewModel = new ProvinceViewModel(Destination);
-            mergeDBHelper.MergingTable("Provinces");
-            Destination.MunicipalityViewModel = new MunicipalityViewModel(Destination);
-            mergeDBHelper.MergingTable("Municipalities");
-            Destination.LandingSiteViewModel = new LandingSiteViewModel(Destination);
-            mergeDBHelper.MergingTable("Landing sites");
-            Destination.CatchLocalNameViewModel = new CatchLocalNameViewModel(Destination);
-            mergeDBHelper.MergingTable("Local name of catch");
-            Destination.GearLocalNameViewModel = new GearLocalNameViewModel(Destination);
-            mergeDBHelper.MergingTable("Local name of gears");
-            Destination.GearClassViewModel = new GearClassViewModel(Destination);
-            mergeDBHelper.MergingTable("Gear classes");
-            Destination.GearViewModel = new GearViewModel(Destination);
-            mergeDBHelper.MergingTable("Fishing gears");
-            Destination.GearSpecViewModel = new GearSpecViewModel(Destination);
-            mergeDBHelper.MergingTable("Gear specs");
-            Destination.RefGearCodeViewModel = new RefGearCodeViewModel(Destination);
-            mergeDBHelper.MergingTable("Reference gear codes");
-            Destination.RefGearCodeUsageViewModel = new RefGearCodeUsageViewModel(Destination);
-            mergeDBHelper.MergingTable("Reference gear code usage");
-            Destination.RefGearCodeUsageLocalNameViewModel = new RefGearCodeUsageLocalNameViewModel(Destination);
-            mergeDBHelper.MergingTable("Reference gear code usage local names");
-            Destination.SamplingEnumeratorViewModel = new SamplingEnumeratorViewModel(Destination);
-            mergeDBHelper.MergingTable("Enumerators");
-            Destination.TaxaViewModel = new TaxaViewModel(Destination);
-            mergeDBHelper.MergingTable("Taxa");
-            Destination.SpeciesViewModel = new SpeciesViewModel(Destination);
-            mergeDBHelper.MergingTable("Species");
-            Destination.CatchNameViewModel = new CatchNameViewModel(Destination);
-            mergeDBHelper.MergingTable("Catch names");
-            Destination.SamplingViewModel = new SamplingViewModel(Destination);
-            mergeDBHelper.MergingTable("Sampling");
-            Destination.FishingExpenseViewModel = new FishingExpenseViewModel(Destination);
-            mergeDBHelper.MergingTable("Fishing expense");
-            Destination.FishingExpenseItemViewModel = new FishingExpenseItemViewModel(Destination);
-            mergeDBHelper.MergingTable("Fishing expense items");
-            Destination.AdditionalFishingGroundViewModel = new AdditionalFishingGroundViewModel(Destination);
-            mergeDBHelper.MergingTable("Additional fishing grounds");
-            Destination.CatchCompositionViewModel = new CatchCompositionViewModel(Destination);
-            mergeDBHelper.MergingTable("Catch composition");
-            Destination.CatchDetailViewModel = new CatchDetailViewModel(Destination);
-            mergeDBHelper.MergingTable("Catch detail");
-            Destination.LenFreqViewModel = new LenFreqViewModel(Destination);
-            mergeDBHelper.MergingTable("Length frequency");
-            Destination.GonadMaturityStageViewModel = new GonadMaturityStageViewModel(Destination);
-            mergeDBHelper.MergingTable("Gonad maturity");
-            Destination.SampledGearSpecViewModel = new SampledGearSpecViewModel(Destination);
-            mergeDBHelper.MergingTable("Gear spec of sampled gears");
 
-            mergeDBHelper.TableLocation = "Source";
-            Source.AOIViewModel = new AOIViewModel(Source);
-            mergeDBHelper.MergingTable("Target areas");
-            Source.AdditionalExtentViewModel = new AdditionalExtentViewModel(Source);
-            mergeDBHelper.MergingTable("Addtional extents");
-            Source.ProvinceViewModel = new ProvinceViewModel(Source);
-            mergeDBHelper.MergingTable("Provinces");
-            Source.MunicipalityViewModel = new MunicipalityViewModel(Source);
-            mergeDBHelper.MergingTable("Municipalities");
-            Source.LandingSiteViewModel = new LandingSiteViewModel(Source);
-            mergeDBHelper.MergingTable("Landing sites");
-            Source.CatchLocalNameViewModel = new CatchLocalNameViewModel(Source);
-            mergeDBHelper.MergingTable("Local name of catch");
-            Source.GearLocalNameViewModel = new GearLocalNameViewModel(Source);
-            mergeDBHelper.MergingTable("Local name of gears");
-            Source.GearClassViewModel = new GearClassViewModel(Source);
-            mergeDBHelper.MergingTable("Gear classes");
-            Source.GearViewModel = new GearViewModel(Source);
-            mergeDBHelper.MergingTable("Fishing gears");
-            Source.GearSpecViewModel = new GearSpecViewModel(Source);
-            mergeDBHelper.MergingTable("Gear specs");
-            Source.RefGearCodeViewModel = new RefGearCodeViewModel(Source);
-            mergeDBHelper.MergingTable("Reference gear codes");
-            Source.RefGearCodeUsageViewModel = new RefGearCodeUsageViewModel(Source);
-            mergeDBHelper.MergingTable("Reference gear code usage");
-            Source.RefGearCodeUsageLocalNameViewModel = new RefGearCodeUsageLocalNameViewModel(Source);
-            mergeDBHelper.MergingTable("Reference gear code usage local names");
-            Source.SamplingEnumeratorViewModel = new SamplingEnumeratorViewModel(Source);
-            mergeDBHelper.MergingTable("Enumerators");
-            Source.TaxaViewModel = new TaxaViewModel(Source);
-            mergeDBHelper.MergingTable("Taxa");
-            Source.SpeciesViewModel = new SpeciesViewModel(Source);
-            mergeDBHelper.MergingTable("Species");
-            Source.CatchNameViewModel = new CatchNameViewModel(Source);
-            mergeDBHelper.MergingTable("Catch names");
-            Source.SamplingViewModel = new SamplingViewModel(Source);
-            mergeDBHelper.MergingTable("Sampling");
-            Source.FishingExpenseViewModel = new FishingExpenseViewModel(Source);
-            mergeDBHelper.MergingTable("Fishing expense");
-            Source.FishingExpenseItemViewModel = new FishingExpenseItemViewModel(Source);
-            mergeDBHelper.MergingTable("Fishing expense items");
-            Source.AdditionalFishingGroundViewModel = new AdditionalFishingGroundViewModel(Source);
-            mergeDBHelper.MergingTable("Additional fishing grounds");
-            Source.CatchCompositionViewModel = new CatchCompositionViewModel(Source);
-            mergeDBHelper.MergingTable("Catch composition");
-            Source.CatchDetailViewModel = new CatchDetailViewModel(Source);
-            mergeDBHelper.MergingTable("Catch detail");
-            Source.LenFreqViewModel = new LenFreqViewModel(Source);
-            mergeDBHelper.MergingTable("Length frequency");
-            Source.GonadMaturityStageViewModel = new GonadMaturityStageViewModel(Source);
-            mergeDBHelper.MergingTable("Gonad maturity");
-            Source.SampledGearSpecViewModel = new SampledGearSpecViewModel(Source);
-            mergeDBHelper.MergingTable("Gear spec of sampled gears");
-            mergeDBHelper.IsDone();
+                mergeDBHelper.TableLocation = "Destination";
+                Destination.AOIViewModel = new AOIViewModel(Destination);
+                mergeDBHelper.MergingTable("Target areas");
+                Destination.AdditionalExtentViewModel = new AdditionalExtentViewModel(Destination);
+                mergeDBHelper.MergingTable("Addtional extents");
+                Destination.ProvinceViewModel = new ProvinceViewModel(Destination);
+                mergeDBHelper.MergingTable("Provinces");
+                Destination.MunicipalityViewModel = new MunicipalityViewModel(Destination);
+                mergeDBHelper.MergingTable("Municipalities");
+                Destination.LandingSiteViewModel = new LandingSiteViewModel(Destination);
+                mergeDBHelper.MergingTable("Landing sites");
+                Destination.CatchLocalNameViewModel = new CatchLocalNameViewModel(Destination);
+                mergeDBHelper.MergingTable("Local name of catch");
+                Destination.GearLocalNameViewModel = new GearLocalNameViewModel(Destination);
+                mergeDBHelper.MergingTable("Local name of gears");
+                Destination.GearClassViewModel = new GearClassViewModel(Destination);
+                mergeDBHelper.MergingTable("Gear classes");
+                Destination.GearViewModel = new GearViewModel(Destination);
+                mergeDBHelper.MergingTable("Fishing gears");
+                Destination.GearSpecViewModel = new GearSpecViewModel(Destination);
+                mergeDBHelper.MergingTable("Gear specs");
+                Destination.RefGearCodeViewModel = new RefGearCodeViewModel(Destination);
+                mergeDBHelper.MergingTable("Reference gear codes");
+                Destination.RefGearCodeUsageViewModel = new RefGearCodeUsageViewModel(Destination);
+                mergeDBHelper.MergingTable("Reference gear code usage");
+                Destination.RefGearCodeUsageLocalNameViewModel = new RefGearCodeUsageLocalNameViewModel(Destination);
+                mergeDBHelper.MergingTable("Reference gear code usage local names");
+                Destination.SamplingEnumeratorViewModel = new SamplingEnumeratorViewModel(Destination);
+                mergeDBHelper.MergingTable("Enumerators");
+                Destination.TaxaViewModel = new TaxaViewModel(Destination);
+                mergeDBHelper.MergingTable("Taxa");
+                Destination.SpeciesViewModel = new SpeciesViewModel(Destination);
+                mergeDBHelper.MergingTable("Species");
+                Destination.CatchNameViewModel = new CatchNameViewModel(Destination);
+                mergeDBHelper.MergingTable("Catch names");
+                Destination.SamplingViewModel = new SamplingViewModel(Destination);
+                mergeDBHelper.MergingTable("Sampling");
+                Destination.FishingExpenseViewModel = new FishingExpenseViewModel(Destination);
+                mergeDBHelper.MergingTable("Fishing expense");
+                Destination.FishingExpenseItemViewModel = new FishingExpenseItemViewModel(Destination);
+                mergeDBHelper.MergingTable("Fishing expense items");
+                Destination.AdditionalFishingGroundViewModel = new AdditionalFishingGroundViewModel(Destination);
+                mergeDBHelper.MergingTable("Additional fishing grounds");
+                Destination.CatchCompositionViewModel = new CatchCompositionViewModel(Destination);
+                mergeDBHelper.MergingTable("Catch composition");
+                Destination.CatchDetailViewModel = new CatchDetailViewModel(Destination);
+                mergeDBHelper.MergingTable("Catch detail");
+                Destination.LenFreqViewModel = new LenFreqViewModel(Destination);
+                mergeDBHelper.MergingTable("Length frequency");
+                Destination.GonadMaturityStageViewModel = new GonadMaturityStageViewModel(Destination);
+                mergeDBHelper.MergingTable("Gonad maturity");
+                Destination.SampledGearSpecViewModel = new SampledGearSpecViewModel(Destination);
+                mergeDBHelper.MergingTable("Gear spec of sampled gears");
 
-            SetupCounts();
-            PickupCounts();
+            if (destinationOnly)
+            {
+                mergeDBHelper.IsDone();
+            }
+            else
+            {
+
+                mergeDBHelper.TableLocation = "Source";
+                Source.AOIViewModel = new AOIViewModel(Source);
+                mergeDBHelper.MergingTable("Target areas");
+                Source.AdditionalExtentViewModel = new AdditionalExtentViewModel(Source);
+                mergeDBHelper.MergingTable("Addtional extents");
+                Source.ProvinceViewModel = new ProvinceViewModel(Source);
+                mergeDBHelper.MergingTable("Provinces");
+                Source.MunicipalityViewModel = new MunicipalityViewModel(Source);
+                mergeDBHelper.MergingTable("Municipalities");
+                Source.LandingSiteViewModel = new LandingSiteViewModel(Source);
+                mergeDBHelper.MergingTable("Landing sites");
+                Source.CatchLocalNameViewModel = new CatchLocalNameViewModel(Source);
+                mergeDBHelper.MergingTable("Local name of catch");
+                Source.GearLocalNameViewModel = new GearLocalNameViewModel(Source);
+                mergeDBHelper.MergingTable("Local name of gears");
+                Source.GearClassViewModel = new GearClassViewModel(Source);
+                mergeDBHelper.MergingTable("Gear classes");
+                Source.GearViewModel = new GearViewModel(Source);
+                mergeDBHelper.MergingTable("Fishing gears");
+                Source.GearSpecViewModel = new GearSpecViewModel(Source);
+                mergeDBHelper.MergingTable("Gear specs");
+                Source.RefGearCodeViewModel = new RefGearCodeViewModel(Source);
+                mergeDBHelper.MergingTable("Reference gear codes");
+                Source.RefGearCodeUsageViewModel = new RefGearCodeUsageViewModel(Source);
+                mergeDBHelper.MergingTable("Reference gear code usage");
+                Source.RefGearCodeUsageLocalNameViewModel = new RefGearCodeUsageLocalNameViewModel(Source);
+                mergeDBHelper.MergingTable("Reference gear code usage local names");
+                Source.SamplingEnumeratorViewModel = new SamplingEnumeratorViewModel(Source);
+                mergeDBHelper.MergingTable("Enumerators");
+                Source.TaxaViewModel = new TaxaViewModel(Source);
+                mergeDBHelper.MergingTable("Taxa");
+                Source.SpeciesViewModel = new SpeciesViewModel(Source);
+                mergeDBHelper.MergingTable("Species");
+                Source.CatchNameViewModel = new CatchNameViewModel(Source);
+                mergeDBHelper.MergingTable("Catch names");
+                Source.SamplingViewModel = new SamplingViewModel(Source);
+                mergeDBHelper.MergingTable("Sampling");
+                Source.FishingExpenseViewModel = new FishingExpenseViewModel(Source);
+                mergeDBHelper.MergingTable("Fishing expense");
+                Source.FishingExpenseItemViewModel = new FishingExpenseItemViewModel(Source);
+                mergeDBHelper.MergingTable("Fishing expense items");
+                Source.AdditionalFishingGroundViewModel = new AdditionalFishingGroundViewModel(Source);
+                mergeDBHelper.MergingTable("Additional fishing grounds");
+                Source.CatchCompositionViewModel = new CatchCompositionViewModel(Source);
+                mergeDBHelper.MergingTable("Catch composition");
+                Source.CatchDetailViewModel = new CatchDetailViewModel(Source);
+                mergeDBHelper.MergingTable("Catch detail");
+                Source.LenFreqViewModel = new LenFreqViewModel(Source);
+                mergeDBHelper.MergingTable("Length frequency");
+                Source.GonadMaturityStageViewModel = new GonadMaturityStageViewModel(Source);
+                mergeDBHelper.MergingTable("Gonad maturity");
+                Source.SampledGearSpecViewModel = new SampledGearSpecViewModel(Source);
+                mergeDBHelper.MergingTable("Gear spec of sampled gears");
+                mergeDBHelper.IsDone();
+
+                SetupCounts();
+                PickupCounts();
+            }
+
         }
 
         private static void SetupCounts()
@@ -203,16 +220,16 @@ namespace FAD3.Database.Classes.merge
             SourceCounts = new Dictionary<string, int>();
             DestinationAfterCounts = new Dictionary<string, int>();
 
-            foreach(var item in EntityTables)
+            foreach (var item in EntityTables)
             {
                 DestinationBeforeCounts.Add(item, 0);
                 SourceCounts.Add(item, 0);
                 DestinationAfterCounts.Add(item, 0);
             }
         }
-        private static void PickupCounts(bool before=true)
+        private static void PickupCounts(bool before = true)
         {
-            if(before)
+            if (before)
             {
                 DestinationBeforeCounts["Samplings"] = Destination.SamplingViewModel.Count;
                 DestinationBeforeCounts["Catch composition"] = Destination.CatchCompositionViewModel.Count;
@@ -316,7 +333,7 @@ namespace FAD3.Database.Classes.merge
             mergedbHelper.MergingTable("Target areas");
 
             Logger.LogMerge("merging additional extents");
-            foreach (var item in Source.AdditionalExtentViewModel.AdditionalExtentCollection.Where(t=>t.AOI.AOIGuid==SourceAOI.AOIGuid))
+            foreach (var item in Source.AdditionalExtentViewModel.AdditionalExtentCollection.Where(t => t.AOI.AOIGuid == SourceAOI.AOIGuid))
             {
                 if (Destination.AdditionalExtentViewModel.GetAdditionalExtent(item.RowID) == null)
                 {
@@ -404,7 +421,7 @@ namespace FAD3.Database.Classes.merge
             mergedbHelper.MergingTable("Reference gear codes");
 
             Logger.LogMerge("reference gear code usage");
-            foreach (var item in Source.RefGearCodeUsageViewModel.RefGearCodeUsageCollection.Where(t=>t.AOI.AOIGuid==SourceAOI.AOIGuid))
+            foreach (var item in Source.RefGearCodeUsageViewModel.RefGearCodeUsageCollection.Where(t => t.AOI.AOIGuid == SourceAOI.AOIGuid))
             {
                 if (Destination.RefGearCodeUsageViewModel.GetRefGearCodeUsage(item.RowNumber) == null)
                 {
@@ -417,7 +434,7 @@ namespace FAD3.Database.Classes.merge
             mergedbHelper.MergingTable("Reference gear codes usage");
 
             Logger.LogMerge("reference gear code usage local name");
-            foreach (var item in Source.RefGearCodeUsageLocalNameViewModel.RefGearCodeUsageLocalNameCollection.Where(t=>t.RefGearCodeUsage.AOI.AOIGuid==SourceAOI.AOIGuid))
+            foreach (var item in Source.RefGearCodeUsageLocalNameViewModel.RefGearCodeUsageLocalNameCollection.Where(t => t.RefGearCodeUsage.AOI.AOIGuid == SourceAOI.AOIGuid))
             {
                 if (Destination.RefGearCodeUsageLocalNameViewModel.GetUsageLocalName(item.RowID) == null)
                 {

@@ -21,6 +21,7 @@ namespace FAD3.Database.Classes.merge
             Samplings = new SamplingRepository(fadEntities);
             SamplingCollection = new ObservableCollection<Sampling>(Samplings.Samplings);
             SamplingCollection.CollectionChanged += SamplingCollection_CollectionChanged;
+            
         }
 
         public Sampling GetEarliestSampling(AOI aoi)

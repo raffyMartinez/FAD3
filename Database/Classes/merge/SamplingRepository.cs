@@ -101,7 +101,40 @@ namespace FAD3.Database.Classes.merge
                                     s.FishingGround = new FishingGround(fishingGround, s);
                                 }
                             }
+                            s.Notes = dr["Notes"].ToString();
+                            FishingVessel fv = new FishingVessel
+                            {
+                                Depth = string.IsNullOrEmpty(dr["hgt"].ToString()) ? null : (double?)dr["hgt"],
+                                Breadth = string.IsNullOrEmpty(dr["wdt"].ToString()) ? null : (double?)dr["wdt"],
+                                Length = string.IsNullOrEmpty(dr["len"].ToString()) ? null : (double?)dr["len"],
+                                SamplingGUID = s.RowID,
+                                EngineHorsePower= string.IsNullOrEmpty(dr["hp"].ToString()) ? null : (double?)dr["hp"],
+                                Engine = dr["Engine"].ToString()
+                            };
+                            if (string.IsNullOrEmpty(dr["VesType"].ToString()))
+                            {
+                                fv.VesselType = VesselType.NotDetermined;
+                            }
+                            else
+                            {
+                                switch ((int)dr["VesType"])
+                                {
+                                    case 1:
+                                        fv.VesselType = VesselType.Motorized;
+                                        break;
+                                    case 2:
+                                        fv.VesselType = VesselType.NonMotorized;
+                                        break;
+                                    case 3:
+                                        fv.VesselType = VesselType.NoVesselUsed;
+                                        break;
+                                    case 4:
+                                        fv.VesselType = VesselType.NotDetermined;
+                                        break;
+                                }
+                            }
 
+                            s.FishingVessel = fv;
 
                             //if (!string.IsNullOrEmpty(fishingGround))
                             //{
@@ -126,6 +159,10 @@ namespace FAD3.Database.Classes.merge
                             {
                                 s.SamplingEnumerator = _fadEntities.SamplingEnumeratorViewModel.GetSamplingEnumerator(dr["Enumerator"].ToString());
                             }
+                            //else
+                            //{
+                            //    s.SamplingEnumerator = new SamplingEnumerator { Name = "" };
+                            //}
 
                             listSamplings.Add(s);
                             counter++;
@@ -144,7 +181,11 @@ namespace FAD3.Database.Classes.merge
         }
         public bool Add(Sampling s)
         {
-
+            int vesType = 4;
+            if (s.FishingVessel.VesselType != VesselType.NotDetermined)
+            {
+                vesType = (int)s.FishingVessel.VesselType;
+            }
             bool success = false;
             s.DateAdded = DateTime.Now;
             using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
@@ -154,7 +195,7 @@ namespace FAD3.Database.Classes.merge
                 var sql = $@"Insert into tblSampling ( SamplingGUID, GearVarGUID, AOI, RefNo,
                                 SamplingDate, SamplingTime, FishingGround, DateSet, TimeSet,
                                 DateHauled, TimeHauled, NoHauls, NoFishers,WtCatch, WtSample,
-                                LSGUID, HasLiveFish, Enumerator, DateEncoded)
+                                LSGUID, HasLiveFish, Enumerator, DateEncoded,wdt,len,hgt,VesType,hp,Engine,Notes)
                                Values (
                                {{{s.RowID}}},
                                {{{s.Gear.GearID}}},
@@ -174,7 +215,14 @@ namespace FAD3.Database.Classes.merge
                                 {{{s.LandingSite.LandingSiteGuid}}},
                                 {s.HasLiveFish},
                                 {{{s.SamplingEnumerator.EnumeratorID}}},
-                                '{DateTime.Now}'
+                                '{DateTime.Now}',
+                                {(s.FishingVessel.Breadth == null ? "null" : s.FishingVessel.Breadth.ToString())},
+                                {(s.FishingVessel.Length == null ? "null" : s.FishingVessel.Length.ToString())},
+                                {(s.FishingVessel.Depth == null ? "null" : s.FishingVessel.Depth.ToString())},
+                                {vesType},
+                                {(s.FishingVessel.EngineHorsePower == null ? "null" : s.FishingVessel.EngineHorsePower.ToString())},
+                                '{s.FishingVessel.Engine}',
+                                '{s.Notes}'
                                )";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
@@ -197,14 +245,41 @@ namespace FAD3.Database.Classes.merge
 
         public bool Update(Sampling s)
         {
+            int vesType = 4;
+            if (s.FishingVessel.VesselType != VesselType.NotDetermined)
+            {
+                vesType = (int)s.FishingVessel.VesselType;
+            }
             bool success = false;
             using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
             {
                 conn.Open();
                 var sql = $@"Update tblSampling set
-                                GearID = {{{s.Gear.GearID}}},
-                                LandingSite = {{{s.LandingSite.LandingSiteGuid}}},
-                                DateTimeSampled = '{s.DateTimeSampled}'
+                              GearVarGUID = {{{s.Gear.GearID}}},
+                               AOI = {{{s.AOI.AOIGuid}}},
+                               RefNo = '{s.ReferenceNumber.ReferenceNumber}',
+                               SamplingDate =  '{s.DateTimeSampled.ToString("MMM-dd-yyyy")}',
+                               SamplingTime = '{s.DateTimeSampled.ToString("HH: mm")}',
+                               FishingGround = '{(s.FishingGround == null ? "" : s.FishingGround.ToString())}',
+                               DateSet = '{(s.DateTimeGearSet == null ? "null" : ((DateTime)s.DateTimeGearSet).ToString("MMM - dd - yyyy"))}',
+                               TimeSet = '{(s.DateTimeGearSet == null ? "null" : ((DateTime)s.DateTimeGearSet).ToString("HH:mm"))}',
+                               DateHauled =  '{(s.DateTimeGearHaul == null ? "null" : ((DateTime)s.DateTimeGearHaul).ToString("MMM - dd - yyyy"))}',
+                               TimeHauled= '{(s.DateTimeGearHaul == null ? "null" : ((DateTime)s.DateTimeGearHaul).ToString("HH:mm"))}',
+                               NoHauls= {(s.NumberOfHauls == null ? "null" : s.NumberOfHauls.ToString())},
+                               NoFishers= {(s.NumberOfFishers == null ? "null" : s.NumberOfFishers.ToString())},
+                               WtCatch= {(s.WeightOfCatch == null ? "null" : s.WeightOfCatch.ToString())},
+                               WtSample= {(s.WeightOfSample == null ? "null" : s.WeightOfSample.ToString())},
+                               LSGUID= {{{s.LandingSite.LandingSiteGuid}}},
+                               HasLiveFish= {s.HasLiveFish},
+                               Enumerator= {{{s.SamplingEnumerator.EnumeratorID}}},
+                               DateEncoded= '{DateTime.Now}',
+                                wdt = {(s.FishingVessel.Breadth == null ? "null" : s.FishingVessel.Breadth.ToString())},
+                                len = {(s.FishingVessel.Length == null ? "null" : s.FishingVessel.Length.ToString())},
+                                hgt= {(s.FishingVessel.Depth == null ? "null" : s.FishingVessel.Depth.ToString())},
+                                VesType = {vesType},
+                                hp= {(s.FishingVessel.EngineHorsePower == null ? "null" : s.FishingVessel.EngineHorsePower.ToString())},
+                                Engine = '{s.FishingVessel.Engine}',
+                                Notes = '{s.Notes}'
                             WHERE RowID={{{s.RowID}}}";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {

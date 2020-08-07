@@ -39,8 +39,12 @@
             this.lvReports = new System.Windows.Forms.ListView();
             this.label3 = new System.Windows.Forms.Label();
             this.lvYears = new System.Windows.Forms.ListView();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.tsProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.tsLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolBar.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolBar
@@ -93,18 +97,20 @@
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.tvTopics, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.lvReports, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label3, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.lvYears, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.lvReports, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.statusStrip1, 0, 4);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 34);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 4;
+            this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1012, 543);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1012, 541);
             this.tableLayoutPanel1.TabIndex = 2;
             // 
             // label1
@@ -123,15 +129,15 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tvTopics.Location = new System.Drawing.Point(4, 29);
-            this.tvTopics.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tvTopics.Margin = new System.Windows.Forms.Padding(4);
             this.tvTopics.Name = "tvTopics";
-            this.tvTopics.Size = new System.Drawing.Size(259, 312);
+            this.tvTopics.Size = new System.Drawing.Size(259, 291);
             this.tvTopics.TabIndex = 1;
             this.tvTopics.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnTreeNodeClick);
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(4, 345);
+            this.label2.Location = new System.Drawing.Point(4, 324);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(259, 25);
@@ -146,10 +152,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvReports.HideSelection = false;
             this.lvReports.Location = new System.Drawing.Point(271, 29);
-            this.lvReports.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvReports.Margin = new System.Windows.Forms.Padding(4);
             this.lvReports.Name = "lvReports";
             this.tableLayoutPanel1.SetRowSpan(this.lvReports, 3);
-            this.lvReports.Size = new System.Drawing.Size(737, 510);
+            this.lvReports.Size = new System.Drawing.Size(737, 477);
             this.lvReports.TabIndex = 4;
             this.lvReports.UseCompatibleStateImageBehavior = false;
             this.lvReports.DoubleClick += new System.EventHandler(this.OnListDoubleClick);
@@ -171,23 +177,48 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lvYears.CheckBoxes = true;
             this.lvYears.HideSelection = false;
-            this.lvYears.Location = new System.Drawing.Point(4, 374);
-            this.lvYears.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lvYears.Location = new System.Drawing.Point(4, 353);
+            this.lvYears.Margin = new System.Windows.Forms.Padding(4);
             this.lvYears.Name = "lvYears";
-            this.lvYears.Size = new System.Drawing.Size(259, 165);
+            this.lvYears.Size = new System.Drawing.Size(259, 153);
             this.lvYears.TabIndex = 6;
             this.lvYears.UseCompatibleStateImageBehavior = false;
             this.lvYears.View = System.Windows.Forms.View.Details;
+            // 
+            // statusStrip1
+            // 
+            this.tableLayoutPanel1.SetColumnSpan(this.statusStrip1, 2);
+            this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsProgressBar,
+            this.tsLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 515);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1012, 26);
+            this.statusStrip1.TabIndex = 7;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // tsProgressBar
+            // 
+            this.tsProgressBar.Name = "tsProgressBar";
+            this.tsProgressBar.Size = new System.Drawing.Size(250, 18);
+            // 
+            // tsLabel
+            // 
+            this.tsLabel.Margin = new System.Windows.Forms.Padding(10, 4, 0, 2);
+            this.tsLabel.Name = "tsLabel";
+            this.tsLabel.Size = new System.Drawing.Size(151, 20);
+            this.tsLabel.Text = "toolStripStatusLabel1";
             // 
             // DatabaseReportForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1012, 577);
+            this.ClientSize = new System.Drawing.Size(1012, 575);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.toolBar);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "DatabaseReportForm";
             this.Text = "DatabaseReportForm";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnFormClosing);
@@ -195,6 +226,9 @@
             this.toolBar.ResumeLayout(false);
             this.toolBar.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,5 +247,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton tsbClose;
         private System.Windows.Forms.ListView lvYears;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripProgressBar tsProgressBar;
+        private System.Windows.Forms.ToolStripStatusLabel tsLabel;
     }
 }

@@ -84,7 +84,12 @@ namespace FAD3.Database.Classes.merge.views
             chart1.ChartAreas[0].AxisY.MajorGrid.Enabled = false;
             chart1.ChartAreas[0].AxisX.MajorGrid.Enabled = false;
             chart1.ChartAreas[0].AxisX.LabelStyle.Enabled = true;
-            chart1.ChartAreas[0].AxisX.LabelStyle = new LabelStyle { Interval = 1, Angle = 90, TruncatedLabels = true };   
+
+            chart1.ChartAreas[0].AxisY.Title = "Record count";
+            chart1.ChartAreas[0].AxisY.TitleFont = new Font("Arial", 13,FontStyle.Bold,GraphicsUnit.Point);
+            chart1.ChartAreas[0].AxisX.Title = "Tables";
+            chart1.ChartAreas[0].AxisX.TitleFont = new Font("Arial", 13, FontStyle.Bold, GraphicsUnit.Point);
+            chart1.ChartAreas[0].AxisX.LabelStyle = new LabelStyle { Interval = 1};   
             chart1.ChartAreas[0].Name = "area1";
 
             var seriesSource = new Series("Source");

@@ -25,10 +25,10 @@
         public SamplingEnumeratorViewModel SamplingEnumeratorViewModel { get; set; }
 
         public FishingExpenseViewModel FishingExpenseViewModel { get; set; }
-
         public FishingExpenseItemViewModel FishingExpenseItemViewModel { get; set; }
         public SamplingViewModel SamplingViewModel { get; set; }
 
+        public FishingVesselViewModel FishingVesselViewModel { get; set; }
         public AdditionalFishingGroundViewModel AdditionalFishingGroundViewModel { get; set; }
         public TaxaViewModel TaxaViewModel { get; set; }
         public SpeciesViewModel SpeciesViewModel { get; set; }

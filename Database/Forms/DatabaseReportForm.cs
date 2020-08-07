@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-
+using FAD3.Database.Classes.merge;
 namespace FAD3.Database.Forms
 {
     public partial class DatabaseReportForm : Form
     {
+        private MergeDBHelper _mergeDBHelper;
         private static DatabaseReportForm _instance;
         private string _treeLevel;
         private TargetArea _targetArea;
@@ -43,6 +44,43 @@ namespace FAD3.Database.Forms
             InitializeComponent();
             _treeLevel = treeLevel;
             _targetArea = targetArea;
+            _mergeDBHelper = new MergeDBHelper(26);
+            _mergeDBHelper.OnMergeDBTable += OnMergeDBTable;
+            _mergeDBHelper.OnMergeDBTableDone += OnMergeTableDone;
+            MergeDataBases.SetUpForReporting(_mergeDBHelper);
+            tsLabel.Text = "";
+        }
+
+        private void OnMergeTableDone(object sender, MergeDBEventArgs e)
+        {
+            if (tsProgressBar.GetCurrentParent().InvokeRequired)
+            {
+
+                tsProgressBar.GetCurrentParent().Invoke(new MethodInvoker(delegate
+                {
+                    tsProgressBar.Maximum = e.TableCount;
+                    tsProgressBar.Value = 0;
+                    tsLabel.Text = $"Finished loading {_mergeDBHelper.TotalTables} tables";
+
+                }));
+
+            }
+        }
+
+        private void OnMergeDBTable(object sender, MergeDBEventArgs e)
+        {
+            if (tsProgressBar.GetCurrentParent().InvokeRequired)
+            {
+
+                tsProgressBar.GetCurrentParent().Invoke(new MethodInvoker(delegate
+                {
+                    tsProgressBar.Maximum = e.TableCount;
+                    tsProgressBar.Value = e.RunningCount;
+                    tsLabel.Text = $"Loading table {e.RunningCount} of {e.TableCount}: {e.CurrentTableRead}";
+
+                }));
+
+            }
         }
 
         private void OnFormLoad(object sender, EventArgs e)
@@ -165,6 +203,12 @@ namespace FAD3.Database.Forms
                     _topicDescription = $"Catch composition data of {TargetArea.TargetAreaName} target area.";
                     lvi.SubItems.Add(_topicDescription);
                     _topic = "catch";
+
+                    row = lvReports.Items.Count + 1;
+                    lvi = lvReports.Items.Add("len_freq", row.ToString(), null);
+                    _topicDescription = $"Length frequency data of {TargetArea.TargetAreaName} target area.";
+                    lvi.SubItems.Add(_topicDescription);
+                    _topic = "len_freq";
                     break;
 
             }
@@ -196,6 +240,8 @@ namespace FAD3.Database.Forms
                 else
                 {
                     rtf.Show(this);
+                    //await rtf.Report();
+                    rtf.Showreport();
                 }
             }
             else

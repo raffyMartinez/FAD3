@@ -33,9 +33,16 @@ namespace FAD3.Database.Classes.merge
         {
             get
             {
-                if(_catchLocalName==null)
+                if (_catchLocalName == null)
                 {
-                    _catchLocalName = FADEntities.CatchLocalNameViewModel.GetCatchLocalName(CatchNameGuid);
+                    if (CatchNameGuid != null)
+                    {
+                        _catchLocalName = FADEntities.CatchLocalNameViewModel.GetCatchLocalName(CatchNameGuid);
+                    }
+                    else
+                    {
+                        _catchLocalName = new CatchLocalName { LocalName = "unknown" };
+                    }
                 }
                 return _catchLocalName;
             }

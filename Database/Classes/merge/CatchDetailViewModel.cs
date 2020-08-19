@@ -13,9 +13,37 @@ namespace FAD3.Database.Classes.merge
         public ObservableCollection<CatchDetail> CatchDetailCollection { get; set; }
         private CatchDetailRepository CatchDetails { get; set; }
 
+        public double TotalWtOfCactchComposition(string samplingGUID)
+        {
+            double wt = 0;
+            foreach(var item in CatchDetailCollection.Where(t => t.CatchComposition.SamplingID == samplingGUID))
+            {
+                wt += item.Weight;
+            }
+            return wt;
+        }
 
+        public double WeightFromTotal(string samplingGuid)
+        {
+            double wt = 0;
+            foreach (var item in CatchDetailCollection
+                .Where(t => t.CatchComposition.SamplingID == samplingGuid)
+                .Where(t=>t.FromTotal))
+            {
+                wt += item.Weight;
+            }
+            return wt;
+        }
+        public List<CatchDetailFlattened>GetFlattened(List<int> years, string aoiGUID)
+        {
 
+            return CatchDetails.getCatchDetailsFlattened(years,aoiGUID);
+        }
 
+        public List<CatchDetail> GetCatchDetails(string samplingGuid)
+        {
+            return CatchDetailCollection.Where(t => t.CatchComposition.SamplingID == samplingGuid).ToList();
+        }
         public CatchDetailViewModel(FADEntities fadEntities)
         {
             CatchDetails = new CatchDetailRepository(fadEntities);

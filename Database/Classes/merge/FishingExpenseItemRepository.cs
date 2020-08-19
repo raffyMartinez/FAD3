@@ -79,7 +79,18 @@ namespace FAD3.Database.Classes.merge
                            ({{{item.ParentFishingExpense.Sampling.RowID}}},{{{item.ExpenseRowID}}},'{item.ExpenseItem}',{(item.Cost==null?"null":item.Cost.ToString())}, '{item.Unit}', {(item.UnitQuantity==null?"null":item.UnitQuantity.ToString())})";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
-                    success = update.ExecuteNonQuery() > 0;
+                    try
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+                    catch (OleDbException dbex)
+                    {
+                        Logger.LogMerge(dbex.Message, true, item);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(ex);
+                    }
                 }
             }
             return success;

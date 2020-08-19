@@ -35,7 +35,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SpatioTemporalMappingForm));
             this.tabMap = new System.Windows.Forms.TabControl();
             this.tabStart = new System.Windows.Forms.TabPage();
-            this.btnExclude = new System.Windows.Forms.Button();
+            this.btnBinning = new System.Windows.Forms.Button();
             this.cboLastData = new System.Windows.Forms.ComboBox();
             this.cboFirstData = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -135,16 +135,17 @@
             this.tabMap.Controls.Add(this.tabSummary);
             this.tabMap.Controls.Add(this.tabCategorize);
             this.tabMap.Controls.Add(this.tabMapping);
-            this.tabMap.Location = new System.Drawing.Point(2, 38);
+            this.tabMap.Location = new System.Drawing.Point(3, 47);
+            this.tabMap.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabMap.Name = "tabMap";
             this.tabMap.SelectedIndex = 0;
-            this.tabMap.Size = new System.Drawing.Size(494, 488);
+            this.tabMap.Size = new System.Drawing.Size(659, 601);
             this.tabMap.TabIndex = 0;
             this.tabMap.SelectedIndexChanged += new System.EventHandler(this.OnTabMapIndexChanged);
             // 
             // tabStart
             // 
-            this.tabStart.Controls.Add(this.btnExclude);
+            this.tabStart.Controls.Add(this.btnBinning);
             this.tabStart.Controls.Add(this.cboLastData);
             this.tabStart.Controls.Add(this.cboFirstData);
             this.tabStart.Controls.Add(this.label6);
@@ -160,34 +161,36 @@
             this.tabStart.Controls.Add(this.label1);
             this.tabStart.Controls.Add(this.txtFile);
             this.tabStart.Controls.Add(this.btnOpen);
-            this.tabStart.Location = new System.Drawing.Point(4, 22);
+            this.tabStart.Location = new System.Drawing.Point(4, 25);
+            this.tabStart.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabStart.Name = "tabStart";
-            this.tabStart.Padding = new System.Windows.Forms.Padding(3);
-            this.tabStart.Size = new System.Drawing.Size(486, 462);
+            this.tabStart.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabStart.Size = new System.Drawing.Size(651, 572);
             this.tabStart.TabIndex = 0;
             this.tabStart.Text = "Start";
             this.tabStart.UseVisualStyleBackColor = true;
             // 
-            // btnExclude
+            // btnBinning
             // 
-            this.btnExclude.Enabled = false;
-            this.btnExclude.Location = new System.Drawing.Point(226, 356);
-            this.btnExclude.Name = "btnExclude";
-            this.btnExclude.Size = new System.Drawing.Size(63, 25);
-            this.btnExclude.TabIndex = 36;
-            this.btnExclude.Text = "Exclude";
-            this.btnExclude.UseVisualStyleBackColor = true;
-            this.btnExclude.Visible = false;
-            this.btnExclude.Click += new System.EventHandler(this.OnButtonClick);
+            this.btnBinning.Enabled = false;
+            this.btnBinning.Location = new System.Drawing.Point(301, 438);
+            this.btnBinning.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnBinning.Name = "btnBinning";
+            this.btnBinning.Size = new System.Drawing.Size(84, 31);
+            this.btnBinning.TabIndex = 36;
+            this.btnBinning.Text = "Binning";
+            this.btnBinning.UseVisualStyleBackColor = true;
+            this.btnBinning.Click += new System.EventHandler(this.OnButtonClick);
             // 
             // cboLastData
             // 
             this.cboLastData.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboLastData.Enabled = false;
             this.cboLastData.FormattingEnabled = true;
-            this.cboLastData.Location = new System.Drawing.Point(184, 319);
+            this.cboLastData.Location = new System.Drawing.Point(245, 393);
+            this.cboLastData.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboLastData.Name = "cboLastData";
-            this.cboLastData.Size = new System.Drawing.Size(186, 21);
+            this.cboLastData.Size = new System.Drawing.Size(247, 24);
             this.cboLastData.TabIndex = 33;
             this.cboLastData.SelectedIndexChanged += new System.EventHandler(this.OnComboSelectionIndexChanged);
             // 
@@ -196,36 +199,40 @@
             this.cboFirstData.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboFirstData.Enabled = false;
             this.cboFirstData.FormattingEnabled = true;
-            this.cboFirstData.Location = new System.Drawing.Point(185, 283);
+            this.cboFirstData.Location = new System.Drawing.Point(247, 348);
+            this.cboFirstData.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboFirstData.Name = "cboFirstData";
-            this.cboFirstData.Size = new System.Drawing.Size(186, 21);
+            this.cboFirstData.Size = new System.Drawing.Size(247, 24);
             this.cboFirstData.TabIndex = 32;
             this.cboFirstData.SelectedIndexChanged += new System.EventHandler(this.OnComboSelectionIndexChanged);
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(32, 322);
+            this.label6.Location = new System.Drawing.Point(43, 396);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 13);
+            this.label6.Size = new System.Drawing.Size(107, 17);
             this.label6.TabIndex = 29;
             this.label6.Text = "End time period";
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(32, 286);
+            this.label7.Location = new System.Drawing.Point(43, 352);
+            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(83, 13);
+            this.label7.Size = new System.Drawing.Size(112, 17);
             this.label7.TabIndex = 28;
             this.label7.Text = "Start time period";
             // 
             // btnReadFile
             // 
             this.btnReadFile.Enabled = false;
-            this.btnReadFile.Location = new System.Drawing.Point(226, 219);
+            this.btnReadFile.Location = new System.Drawing.Point(301, 270);
+            this.btnReadFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnReadFile.Name = "btnReadFile";
-            this.btnReadFile.Size = new System.Drawing.Size(63, 25);
+            this.btnReadFile.Size = new System.Drawing.Size(84, 31);
             this.btnReadFile.TabIndex = 27;
             this.btnReadFile.Text = "Read file";
             this.btnReadFile.UseVisualStyleBackColor = true;
@@ -236,9 +243,10 @@
             this.cboValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboValue.Enabled = false;
             this.cboValue.FormattingEnabled = true;
-            this.cboValue.Location = new System.Drawing.Point(184, 179);
+            this.cboValue.Location = new System.Drawing.Point(245, 220);
+            this.cboValue.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboValue.Name = "cboValue";
-            this.cboValue.Size = new System.Drawing.Size(185, 21);
+            this.cboValue.Size = new System.Drawing.Size(245, 24);
             this.cboValue.TabIndex = 26;
             this.cboValue.Tag = "dc";
             this.cboValue.SelectedIndexChanged += new System.EventHandler(this.OnComboSelectionIndexChanged);
@@ -246,9 +254,10 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(32, 182);
+            this.label4.Location = new System.Drawing.Point(43, 224);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(76, 13);
+            this.label4.Size = new System.Drawing.Size(100, 17);
             this.label4.TabIndex = 25;
             this.label4.Text = "Values column";
             // 
@@ -257,9 +266,10 @@
             this.cboTemporal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboTemporal.Enabled = false;
             this.cboTemporal.FormattingEnabled = true;
-            this.cboTemporal.Location = new System.Drawing.Point(184, 139);
+            this.cboTemporal.Location = new System.Drawing.Point(245, 171);
+            this.cboTemporal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboTemporal.Name = "cboTemporal";
-            this.cboTemporal.Size = new System.Drawing.Size(185, 21);
+            this.cboTemporal.Size = new System.Drawing.Size(245, 24);
             this.cboTemporal.TabIndex = 24;
             this.cboTemporal.Tag = "dc";
             this.cboTemporal.SelectedIndexChanged += new System.EventHandler(this.OnComboSelectionIndexChanged);
@@ -267,9 +277,10 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(32, 142);
+            this.label3.Location = new System.Drawing.Point(43, 175);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 13);
+            this.label3.Size = new System.Drawing.Size(117, 17);
             this.label3.TabIndex = 23;
             this.label3.Text = "Temporal column";
             // 
@@ -278,9 +289,10 @@
             this.cboLatitude.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboLatitude.Enabled = false;
             this.cboLatitude.FormattingEnabled = true;
-            this.cboLatitude.Location = new System.Drawing.Point(184, 101);
+            this.cboLatitude.Location = new System.Drawing.Point(245, 124);
+            this.cboLatitude.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboLatitude.Name = "cboLatitude";
-            this.cboLatitude.Size = new System.Drawing.Size(185, 21);
+            this.cboLatitude.Size = new System.Drawing.Size(245, 24);
             this.cboLatitude.TabIndex = 22;
             this.cboLatitude.Tag = "dc";
             this.cboLatitude.SelectedIndexChanged += new System.EventHandler(this.OnComboSelectionIndexChanged);
@@ -290,9 +302,10 @@
             this.cboLongitude.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboLongitude.Enabled = false;
             this.cboLongitude.FormattingEnabled = true;
-            this.cboLongitude.Location = new System.Drawing.Point(184, 64);
+            this.cboLongitude.Location = new System.Drawing.Point(245, 79);
+            this.cboLongitude.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboLongitude.Name = "cboLongitude";
-            this.cboLongitude.Size = new System.Drawing.Size(185, 21);
+            this.cboLongitude.Size = new System.Drawing.Size(245, 24);
             this.cboLongitude.TabIndex = 21;
             this.cboLongitude.Tag = "dc";
             this.cboLongitude.SelectedIndexChanged += new System.EventHandler(this.OnComboSelectionIndexChanged);
@@ -300,35 +313,39 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(32, 104);
+            this.label2.Location = new System.Drawing.Point(43, 128);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 13);
+            this.label2.Size = new System.Drawing.Size(108, 17);
             this.label2.TabIndex = 20;
             this.label2.Text = "Latitude column";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(32, 67);
+            this.label1.Location = new System.Drawing.Point(43, 82);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.Size = new System.Drawing.Size(120, 17);
             this.label1.TabIndex = 19;
             this.label1.Text = "Longitude column";
             // 
             // txtFile
             // 
             this.txtFile.BackColor = System.Drawing.SystemColors.Window;
-            this.txtFile.Location = new System.Drawing.Point(66, 21);
+            this.txtFile.Location = new System.Drawing.Point(88, 26);
+            this.txtFile.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtFile.Name = "txtFile";
             this.txtFile.ReadOnly = true;
-            this.txtFile.Size = new System.Drawing.Size(359, 20);
+            this.txtFile.Size = new System.Drawing.Size(477, 22);
             this.txtFile.TabIndex = 18;
             // 
             // btnOpen
             // 
-            this.btnOpen.Location = new System.Drawing.Point(10, 18);
+            this.btnOpen.Location = new System.Drawing.Point(13, 22);
+            this.btnOpen.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOpen.Name = "btnOpen";
-            this.btnOpen.Size = new System.Drawing.Size(50, 25);
+            this.btnOpen.Size = new System.Drawing.Size(67, 31);
             this.btnOpen.TabIndex = 17;
             this.btnOpen.Text = "Open";
             this.btnOpen.UseVisualStyleBackColor = true;
@@ -338,10 +355,11 @@
             // 
             this.tabMetadata.Controls.Add(this.label21);
             this.tabMetadata.Controls.Add(this.txtMetadata);
-            this.tabMetadata.Location = new System.Drawing.Point(4, 22);
+            this.tabMetadata.Location = new System.Drawing.Point(4, 25);
+            this.tabMetadata.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabMetadata.Name = "tabMetadata";
-            this.tabMetadata.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMetadata.Size = new System.Drawing.Size(486, 462);
+            this.tabMetadata.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabMetadata.Size = new System.Drawing.Size(651, 572);
             this.tabMetadata.TabIndex = 5;
             this.tabMetadata.Text = "Metadata";
             this.tabMetadata.UseVisualStyleBackColor = true;
@@ -349,19 +367,21 @@
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(6, 16);
+            this.label21.Location = new System.Drawing.Point(8, 20);
+            this.label21.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(52, 13);
+            this.label21.Size = new System.Drawing.Size(67, 17);
             this.label21.TabIndex = 1;
             this.label21.Text = "Metadata";
             // 
             // txtMetadata
             // 
-            this.txtMetadata.Location = new System.Drawing.Point(6, 32);
+            this.txtMetadata.Location = new System.Drawing.Point(8, 39);
+            this.txtMetadata.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtMetadata.Multiline = true;
             this.txtMetadata.Name = "txtMetadata";
             this.txtMetadata.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtMetadata.Size = new System.Drawing.Size(442, 413);
+            this.txtMetadata.Size = new System.Drawing.Size(588, 507);
             this.txtMetadata.TabIndex = 0;
             this.txtMetadata.Text = "Metadata is only available in NCCVS file type";
             // 
@@ -381,10 +401,11 @@
             this.tabSummary.Controls.Add(this.label14);
             this.tabSummary.Controls.Add(this.txtRows);
             this.tabSummary.Controls.Add(this.label5);
-            this.tabSummary.Location = new System.Drawing.Point(4, 22);
+            this.tabSummary.Location = new System.Drawing.Point(4, 25);
+            this.tabSummary.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabSummary.Name = "tabSummary";
-            this.tabSummary.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSummary.Size = new System.Drawing.Size(486, 462);
+            this.tabSummary.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabSummary.Size = new System.Drawing.Size(651, 572);
             this.tabSummary.TabIndex = 6;
             this.tabSummary.Text = "Dataset Summary";
             this.tabSummary.UseVisualStyleBackColor = true;
@@ -392,118 +413,132 @@
             // txtDatasetNumberOfTimePeriods
             // 
             this.txtDatasetNumberOfTimePeriods.BackColor = System.Drawing.SystemColors.Window;
-            this.txtDatasetNumberOfTimePeriods.Location = new System.Drawing.Point(196, 50);
+            this.txtDatasetNumberOfTimePeriods.Location = new System.Drawing.Point(261, 62);
+            this.txtDatasetNumberOfTimePeriods.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtDatasetNumberOfTimePeriods.Name = "txtDatasetNumberOfTimePeriods";
             this.txtDatasetNumberOfTimePeriods.ReadOnly = true;
-            this.txtDatasetNumberOfTimePeriods.Size = new System.Drawing.Size(185, 20);
+            this.txtDatasetNumberOfTimePeriods.Size = new System.Drawing.Size(245, 22);
             this.txtDatasetNumberOfTimePeriods.TabIndex = 58;
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(44, 53);
+            this.label19.Location = new System.Drawing.Point(59, 65);
+            this.label19.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(115, 13);
+            this.label19.Size = new System.Drawing.Size(155, 17);
             this.label19.TabIndex = 57;
             this.label19.Text = "Number of time periods";
             // 
             // txtDatasetMin
             // 
-            this.txtDatasetMin.Location = new System.Drawing.Point(196, 332);
+            this.txtDatasetMin.Location = new System.Drawing.Point(261, 409);
+            this.txtDatasetMin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtDatasetMin.Name = "txtDatasetMin";
-            this.txtDatasetMin.Size = new System.Drawing.Size(185, 20);
+            this.txtDatasetMin.Size = new System.Drawing.Size(245, 22);
             this.txtDatasetMin.TabIndex = 56;
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(44, 335);
+            this.label20.Location = new System.Drawing.Point(59, 412);
+            this.label20.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(52, 13);
+            this.label20.Size = new System.Drawing.Size(68, 17);
             this.label20.TabIndex = 55;
             this.label20.Text = "Minumum";
             // 
             // txtDatasetMax
             // 
-            this.txtDatasetMax.Location = new System.Drawing.Point(196, 285);
+            this.txtDatasetMax.Location = new System.Drawing.Point(261, 351);
+            this.txtDatasetMax.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtDatasetMax.Name = "txtDatasetMax";
-            this.txtDatasetMax.Size = new System.Drawing.Size(185, 20);
+            this.txtDatasetMax.Size = new System.Drawing.Size(245, 22);
             this.txtDatasetMax.TabIndex = 54;
             // 
             // lblMax
             // 
             this.lblMax.AutoSize = true;
-            this.lblMax.Location = new System.Drawing.Point(44, 288);
+            this.lblMax.Location = new System.Drawing.Point(59, 354);
+            this.lblMax.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMax.Name = "lblMax";
-            this.lblMax.Size = new System.Drawing.Size(51, 13);
+            this.lblMax.Size = new System.Drawing.Size(66, 17);
             this.lblMax.TabIndex = 53;
             this.lblMax.Text = "Maximum";
             // 
             // txtDatasetNumberValues
             // 
-            this.txtDatasetNumberValues.Location = new System.Drawing.Point(196, 194);
+            this.txtDatasetNumberValues.Location = new System.Drawing.Point(261, 239);
+            this.txtDatasetNumberValues.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtDatasetNumberValues.Name = "txtDatasetNumberValues";
-            this.txtDatasetNumberValues.Size = new System.Drawing.Size(185, 20);
+            this.txtDatasetNumberValues.Size = new System.Drawing.Size(245, 22);
             this.txtDatasetNumberValues.TabIndex = 52;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(44, 197);
+            this.label17.Location = new System.Drawing.Point(59, 242);
+            this.label17.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(90, 13);
+            this.label17.Size = new System.Drawing.Size(119, 17);
             this.label17.TabIndex = 51;
             this.label17.Text = "Number of values";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(44, 244);
+            this.label16.Location = new System.Drawing.Point(59, 300);
+            this.label16.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(125, 13);
+            this.label16.Size = new System.Drawing.Size(166, 17);
             this.label16.TabIndex = 44;
             this.label16.Text = "Number of unique values";
             // 
             // txtDatasetUniqueCount
             // 
-            this.txtDatasetUniqueCount.Location = new System.Drawing.Point(196, 241);
+            this.txtDatasetUniqueCount.Location = new System.Drawing.Point(261, 297);
+            this.txtDatasetUniqueCount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtDatasetUniqueCount.Name = "txtDatasetUniqueCount";
-            this.txtDatasetUniqueCount.Size = new System.Drawing.Size(185, 20);
+            this.txtDatasetUniqueCount.Size = new System.Drawing.Size(245, 22);
             this.txtDatasetUniqueCount.TabIndex = 43;
             // 
             // txtInlandPoints
             // 
             this.txtInlandPoints.BackColor = System.Drawing.SystemColors.Window;
-            this.txtInlandPoints.Location = new System.Drawing.Point(196, 144);
+            this.txtInlandPoints.Location = new System.Drawing.Point(261, 177);
+            this.txtInlandPoints.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtInlandPoints.Name = "txtInlandPoints";
             this.txtInlandPoints.ReadOnly = true;
-            this.txtInlandPoints.Size = new System.Drawing.Size(185, 20);
+            this.txtInlandPoints.Size = new System.Drawing.Size(245, 22);
             this.txtInlandPoints.TabIndex = 42;
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(44, 147);
+            this.label14.Location = new System.Drawing.Point(59, 181);
+            this.label14.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(67, 13);
+            this.label14.Size = new System.Drawing.Size(88, 17);
             this.label14.TabIndex = 41;
             this.label14.Text = "Inland points";
             // 
             // txtRows
             // 
             this.txtRows.BackColor = System.Drawing.SystemColors.Window;
-            this.txtRows.Location = new System.Drawing.Point(196, 97);
+            this.txtRows.Location = new System.Drawing.Point(261, 119);
+            this.txtRows.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtRows.Name = "txtRows";
             this.txtRows.ReadOnly = true;
-            this.txtRows.Size = new System.Drawing.Size(185, 20);
+            this.txtRows.Size = new System.Drawing.Size(245, 22);
             this.txtRows.TabIndex = 40;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(44, 100);
+            this.label5.Location = new System.Drawing.Point(59, 123);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(140, 13);
+            this.label5.Size = new System.Drawing.Size(187, 17);
             this.label5.TabIndex = 39;
             this.label5.Text = "Number of point coordinates";
             // 
@@ -520,10 +555,11 @@
             this.tabCategorize.Controls.Add(this.txtCategoryCount);
             this.tabCategorize.Controls.Add(this.label10);
             this.tabCategorize.Controls.Add(this.icbColorScheme);
-            this.tabCategorize.Location = new System.Drawing.Point(4, 22);
+            this.tabCategorize.Location = new System.Drawing.Point(4, 25);
+            this.tabCategorize.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabCategorize.Name = "tabCategorize";
-            this.tabCategorize.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCategorize.Size = new System.Drawing.Size(486, 462);
+            this.tabCategorize.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabCategorize.Size = new System.Drawing.Size(651, 572);
             this.tabCategorize.TabIndex = 1;
             this.tabCategorize.Text = "Categorize";
             this.tabCategorize.UseVisualStyleBackColor = true;
@@ -531,18 +567,20 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(2, 40);
+            this.label8.Location = new System.Drawing.Point(3, 49);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(108, 13);
+            this.label8.Size = new System.Drawing.Size(143, 17);
             this.label8.TabIndex = 41;
             this.label8.Text = "Classification scheme";
             // 
             // cboClassificationScheme
             // 
             this.cboClassificationScheme.FormattingEnabled = true;
-            this.cboClassificationScheme.Location = new System.Drawing.Point(116, 37);
+            this.cboClassificationScheme.Location = new System.Drawing.Point(155, 46);
+            this.cboClassificationScheme.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cboClassificationScheme.Name = "cboClassificationScheme";
-            this.cboClassificationScheme.Size = new System.Drawing.Size(145, 21);
+            this.cboClassificationScheme.Size = new System.Drawing.Size(192, 24);
             this.cboClassificationScheme.TabIndex = 40;
             // 
             // groupBoxSummary
@@ -557,90 +595,102 @@
             this.groupBoxSummary.Controls.Add(this.txtSelectedMinimum);
             this.groupBoxSummary.Controls.Add(this.txtSelectedValuesCount);
             this.groupBoxSummary.Controls.Add(this.label9);
-            this.groupBoxSummary.Location = new System.Drawing.Point(6, 299);
+            this.groupBoxSummary.Location = new System.Drawing.Point(8, 368);
+            this.groupBoxSummary.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBoxSummary.Name = "groupBoxSummary";
-            this.groupBoxSummary.Size = new System.Drawing.Size(198, 156);
+            this.groupBoxSummary.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBoxSummary.Size = new System.Drawing.Size(264, 192);
             this.groupBoxSummary.TabIndex = 39;
             this.groupBoxSummary.TabStop = false;
             this.groupBoxSummary.Text = "Summary of selected time periods";
             // 
             // txtSelectedNumberOfPeriods
             // 
-            this.txtSelectedNumberOfPeriods.Location = new System.Drawing.Point(109, 25);
+            this.txtSelectedNumberOfPeriods.Location = new System.Drawing.Point(145, 31);
+            this.txtSelectedNumberOfPeriods.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSelectedNumberOfPeriods.Name = "txtSelectedNumberOfPeriods";
-            this.txtSelectedNumberOfPeriods.Size = new System.Drawing.Size(62, 20);
+            this.txtSelectedNumberOfPeriods.Size = new System.Drawing.Size(81, 22);
             this.txtSelectedNumberOfPeriods.TabIndex = 60;
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(13, 28);
+            this.label22.Location = new System.Drawing.Point(17, 34);
+            this.label22.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(93, 13);
+            this.label22.Size = new System.Drawing.Size(125, 17);
             this.label22.TabIndex = 59;
             this.label22.Text = "Number of periods";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(13, 133);
+            this.label18.Location = new System.Drawing.Point(17, 164);
+            this.label18.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(75, 13);
+            this.label18.Size = new System.Drawing.Size(98, 17);
             this.label18.TabIndex = 58;
             this.label18.Text = "Unique values";
             // 
             // txtSelectedUnique
             // 
-            this.txtSelectedUnique.Location = new System.Drawing.Point(109, 130);
+            this.txtSelectedUnique.Location = new System.Drawing.Point(145, 160);
+            this.txtSelectedUnique.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSelectedUnique.Name = "txtSelectedUnique";
-            this.txtSelectedUnique.Size = new System.Drawing.Size(62, 20);
+            this.txtSelectedUnique.Size = new System.Drawing.Size(81, 22);
             this.txtSelectedUnique.TabIndex = 57;
             // 
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(13, 107);
+            this.label12.Location = new System.Drawing.Point(17, 132);
+            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(51, 13);
+            this.label12.Size = new System.Drawing.Size(66, 17);
             this.label12.TabIndex = 56;
             this.label12.Text = "Maximum";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(13, 81);
+            this.label11.Location = new System.Drawing.Point(17, 100);
+            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(48, 13);
+            this.label11.Size = new System.Drawing.Size(63, 17);
             this.label11.TabIndex = 55;
             this.label11.Text = "Minimum";
             // 
             // txtSelectedMaximum
             // 
-            this.txtSelectedMaximum.Location = new System.Drawing.Point(109, 104);
+            this.txtSelectedMaximum.Location = new System.Drawing.Point(145, 128);
+            this.txtSelectedMaximum.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSelectedMaximum.Name = "txtSelectedMaximum";
-            this.txtSelectedMaximum.Size = new System.Drawing.Size(62, 20);
+            this.txtSelectedMaximum.Size = new System.Drawing.Size(81, 22);
             this.txtSelectedMaximum.TabIndex = 54;
             // 
             // txtSelectedMinimum
             // 
-            this.txtSelectedMinimum.Location = new System.Drawing.Point(109, 78);
+            this.txtSelectedMinimum.Location = new System.Drawing.Point(145, 96);
+            this.txtSelectedMinimum.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSelectedMinimum.Name = "txtSelectedMinimum";
-            this.txtSelectedMinimum.Size = new System.Drawing.Size(62, 20);
+            this.txtSelectedMinimum.Size = new System.Drawing.Size(81, 22);
             this.txtSelectedMinimum.TabIndex = 53;
             // 
             // txtSelectedValuesCount
             // 
-            this.txtSelectedValuesCount.Location = new System.Drawing.Point(109, 52);
+            this.txtSelectedValuesCount.Location = new System.Drawing.Point(145, 64);
+            this.txtSelectedValuesCount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSelectedValuesCount.Name = "txtSelectedValuesCount";
-            this.txtSelectedValuesCount.Size = new System.Drawing.Size(62, 20);
+            this.txtSelectedValuesCount.Size = new System.Drawing.Size(81, 22);
             this.txtSelectedValuesCount.TabIndex = 52;
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(13, 55);
+            this.label9.Location = new System.Drawing.Point(17, 68);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(90, 13);
+            this.label9.Size = new System.Drawing.Size(119, 17);
             this.label9.TabIndex = 51;
             this.label9.Text = "Number of values";
             // 
@@ -648,18 +698,21 @@
             // 
             this.groupBox2.Controls.Add(this.btnShowGridPoints);
             this.groupBox2.Controls.Add(this.btnShowGridPolygons);
-            this.groupBox2.Location = new System.Drawing.Point(236, 300);
+            this.groupBox2.Location = new System.Drawing.Point(315, 369);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(200, 101);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox2.Size = new System.Drawing.Size(267, 124);
             this.groupBox2.TabIndex = 38;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Show on map";
             // 
             // btnShowGridPoints
             // 
-            this.btnShowGridPoints.Location = new System.Drawing.Point(68, 20);
+            this.btnShowGridPoints.Location = new System.Drawing.Point(91, 25);
+            this.btnShowGridPoints.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnShowGridPoints.Name = "btnShowGridPoints";
-            this.btnShowGridPoints.Size = new System.Drawing.Size(73, 25);
+            this.btnShowGridPoints.Size = new System.Drawing.Size(97, 31);
             this.btnShowGridPoints.TabIndex = 13;
             this.btnShowGridPoints.Text = "Data points";
             this.btnShowGridPoints.UseVisualStyleBackColor = true;
@@ -667,9 +720,10 @@
             // 
             // btnShowGridPolygons
             // 
-            this.btnShowGridPolygons.Location = new System.Drawing.Point(68, 62);
+            this.btnShowGridPolygons.Location = new System.Drawing.Point(91, 76);
+            this.btnShowGridPolygons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnShowGridPolygons.Name = "btnShowGridPolygons";
-            this.btnShowGridPolygons.Size = new System.Drawing.Size(73, 25);
+            this.btnShowGridPolygons.Size = new System.Drawing.Size(97, 31);
             this.btnShowGridPolygons.TabIndex = 26;
             this.btnShowGridPolygons.Text = "Grid";
             this.btnShowGridPolygons.UseVisualStyleBackColor = true;
@@ -678,17 +732,19 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(2, 8);
+            this.label13.Location = new System.Drawing.Point(3, 10);
+            this.label13.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(76, 13);
+            this.label13.Size = new System.Drawing.Size(101, 17);
             this.label13.TabIndex = 37;
             this.label13.Text = "Color schemes";
             // 
             // btnColorScheme
             // 
-            this.btnColorScheme.Location = new System.Drawing.Point(352, 6);
+            this.btnColorScheme.Location = new System.Drawing.Point(469, 7);
+            this.btnColorScheme.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnColorScheme.Name = "btnColorScheme";
-            this.btnColorScheme.Size = new System.Drawing.Size(90, 25);
+            this.btnColorScheme.Size = new System.Drawing.Size(120, 31);
             this.btnColorScheme.TabIndex = 35;
             this.btnColorScheme.Text = "Choose colors";
             this.btnColorScheme.UseVisualStyleBackColor = true;
@@ -707,23 +763,28 @@
             this.dgcolCount,
             this.dgCol});
             this.dgCategories.GridColor = System.Drawing.SystemColors.Window;
-            this.dgCategories.Location = new System.Drawing.Point(5, 99);
+            this.dgCategories.Location = new System.Drawing.Point(7, 122);
+            this.dgCategories.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgCategories.Name = "dgCategories";
             this.dgCategories.ReadOnly = true;
             this.dgCategories.RowHeadersVisible = false;
-            this.dgCategories.Size = new System.Drawing.Size(439, 194);
+            this.dgCategories.RowHeadersWidth = 51;
+            this.dgCategories.Size = new System.Drawing.Size(585, 239);
             this.dgCategories.TabIndex = 34;
             this.dgCategories.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnCellDblClick);
             // 
             // dgcolCategory
             // 
             this.dgcolCategory.HeaderText = "Category";
+            this.dgcolCategory.MinimumWidth = 6;
             this.dgcolCategory.Name = "dgcolCategory";
             this.dgcolCategory.ReadOnly = true;
+            this.dgcolCategory.Width = 125;
             // 
             // dgcolCount
             // 
             this.dgcolCount.HeaderText = "Count";
+            this.dgcolCount.MinimumWidth = 6;
             this.dgcolCount.Name = "dgcolCount";
             this.dgcolCount.ReadOnly = true;
             this.dgcolCount.Width = 75;
@@ -731,6 +792,7 @@
             // dgCol
             // 
             this.dgCol.HeaderText = "Symbol";
+            this.dgCol.MinimumWidth = 6;
             this.dgCol.Name = "dgCol";
             this.dgCol.ReadOnly = true;
             this.dgCol.Resizable = System.Windows.Forms.DataGridViewTriState.True;
@@ -739,9 +801,10 @@
             // 
             // btnCategorize
             // 
-            this.btnCategorize.Location = new System.Drawing.Point(272, 65);
+            this.btnCategorize.Location = new System.Drawing.Point(363, 80);
+            this.btnCategorize.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCategorize.Name = "btnCategorize";
-            this.btnCategorize.Size = new System.Drawing.Size(90, 25);
+            this.btnCategorize.Size = new System.Drawing.Size(120, 31);
             this.btnCategorize.TabIndex = 33;
             this.btnCategorize.Text = "Categorize";
             this.btnCategorize.UseVisualStyleBackColor = true;
@@ -749,17 +812,19 @@
             // 
             // txtCategoryCount
             // 
-            this.txtCategoryCount.Location = new System.Drawing.Point(116, 68);
+            this.txtCategoryCount.Location = new System.Drawing.Point(155, 84);
+            this.txtCategoryCount.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtCategoryCount.Name = "txtCategoryCount";
-            this.txtCategoryCount.Size = new System.Drawing.Size(146, 20);
+            this.txtCategoryCount.Size = new System.Drawing.Size(193, 22);
             this.txtCategoryCount.TabIndex = 32;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(2, 71);
+            this.label10.Location = new System.Drawing.Point(3, 87);
+            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(108, 13);
+            this.label10.Size = new System.Drawing.Size(144, 17);
             this.label10.TabIndex = 31;
             this.label10.Text = "Number of categories";
             // 
@@ -772,10 +837,11 @@
             this.icbColorScheme.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.icbColorScheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.icbColorScheme.FormattingEnabled = true;
-            this.icbColorScheme.Location = new System.Drawing.Point(116, 6);
+            this.icbColorScheme.Location = new System.Drawing.Point(155, 7);
+            this.icbColorScheme.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.icbColorScheme.Name = "icbColorScheme";
             this.icbColorScheme.OutlineColor = System.Drawing.Color.Black;
-            this.icbColorScheme.Size = new System.Drawing.Size(146, 21);
+            this.icbColorScheme.Size = new System.Drawing.Size(193, 23);
             this.icbColorScheme.TabIndex = 36;
             // 
             // tabMapping
@@ -790,10 +856,11 @@
             this.tabMapping.Controls.Add(this.lblMappedSheet);
             this.tabMapping.Controls.Add(this.listSelectedTimePeriods);
             this.tabMapping.Controls.Add(this.label15);
-            this.tabMapping.Location = new System.Drawing.Point(4, 22);
+            this.tabMapping.Location = new System.Drawing.Point(4, 25);
+            this.tabMapping.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabMapping.Name = "tabMapping";
-            this.tabMapping.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMapping.Size = new System.Drawing.Size(486, 462);
+            this.tabMapping.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabMapping.Size = new System.Drawing.Size(651, 572);
             this.tabMapping.TabIndex = 2;
             this.tabMapping.Text = "Mapping";
             this.tabMapping.UseVisualStyleBackColor = true;
@@ -803,9 +870,10 @@
             this.chkViewTimeSeriesChart.AutoSize = true;
             this.chkViewTimeSeriesChart.Checked = true;
             this.chkViewTimeSeriesChart.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkViewTimeSeriesChart.Location = new System.Drawing.Point(17, 434);
+            this.chkViewTimeSeriesChart.Location = new System.Drawing.Point(23, 534);
+            this.chkViewTimeSeriesChart.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chkViewTimeSeriesChart.Name = "chkViewTimeSeriesChart";
-            this.chkViewTimeSeriesChart.Size = new System.Drawing.Size(82, 17);
+            this.chkViewTimeSeriesChart.Size = new System.Drawing.Size(105, 21);
             this.chkViewTimeSeriesChart.TabIndex = 34;
             this.chkViewTimeSeriesChart.Text = "View results";
             this.chkViewTimeSeriesChart.UseVisualStyleBackColor = true;
@@ -813,18 +881,20 @@
             // lblParameter
             // 
             this.lblParameter.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblParameter.Location = new System.Drawing.Point(190, 434);
+            this.lblParameter.Location = new System.Drawing.Point(253, 534);
+            this.lblParameter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblParameter.Name = "lblParameter";
-            this.lblParameter.Size = new System.Drawing.Size(254, 18);
+            this.lblParameter.Size = new System.Drawing.Size(339, 22);
             this.lblParameter.TabIndex = 33;
             this.lblParameter.Text = "Mapped parameter";
             this.lblParameter.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // btnExport
             // 
-            this.btnExport.Location = new System.Drawing.Point(17, 403);
+            this.btnExport.Location = new System.Drawing.Point(23, 496);
+            this.btnExport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnExport.Name = "btnExport";
-            this.btnExport.Size = new System.Drawing.Size(121, 25);
+            this.btnExport.Size = new System.Drawing.Size(161, 31);
             this.btnExport.TabIndex = 29;
             this.btnExport.Text = "Export to time series";
             this.btnExport.UseVisualStyleBackColor = true;
@@ -846,7 +916,8 @@
             legend2.Enabled = false;
             legend2.Name = "Legend1";
             this.graphSheet.Legends.Add(legend2);
-            this.graphSheet.Location = new System.Drawing.Point(181, 304);
+            this.graphSheet.Location = new System.Drawing.Point(241, 374);
+            this.graphSheet.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.graphSheet.Name = "graphSheet";
             series2.ChartArea = "ChartArea1";
             series2.IsVisibleInLegend = false;
@@ -854,7 +925,7 @@
             series2.Name = "Series1";
             series2.YValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.Double;
             this.graphSheet.Series.Add(series2);
-            this.graphSheet.Size = new System.Drawing.Size(299, 105);
+            this.graphSheet.Size = new System.Drawing.Size(399, 129);
             this.graphSheet.TabIndex = 32;
             this.graphSheet.Text = "chart1";
             // 
@@ -862,9 +933,10 @@
             // 
             this.btnDown.ImageKey = "go-down.png";
             this.btnDown.ImageList = this.imageList1;
-            this.btnDown.Location = new System.Drawing.Point(154, 147);
+            this.btnDown.Location = new System.Drawing.Point(205, 181);
+            this.btnDown.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnDown.Name = "btnDown";
-            this.btnDown.Size = new System.Drawing.Size(30, 30);
+            this.btnDown.Size = new System.Drawing.Size(40, 37);
             this.btnDown.TabIndex = 31;
             this.btnDown.UseVisualStyleBackColor = true;
             this.btnDown.Click += new System.EventHandler(this.OnButtonClick);
@@ -884,9 +956,10 @@
             // 
             this.btnUp.ImageKey = "go-up.png";
             this.btnUp.ImageList = this.imageList1;
-            this.btnUp.Location = new System.Drawing.Point(154, 102);
+            this.btnUp.Location = new System.Drawing.Point(205, 126);
+            this.btnUp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnUp.Name = "btnUp";
-            this.btnUp.Size = new System.Drawing.Size(30, 30);
+            this.btnUp.Size = new System.Drawing.Size(40, 37);
             this.btnUp.TabIndex = 30;
             this.btnUp.UseVisualStyleBackColor = true;
             this.btnUp.Click += new System.EventHandler(this.OnButtonClick);
@@ -905,11 +978,13 @@
             this.colSymbol,
             this.colCount,
             this.colPercent});
-            this.dgSheetSummary.Location = new System.Drawing.Point(190, 25);
+            this.dgSheetSummary.Location = new System.Drawing.Point(253, 31);
+            this.dgSheetSummary.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dgSheetSummary.Name = "dgSheetSummary";
             this.dgSheetSummary.ReadOnly = true;
             this.dgSheetSummary.RowHeadersVisible = false;
-            this.dgSheetSummary.Size = new System.Drawing.Size(288, 273);
+            this.dgSheetSummary.RowHeadersWidth = 51;
+            this.dgSheetSummary.Size = new System.Drawing.Size(384, 336);
             this.dgSheetSummary.TabIndex = 28;
             this.dgSheetSummary.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OnGridSummaryCellClick);
             // 
@@ -927,13 +1002,16 @@
             // 
             this.colCategory.Frozen = true;
             this.colCategory.HeaderText = "Category";
+            this.colCategory.MinimumWidth = 6;
             this.colCategory.Name = "colCategory";
             this.colCategory.ReadOnly = true;
+            this.colCategory.Width = 125;
             // 
             // colSymbol
             // 
             this.colSymbol.Frozen = true;
             this.colSymbol.HeaderText = "Symbol";
+            this.colSymbol.MinimumWidth = 6;
             this.colSymbol.Name = "colSymbol";
             this.colSymbol.ReadOnly = true;
             this.colSymbol.Width = 50;
@@ -942,6 +1020,7 @@
             // 
             this.colCount.Frozen = true;
             this.colCount.HeaderText = "n";
+            this.colCount.MinimumWidth = 6;
             this.colCount.Name = "colCount";
             this.colCount.ReadOnly = true;
             this.colCount.Width = 50;
@@ -950,6 +1029,7 @@
             // 
             this.colPercent.Frozen = true;
             this.colPercent.HeaderText = "%";
+            this.colPercent.MinimumWidth = 6;
             this.colPercent.Name = "colPercent";
             this.colPercent.ReadOnly = true;
             this.colPercent.Width = 50;
@@ -957,9 +1037,10 @@
             // lblMappedSheet
             // 
             this.lblMappedSheet.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMappedSheet.Location = new System.Drawing.Point(192, 412);
+            this.lblMappedSheet.Location = new System.Drawing.Point(256, 507);
+            this.lblMappedSheet.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMappedSheet.Name = "lblMappedSheet";
-            this.lblMappedSheet.Size = new System.Drawing.Size(254, 18);
+            this.lblMappedSheet.Size = new System.Drawing.Size(339, 22);
             this.lblMappedSheet.TabIndex = 27;
             this.lblMappedSheet.Text = "Mapped sheet";
             this.lblMappedSheet.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -967,10 +1048,12 @@
             // listSelectedTimePeriods
             // 
             this.listSelectedTimePeriods.FormattingEnabled = true;
-            this.listSelectedTimePeriods.Location = new System.Drawing.Point(5, 25);
+            this.listSelectedTimePeriods.ItemHeight = 16;
+            this.listSelectedTimePeriods.Location = new System.Drawing.Point(7, 31);
+            this.listSelectedTimePeriods.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.listSelectedTimePeriods.Name = "listSelectedTimePeriods";
             this.listSelectedTimePeriods.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listSelectedTimePeriods.Size = new System.Drawing.Size(143, 368);
+            this.listSelectedTimePeriods.Size = new System.Drawing.Size(189, 452);
             this.listSelectedTimePeriods.TabIndex = 26;
             this.listSelectedTimePeriods.Click += new System.EventHandler(this.OnSelectedSheetsClick);
             this.listSelectedTimePeriods.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnListBoxKeyDown);
@@ -979,9 +1062,10 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(2, 9);
+            this.label15.Location = new System.Drawing.Point(3, 11);
+            this.label15.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(67, 13);
+            this.label15.Size = new System.Drawing.Size(90, 17);
             this.label15.TabIndex = 25;
             this.label15.Text = "Time periods";
             // 
@@ -989,29 +1073,32 @@
             // 
             this.btnOk.ImageKey = "im_exit.bmp";
             this.btnOk.ImageList = this.imageList1;
-            this.btnOk.Location = new System.Drawing.Point(460, 532);
+            this.btnOk.Location = new System.Drawing.Point(613, 655);
+            this.btnOk.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(30, 30);
+            this.btnOk.Size = new System.Drawing.Size(40, 37);
             this.btnOk.TabIndex = 28;
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.OnButtonClick);
             // 
             // lblStatus
             // 
-            this.lblStatus.Location = new System.Drawing.Point(3, 540);
+            this.lblStatus.Location = new System.Drawing.Point(4, 665);
+            this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(343, 18);
+            this.lblStatus.Size = new System.Drawing.Size(457, 22);
             this.lblStatus.TabIndex = 29;
             // 
             // SpatioTemporalMappingForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(496, 567);
+            this.ClientSize = new System.Drawing.Size(661, 698);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.tabMap);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "SpatioTemporalMappingForm";
             this.Text = "SpatioTemporalHelperForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnFormClosed);
@@ -1086,7 +1173,7 @@
         private System.Windows.Forms.TabPage tabMetadata;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.TextBox txtMetadata;
-        private System.Windows.Forms.Button btnExclude;
+        private System.Windows.Forms.Button btnBinning;
         private System.Windows.Forms.TabPage tabSummary;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.TextBox txtDatasetUniqueCount;

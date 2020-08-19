@@ -3,10 +3,143 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Diagnostics;
 namespace FAD3.Database.Classes.merge
 {
-   public class CatchDetail
+    public class CatchDetailFlattened
+    {
+        private double? _wtCatch;
+        private double? _wtSample;
+        private static double? _wtFromTotal;
+        private string _samplingGUID;
+        private double? _catchWeightLessFromTotal;
+        public CatchDetailFlattened(string samplingGUID) 
+        {
+            if (_samplingGUID != samplingGUID)
+            {
+                _samplingGUID = samplingGUID;
+                Console.WriteLine($"Weight from total is {_wtFromTotal}");
+            }
+        }
+        public CatchDetailFlattened(CatchDetail cd)
+        {
+            DateSampled = cd.CatchComposition.Sampling.DateTimeSampled;
+            RefNo = cd.CatchComposition.Sampling.ReferenceNumber.ToString();
+            LandingSite = cd.CatchComposition.Sampling.LandingSite.ToString();
+            Gear = cd.CatchComposition.Sampling.Gear.ToString();
+            CatchName = cd.CatchComposition.CatchNameString;
+            IDType = cd.CatchComposition.NameType.ToString();
+            TotalCatchWeight = cd.CatchComposition.Sampling.WeightOfCatch;
+            TotalCatchSampleWeight = cd.CatchComposition.Sampling.WeightOfSample;
+            CatchWeight = cd.Weight;
+            CatchSampleWeight = cd.SampleWeight;
+            Count = cd.Count;
+            SampleCount = cd.SampleCount;
+            FromTotal = cd.FromTotal;
+        }
+        public DateTime DateSampled { get; set; }
+        public string RefNo { get; set; }
+        public string LandingSite { get; set; }
+        public string Gear { get; set; }
+
+        public string CatchName { get; set; }
+
+        public string IDType { get; set; }
+
+        public double? TotalCatchWeight { get; set; }
+        public double? TotalCatchSampleWeight { get; set; }
+
+
+        public bool IsLiveFIsh { get; set; }
+        public double CatchWeight { get; set; }
+
+        public double? CatchSampleWeight { get; set; }
+
+
+        public int? Count { get; set; }
+        public int? SampleCount { get; set; }
+        public bool FromTotal { get; set; }
+        public double? ComputedWt
+        {
+            get
+            {
+
+                _wtCatch = TotalCatchWeight;
+                _wtSample = TotalCatchSampleWeight;
+                _wtFromTotal = MergeDataBases.Destination.CatchDetailViewModel.WeightFromTotal(_samplingGUID);
+                _catchWeightLessFromTotal = (double)_wtCatch - _wtFromTotal;
+                if (FromTotal)
+                {
+                    return (double)CatchWeight;
+
+                }
+                else
+                {
+                    if(_wtSample==null)
+                    {
+                        return (double)CatchWeight;
+                    }
+                    else
+                    {
+                        return (CatchWeight / (double)_wtSample) * _catchWeightLessFromTotal;
+                    }
+                }
+            }
+        }
+        public int? ComputedCount
+        {
+            get
+            {
+
+                _wtCatch = TotalCatchWeight;
+                _wtSample = TotalCatchSampleWeight;                
+                _wtFromTotal = MergeDataBases.Destination.CatchDetailViewModel.WeightFromTotal(_samplingGUID);
+                _catchWeightLessFromTotal = (double)_wtCatch - _wtFromTotal;
+                if(FromTotal || _wtSample==null)
+                {
+                    if(_wtSample==null)
+                    {
+                        if(Count==null)
+                        {
+                            return (int)((CatchWeight / CatchSampleWeight) * SampleCount);
+                        }
+                        else
+                        {
+                            return (int)Count;
+                        }
+                    }
+                    else
+                    {
+                        if (Count != null)
+                        {
+                            return  (int)Count;
+                        }
+                        else
+                        {
+                            if (SampleCount != null && CatchSampleWeight != null)
+                            {
+                                return  (int)((CatchWeight / CatchSampleWeight) * SampleCount);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (Count == null)
+                    {
+                        return (int)(_catchWeightLessFromTotal / (double)_wtSample * (CatchWeight / CatchSampleWeight * SampleCount));
+                    }
+                    else
+                    {
+                        return  (int)(_catchWeightLessFromTotal / (double)_wtSample * Count);
+                    }
+                }
+                return null;
+            }
+        }
+        
+    }
+    public class CatchDetail
     {
         private double? _wtCatch;
         private double? _wtSample;
@@ -38,69 +171,6 @@ namespace FAD3.Database.Classes.merge
         public bool FromTotal { get; set; }
         public bool LiveFish { get; set; }
 
-        public double? ComputedWeight
-        {
-            get
-            {
-                _wtCatch = CatchComposition.Sampling.WeightOfCatch;
-                _wtSample = CatchComposition.Sampling.WeightOfSample;
-                double? computedWt = Weight;
-                if(!FromTotal)
-                {
-                    if (_wtSample != null && _wtSample >0 )
-                    {
-                        computedWt = Weight * (double)(_wtCatch / _wtSample);
-                    }
-                    else
-                    {
-                        computedWt = null;
-                    }
-                }
-                return computedWt;
-            }
-        }
-
-        public int? ComputedCount
-        {
-            
-            get
-            {
-                int? computedCt=null;
-                {
-                    if(FromTotal)
-                    {
-                        if (Count != null)
-                        {
-                            computedCt = (int)Count;
-                        }
-                        else
-                        {
-                            if (SampleWeight != null && SampleWeight>0)
-                            {
-                                computedCt = (int)((Weight / SampleWeight) * SampleCount);
-                            }
-                            else
-                            {
-                                computedCt = null;
-                            }
-                        }
-                    }
-                    else if(Count==null)
-                    {
-                        computedCt = SampleWeight > 0 ? (int?)((Weight / SampleWeight) * SampleCount) : null;
-                    }
-                    else
-                    {
-                        if (_wtSample != null && _wtSample > 0)
-                        {
-                            computedCt = (int)(Count * (_wtCatch / _wtSample));
-                        }
-                    }
-
-                }
-                return computedCt;
-            }
-        }
         public override string ToString()
         {
             return $"Catch detail {CatchComposition.Sampling.ReferenceNumber.ReferenceNumber} {CatchComposition.CatchName.ToString()}";

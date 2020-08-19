@@ -88,7 +88,18 @@ namespace FAD3.Database.Classes.merge
                            ({{{afg.Sampling.RowID}}},'{afg.GridCell.ToString()}', {{{afg.RowGUID}}})";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
-                    success = update.ExecuteNonQuery() > 0;
+                    try
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+                    catch(OleDbException dbex)
+                    {
+                        Logger.LogMerge(dbex.Message);
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Log(ex);
+                    }
                 }
             }
             return success;

@@ -74,7 +74,18 @@ namespace FAD3.Database.Classes.merge
                                 {(item.FishWeightForConsumption != null ? item.FishWeightForConsumption.ToString() : "null")})";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
-                    success = update.ExecuteNonQuery() > 0;
+                    try
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+                    catch(OleDbException dbex)
+                    {
+                        Logger.LogMerge(dbex.Message,true,item);
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Log(ex);
+                    }
                 }
             }
             return success;

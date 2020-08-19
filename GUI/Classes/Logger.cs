@@ -21,33 +21,115 @@ namespace FAD3
     /// </summary>
     public class Logger
     {
-        public Logger()
+        private static string _mergeLogPath;
+        private static string _mergeErrorLogPath;
+        static Logger()
         {
+            _mergeLogPath = Application.StartupPath + "\\merge.log";
+            _mergeErrorLogPath = Application.StartupPath + "\\merge_error.log";
         }
+        public static bool DeleteMergeLog()
+        {
+            bool success = false;
+            if(File.Exists(_mergeLogPath))
+            {
+                try
+                {
+                    File.Delete(_mergeLogPath);
+                }
+                catch(Exception ex)
+                {
+                    Log(ex);
+                }
+                success = File.Exists(_mergeLogPath);
+            }
+            else
+            {
+                success = true;
+            }
 
+            return success;
+        }
+        public static bool DeleteMergeErrorLog()
+        {
+            bool success = false;
+            if (File.Exists(_mergeErrorLogPath))
+            {
+                try
+                {
+                    File.Delete(_mergeErrorLogPath);
+                }
+                catch (Exception ex)
+                {
+                    Log(ex);
+                }
+                success = File.Exists(_mergeErrorLogPath);
+            }
+            else
+            {
+                success = true;
+            }
+
+            return success;
+        }
         public static void LogMerge(FADEntities source, FADEntities destination)
         {
-            string filepath = Application.StartupPath + "\\merge.log";
 
-            using (StreamWriter writer = new StreamWriter(filepath, true))
+            using (StreamWriter writer = new StreamWriter(_mergeLogPath, true))
             {
                 writer.WriteLine($"source: {source.MDBPath} destination:{destination.MDBPath} - {DateTime.Now.ToString()}");
             }
         }
-        public static void LogMerge(string s, bool isError=false)
+        public static void LogMerge(string s, bool isError=false, object obj = null)
         {
-            var logPreMessage = "merge message";
-            if(isError)
-            {
-                logPreMessage = "merge error";
-            }
-            {
-                string filepath = Application.StartupPath + "\\merge.log";
 
-                    using (StreamWriter writer = new StreamWriter(filepath, true))
+            if (isError)
+            {
+                if (obj != null)
+                {
+                    string objectDetail = "";
+                    string typeName = obj.GetType().Name;
+                    switch (typeName)
                     {
-                        writer.WriteLine($"{logPreMessage}: {s} - {DateTime.Now.ToString()}");
+                        case "Sampling":
+                            objectDetail = $"{((Database.Classes.merge.Sampling)obj).ReferenceNumber.ToString()}";
+                            break;
+                        case "CatchComposition":
+                            var cc = (Database.Classes.merge.CatchComposition)obj;
+                            objectDetail = $"{cc.Sampling.ReferenceNumber} - {cc.CatchNameString}";
+                            break;
+                        case "CatchDetail":
+                            var cd = (CatchDetail)obj;
+                            objectDetail = $"{cd.CatchComposition.Sampling.ReferenceNumber} - {cd.CatchComposition.CatchNameString}";
+                            break;
+                        case "LenFreq":
+                            var lf = (LenFreq)obj;
+                            objectDetail = $"{lf.CatchComposition.Sampling.ReferenceNumber} - {lf.CatchComposition.CatchNameString}";
+                            break;
+                        case "Species":
+                            var sp = (Species)obj;
+                            objectDetail = $"ID: {sp.SpeciesID}  Name: {sp.Generic} {sp.Specific} Taxa:{sp.Taxa}";
+                            break;
                     }
+                    using (StreamWriter writer = new StreamWriter(_mergeErrorLogPath, true))
+                    {
+                        writer.WriteLine($"Merge error Type:{typeName} Details:{objectDetail} Error:{s} - {DateTime.Now.ToString()}");
+                    }
+                }
+                else
+                {
+                    using (StreamWriter writer = new StreamWriter(_mergeLogPath, true))
+                    {
+                        writer.WriteLine($"Merge error: {s} - {DateTime.Now.ToString()}");
+                    }
+                }
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter(_mergeLogPath, true))
+                {
+                    writer.WriteLine($"{s} - {DateTime.Now.ToString()}");
+                }
             }
         }
         public static void Log(Exception ex, Boolean ShowMessage = false)

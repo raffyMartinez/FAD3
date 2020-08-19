@@ -227,7 +227,7 @@ namespace FAD3.Mapping.Forms
         {
             switch (((Button)sender).Name)
             {
-                case "btnExclude":
+                case "btnBinning":
                     break;
 
                 case "btnShowMetadata":
@@ -1213,6 +1213,7 @@ namespace FAD3.Mapping.Forms
             {
                 btnShowGridPoints.Enabled = _datafileRead;
                 btnCategorize.Enabled = _hasMesh;
+                btnBinning.Enabled = true;
                 _startTimePeriod = cboFirstData.Text;
                 _endTimePeriod = cboLastData.Text;
                 _firstColIndex = cboFirstData.SelectedIndex;
@@ -1331,7 +1332,7 @@ namespace FAD3.Mapping.Forms
 
             tt.SetToolTip(cboFirstData, "First time slice to include in the map");
             tt.SetToolTip(cboLastData, "Last time slice to include in the map");
-            tt.SetToolTip(btnExclude, "");
+            tt.SetToolTip(btnBinning, "Bin coordinates to grid");
 
             tt.SetToolTip(txtMetadata, "Contents of metadata of dataset, but only for NCCSV dataset type");
 

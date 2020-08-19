@@ -216,13 +216,13 @@ namespace FAD3.Database.Classes.merge.views
                 case "buttonMerge":
                     if (checkProceed.Checked)
                     {
-
+                        MergeDataBases.SyncGearClasses();
                         MergeDataBases.SourceAOI = SourceAOI;
                         MergeDataBases.DestinationAOI = DestinationAOI;
                         _mergeDBHelper = new MergeDBHelper(26);
                         _mergeDBHelper.OnMergeDBTable += OnMergeDBTable;
                         _mergeDBHelper.OnMergeDBTableDone += OnMergeDBTableDone;
-                        if ( await MergeDataBases.Merge(_mergeDBHelper, true))
+                        if ( await MergeDataBases.Merge(_mergeDBHelper, false))
                         {
                             MessageBox.Show("Finished merging target area", "Merging database", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
@@ -274,7 +274,7 @@ namespace FAD3.Database.Classes.merge.views
                 {
                     tsProgressBar.Maximum = e.TableCount;
                     tsProgressBar.Value = e.RunningCount;
-                    tsLabel.Text = $"Finished merging table {e.RunningCount} of {e.TableCount}: {e.CurrentTableRead}";
+                    tsLabel.Text = $"Now merging table {e.RunningCount} of {e.TableCount}: {e.CurrentTableRead}";
 
                 }));
 

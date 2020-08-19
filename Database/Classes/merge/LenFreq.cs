@@ -6,6 +6,18 @@ using System.Threading.Tasks;
 
 namespace FAD3.Database.Classes.merge
 {
+    public class LenFreqFlattened
+    {
+        public LenFreqFlattened() { }
+        public string RefNo { get; set; }
+        public DateTime DateSampled { get; set; }
+        public string LandingSite { get; set; }
+        public string Gear { get; set; }
+        
+        public string CatchName { get; set; }
+        public double Length { get; set; }
+        public int Frequency { get; set; } 
+    }
     public class LenFreq
     {
         private CatchComposition _catchComposition;

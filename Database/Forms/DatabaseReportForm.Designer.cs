@@ -36,12 +36,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.tvTopics = new System.Windows.Forms.TreeView();
             this.label2 = new System.Windows.Forms.Label();
-            this.lvReports = new System.Windows.Forms.ListView();
             this.label3 = new System.Windows.Forms.Label();
             this.lvYears = new System.Windows.Forms.ListView();
+            this.lvReports = new System.Windows.Forms.ListView();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsProgressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.tsLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toolBar.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -145,21 +146,6 @@
             this.label2.Text = "Years";
             this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
-            // lvReports
-            // 
-            this.lvReports.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.lvReports.HideSelection = false;
-            this.lvReports.Location = new System.Drawing.Point(271, 29);
-            this.lvReports.Margin = new System.Windows.Forms.Padding(4);
-            this.lvReports.Name = "lvReports";
-            this.tableLayoutPanel1.SetRowSpan(this.lvReports, 3);
-            this.lvReports.Size = new System.Drawing.Size(737, 477);
-            this.lvReports.TabIndex = 4;
-            this.lvReports.UseCompatibleStateImageBehavior = false;
-            this.lvReports.DoubleClick += new System.EventHandler(this.OnListDoubleClick);
-            // 
             // label3
             // 
             this.label3.Location = new System.Drawing.Point(271, 0);
@@ -184,6 +170,21 @@
             this.lvYears.TabIndex = 6;
             this.lvYears.UseCompatibleStateImageBehavior = false;
             this.lvYears.View = System.Windows.Forms.View.Details;
+            // 
+            // lvReports
+            // 
+            this.lvReports.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvReports.HideSelection = false;
+            this.lvReports.Location = new System.Drawing.Point(271, 29);
+            this.lvReports.Margin = new System.Windows.Forms.Padding(4);
+            this.lvReports.Name = "lvReports";
+            this.tableLayoutPanel1.SetRowSpan(this.lvReports, 3);
+            this.lvReports.Size = new System.Drawing.Size(737, 477);
+            this.lvReports.TabIndex = 4;
+            this.lvReports.UseCompatibleStateImageBehavior = false;
+            this.lvReports.DoubleClick += new System.EventHandler(this.OnListDoubleClick);
             // 
             // statusStrip1
             // 
@@ -250,5 +251,6 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar tsProgressBar;
         private System.Windows.Forms.ToolStripStatusLabel tsLabel;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }

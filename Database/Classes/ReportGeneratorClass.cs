@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Data.OleDb;
 using System.Linq;
 using FAD3.Database.Classes.merge;
+using ClosedXML.Excel;
+using System.Threading;
+using System.Threading.Tasks;
 namespace FAD3.Database.Classes
 {
     public static class ReportGeneratorClass
@@ -12,34 +15,56 @@ namespace FAD3.Database.Classes
         public static TargetArea TargetArea { get; set; }
         public static string Topic { get; set; }
         public static List<int> Years { get; set; }
-        private static string _years;
+        //private static string _years;
 
-        public static void Generate()
+        public static bool ExportToExcel(string fileName, string sheetName)
+        {
+            var wb = new XLWorkbook();
+            try
+            {
+                wb.Worksheets.Add(DataSet.Tables[0], sheetName);
+            }
+            catch(Exception ex)
+            {
+                Logger.Log(ex);
+                return false;
+            }
+            wb.SaveAs(fileName);
+            return true;
+        }
+
+        public static async Task GenerateAsync()
+        {
+            await Task.Run(() => GenerateReport());
+        }
+        public static void GenerateReport()
         {
             DataSet = new System.Data.DataSet();
             switch (Topic)
             {
                 case "len_freq":
-                    var queryLF = from lf in MergeDataBases.Destination.LenFreqViewModel.LenFreqCollection
-                                  where lf.CatchComposition.Sampling.AOI.AOIGuid == TargetArea.TargetAreaGuid
-                                  where Years.Contains(lf.CatchComposition.Sampling.DateTimeSampled.Year)
-                                  orderby lf.CatchComposition.Sampling.DateTimeSampled
-                                  orderby lf.CatchComposition.Sampling.LandingSite.LandingSiteName
-                                  select new
-                                  {
-                                      targetArea = lf.CatchComposition.Sampling.AOI.AOIName,
-                                      refNo = lf.CatchComposition.Sampling.ReferenceNumber.ReferenceNumber,
-                                      dateSampled = lf.CatchComposition.Sampling.DateTimeSampled.ToString("MMM-dd-yyyy HH:mm"),
-                                      landingSite = lf.CatchComposition.Sampling.LandingSite.ToString(),
-                                      gear = lf.CatchComposition.Sampling.Gear.ToString(),
-                                      catchName = lf.CatchComposition.CatchName,
-                                      identification = lf.CatchComposition.NameType.ToString(),
-                                      lenClass = lf.LenClass,
-                                      freq = lf.Freq
-                                  };
-                    System.Data.DataTable tableLF = queryLF.CopyToDataTable();
+                    List<merge.LenFreqFlattened> lfFlattenedList = MergeDataBases.Destination.LenFreqViewModel.GetFlattened(Years, TargetArea.TargetAreaGuid);
+                    //var queryLF = from lf in MergeDataBases.Destination.LenFreqViewModel.LenFreqCollection
+                    //              where lf.CatchComposition.Sampling.AOI.AOIGuid == TargetArea.TargetAreaGuid
+                    //              where Years.Contains(lf.CatchComposition.Sampling.DateTimeSampled.Year)
+                    //              orderby lf.CatchComposition.Sampling.DateTimeSampled
+                    //              orderby lf.CatchComposition.Sampling.LandingSite.LandingSiteName
+                    //              select new
+                    //              {
+                    //                  targetArea = lf.CatchComposition.Sampling.AOI.AOIName,
+                    //                  refNo = lf.CatchComposition.Sampling.ReferenceNumber.ReferenceNumber,
+                    //                  dateSampled = lf.CatchComposition.Sampling.DateTimeSampled.ToString("MMM-dd-yyyy HH:mm"),
+                    //                  landingSite = lf.CatchComposition.Sampling.LandingSite.ToString(),
+                    //                  gear = lf.CatchComposition.Sampling.Gear.ToString(),
+                    //                  catchName = lf.CatchComposition.CatchNameString,
+                    //                  identification = lf.CatchComposition.NameType.ToString(),
+                    //                  lenClass = lf.LenClass,
+                    //                  freq = lf.Freq
+                    //              };
+                    System.Data.DataTable tableLF = lfFlattenedList.CopyToDataTable();
                     DataSet.Tables.Add(tableLF);
                     break;
+
                 case "effort":
                     var queryEffort = from i in MergeDataBases.Destination.SamplingViewModel.SamplingCollection
                                 where i.AOI.AOIGuid == TargetArea.TargetAreaGuid
@@ -129,37 +154,39 @@ namespace FAD3.Database.Classes
                     System.Data.DataTable tablegs = querySpecs.CopyToDataTable();
                     DataSet.Tables.Add(tablegs);
                     break;
-                case "catch":
-                    List<merge.CatchDetail> catchdtls = MergeDataBases.Destination.CatchDetailViewModel.CatchDetailCollection.ToList();
 
-                    var queryCatch = from cd in catchdtls
-                                 where cd.CatchComposition.Sampling.AOI.AOIGuid == TargetArea.TargetAreaGuid
-                                 where Years.Contains(cd.CatchComposition.Sampling.DateTimeSampled.Year)
-                                 orderby cd.CatchComposition.Sampling.DateTimeSampled
-                                 orderby cd.CatchComposition.Sampling.LandingSite.LandingSiteName
-                                 select new
-                                 {
-                                     dateSampled = cd.CatchComposition.Sampling.DateTimeSampled.ToString("MMM-dd-yyyy HH:mm"),
-                                     refno = cd.CatchComposition.Sampling.ReferenceNumber.ReferenceNumber,
-                                     landingSite = cd.CatchComposition.Sampling.LandingSite.ToString(),
-                                     gear = cd.CatchComposition.Sampling.Gear.ToString(),
-                                     catchName = cd.CatchComposition.CatchName,
-                                     idType = cd.CatchComposition.NameType.ToString(),
-                                     catchTotalWt = cd.CatchComposition.Sampling.WeightOfCatch,
-                                     catchSampleWt = cd.CatchComposition.Sampling.WeightOfSample,
-                                     isLiveFish = cd.LiveFish,
-                                     catchWt = cd.Weight,
-                                     catchCt = cd.Count,
-                                     catchSubSampleWt = cd.SampleWeight,
-                                     catchSubSampleCt = cd.SampleCount,
-                                     fromTotal = cd.FromTotal,
-                                     computedWt=cd.ComputedWeight,
-                                     computedCt=cd.ComputedCount
-                                 };
-                    System.Data.DataTable tableCatch = queryCatch.CopyToDataTable();
+                case "catch":
+                    List<merge.CatchDetailFlattened> catchDetailFlattenedList = MergeDataBases.Destination.CatchDetailViewModel.GetFlattened(Years,TargetArea.TargetAreaGuid);
+
+                    //var queryCatch = from cd in catchdtls
+                    //             where cd.CatchComposition.Sampling.AOI.AOIGuid == TargetArea.TargetAreaGuid
+                    //             where Years.Contains(cd.CatchComposition.Sampling.DateTimeSampled.Year)
+                    //             orderby cd.CatchComposition.Sampling.DateTimeSampled
+                    //             orderby cd.CatchComposition.Sampling.LandingSite.LandingSiteName
+                    //             select new
+                    //             {
+                    //                 dateSampled = cd.CatchComposition.Sampling.DateTimeSampled.ToString("MMM-dd-yyyy HH:mm"),
+                    //                 refno = cd.CatchComposition.Sampling.ReferenceNumber.ReferenceNumber,
+                    //                 landingSite = cd.CatchComposition.Sampling.LandingSite.ToString(),
+                    //                 gear = cd.CatchComposition.Sampling.Gear.ToString(),
+                    //                 catchName = cd.CatchComposition.CatchNameString,
+                    //                 idType = cd.CatchComposition.NameType.ToString(),
+                    //                 catchTotalWt = cd.CatchComposition.Sampling.WeightOfCatch,
+                    //                 catchSampleWt = cd.CatchComposition.Sampling.WeightOfSample,
+                    //                 isLiveFish = cd.LiveFish,
+                    //                 catchWt = cd.Weight,
+                    //                 catchCt = cd.Count,
+                    //                 catchSubSampleWt = cd.SampleWeight,
+                    //                 catchSubSampleCt = cd.SampleCount,
+                    //                 fromTotal = cd.FromTotal,
+                    //                 computedWt=cd.ComputedWeight,
+                    //                 computedCt=cd.ComputedCount
+                    //             };
+                    System.Data.DataTable tableCatch = catchDetailFlattenedList.CopyToDataTable();
                     DataSet.Tables.Add(tableCatch);
                     break;
             }
+            Logger.Log($"Finished dataset for topic {Topic}");
         }
 
         public static System.Data.DataSet DataSet { get; internal set; }

@@ -153,7 +153,7 @@ namespace FAD3.Database.Forms
             global.SaveFormSettings(this);
         }
 
-        private void OnToolbarItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private async void OnToolbarItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             switch (e.ClickedItem.Name)
             {
@@ -162,10 +162,89 @@ namespace FAD3.Database.Forms
                     break;
 
                 case "tsbExcel":
+                    if (lvReports.SelectedItems.Count > 0
+                        && TargetArea != null
+                        && Years().Count>0)
+                    {
+                        string fn = "";
+                        string defaultFN = lvReports.SelectedItems[0].SubItems[1].Text;
+                        if (GetExcelFile(defaultFN, out fn))
+                        {
+                            string topic = lvReports.SelectedItems[0].Name;
+                            ReportGeneratorClass.TargetArea = TargetArea;
+                            ReportGeneratorClass.Topic = topic;
+                            ReportGeneratorClass.Years = Years();
+                            string sheetName="";
+                            switch(topic)
+                            {
+                                case "len_freq":
+                                    sheetName = "Length frequency";
+                                    break;
+                                case "effort":
+                                    sheetName = "Fishing effort";
+                                    break;
+                                case "fishing_expense_items":
+                                    sheetName = "Expense items";
+                                    break;
+                                case "fishing_expense":
+                                    sheetName = "Cost of fishing";
+                                    break;
+                                case "gear_specs":
+                                    sheetName = "Fishing gear specs";
+                                    break;
+                                case "catch":
+                                    sheetName = "Catch composition";
+                                    break;
+
+                            }
+                            tsProgressBar.Style = ProgressBarStyle.Marquee;
+                            tsProgressBar.MarqueeAnimationSpeed = 100;
+                            tsLabel.Text = $"Generating report for {sheetName}";
+                            await ReportGeneratorClass.GenerateAsync();
+                            tsLabel.Text = $"Finished generating report for {sheetName}";
+                            tsProgressBar.Style = ProgressBarStyle.Continuous;
+                            tsProgressBar.Value = 0;
+
+                            if (ReportGeneratorClass.ExportToExcel(fn, sheetName))
+                            {
+                                MessageBox.Show("Finished exporting data to MS Excel","Export to Excel",MessageBoxButtons.OK,MessageBoxIcon.Information);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Exporting to Excel was not successful", "Export to Excel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show
+                            (
+                                "Please select a target area, topic and one or more years",
+                                "More information required for exporting",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information
+                            );
+                    }
                     break;
             }
         }
 
+        private bool GetExcelFile(string defaultFilename,  out string fileName, bool toExcel=true)
+        {
+            fileName = "";
+            FileDialogHelper.Title = "Provide filename for exporting fisher, vessel and fishing gear inventory";
+            FileDialogHelper.DialogType = FileDialogType.FileSave;
+            FileDialogHelper.DataFileType = DataFileType.Text | DataFileType.XML | DataFileType.CSV | DataFileType.Excel;
+            if(toExcel)
+            {
+                FileDialogHelper.FilterIndex = 3;
+            }
+            FileDialogHelper.FileName = fileName;
+            FileDialogHelper.ShowDialog();
+
+            fileName = FileDialogHelper.FileName;
+            return fileName.Length > 0;
+        }
         private void OnTreeNodeClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             lvReports.Items.Clear();
@@ -218,6 +297,18 @@ namespace FAD3.Database.Forms
             }
         }
 
+        private List<int>Years()
+        {
+            List<int> years = new List<int>();
+            foreach (ListViewItem lvi in lvYears.Items)
+            {
+                if (lvi.Checked)
+                {
+                    years.Add(int.Parse(lvi.Text));
+                }
+            }
+            return years;
+        }
         private void OnListDoubleClick(object sender, EventArgs e)
         {
             List<int> years = new List<int>();

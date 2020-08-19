@@ -20,14 +20,14 @@ namespace FAD3.Database.Forms
         private DataSet _dataSet;
 
 
-        public bool Showreport()
+        public async  Task<bool> Showreport()
         {
             var samplingGUID = "";
             lvTable.Visible = false;
             ReportGeneratorClass.TargetArea = TargetArea;
             ReportGeneratorClass.Topic = Topic;
             ReportGeneratorClass.Years = Years;
-            ReportGeneratorClass.Generate();
+            await ReportGeneratorClass.GenerateAsync();
             _dataSet = ReportGeneratorClass.DataSet;
             lvTable.Columns.Clear();
             var ch = lvTable.Columns.Add("Row");

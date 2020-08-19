@@ -23,7 +23,15 @@ namespace FAD3.Database.Classes.merge
             SamplingCollection.CollectionChanged += SamplingCollection_CollectionChanged;
             
         }
-
+        public bool ModifyReferenceNumber(Sampling sampling)
+        {
+            var success = Samplings.ModifyRefNumber(sampling);
+            if (success)
+            {
+                SamplingCollection.Where(t => t.ReferenceNumber.ReferenceNumber == sampling.ReferenceNumber.ReferenceNumber).FirstOrDefault().ReferenceNumber.ReferenceNumber = $"{sampling.ReferenceNumber.ReferenceNumber}_1";
+            }
+            return success;
+        }
         public Sampling GetEarliestSampling(AOI aoi)
         {
             Sampling sampling = null;

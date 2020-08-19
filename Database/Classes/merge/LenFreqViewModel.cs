@@ -27,7 +27,11 @@ namespace FAD3.Database.Classes.merge
         {
             return LenFreqCollection.ToList();
         }
+        public List<LenFreqFlattened> GetFlattened(List<int> years, string aoiGUID)
+        {
 
+            return LenFreqs.getFlattened(years, aoiGUID);
+        }
         public LenFreq getLenFreq(string id)
         {
             return LenFreqCollection.FirstOrDefault(n => n.RowGUID == id);

@@ -588,6 +588,12 @@
     <Compile Include="Mapping\Forms\BatchExportMapSettingsForm.Designer.cs">
       <DependentUpon>BatchExportMapSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mapping\Forms\CoordinateBinningForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Mapping\Forms\CoordinateBinningForm.Designer.cs">
+      <DependentUpon>CoordinateBinningForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Mapping\Forms\ERDDAPSelectDatasetForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1150,6 +1156,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Mapping\Forms\BatchExportMapSettingsForm.resx">
       <DependentUpon>BatchExportMapSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Mapping\Forms\CoordinateBinningForm.resx">
+      <DependentUpon>CoordinateBinningForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Mapping\Forms\ERDDAPSelectDatasetForm.resx">
       <DependentUpon>ERDDAPSelectDatasetForm.cs</DependentUpon>

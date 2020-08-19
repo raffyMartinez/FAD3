@@ -42,7 +42,7 @@ namespace FAD3.Database.Classes.merge
                             Gear g = new Gear();
                             g.GearID = dr["GearVarGUID"].ToString();
                             g.GearName = dr["Variation"].ToString();
-                            g.GearClass = _fadEntities.GearClassViewModel.GetGearClass(dr["GearClass"].ToString());
+                            g.GearClass = _fadEntities.GearClassViewModel.GetGearClassEx(dr["GearClass"].ToString());
 
                             listGears.Add(g);
                         }
@@ -68,7 +68,18 @@ namespace FAD3.Database.Classes.merge
                            ('{g.GearName}',{{{g.GearID}}}, {{{g.GearClass.GearClassGuid}}},'{(g.GearName.Replace(" ",""))}')";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
-                    success = update.ExecuteNonQuery() > 0;
+                    try
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+                    catch (OleDbException dbex)
+                    {
+                        Logger.LogMerge(dbex.Message,true,g);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(ex);
+                    }
                 }
             }
             return success;

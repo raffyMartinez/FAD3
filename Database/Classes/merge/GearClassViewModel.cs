@@ -48,9 +48,15 @@ namespace FAD3.Database.Classes.merge
             }
             return false;
         }
-        public GearClass GetGearClass(string gearClassID)
+
+        public GearClass GetGearClassEx(string gearClassID)
         {
             return GearClassCollection.FirstOrDefault(n => n.GearClassGuid == gearClassID);
+
+        }
+        public GearClass GetGearClass(string gearCode)
+        {
+            return GearClassCollection.FirstOrDefault(n => n.GearCode == gearCode);
 
         }
         private void GearClasses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace FAD3.Database.Classes.merge
 {
+
    public class CatchComposition
     {
         private Sampling _sampling;
@@ -29,6 +30,14 @@ namespace FAD3.Database.Classes.merge
         }
         public string SamplingID { get; set; }
         public CatchName CatchName { get; set; }
+
+        public string CatchNameString
+        {
+            get
+            {
+                return CatchName.ToString();
+            }
+        }
         public string NameGUID { get; set; }
         
         public int? Sequence { get; set; }

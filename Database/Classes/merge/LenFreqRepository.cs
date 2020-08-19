@@ -10,14 +10,83 @@ namespace FAD3.Database.Classes.merge
     class LenFreqRepository
     {
         private FADEntities _fadEntities;
-        public List<LenFreq> LenFreqs{ get; set; }
 
+        public List<LenFreq> LenFreqs{ get; set; }
         public LenFreqRepository(FADEntities fadEntities)
         {
             _fadEntities = fadEntities;
             LenFreqs = getLenFreqs();
         }
 
+        public List<LenFreqFlattened> getFlattened(List<int>years, string aoiGUID)
+        {
+            string inYears = "";
+            foreach (var item in years)
+            {
+                inYears += $"{item.ToString()},";
+            }
+            inYears = inYears.Trim(' ', ',');
+            List<LenFreqFlattened> thisList = new List<LenFreqFlattened>();
+            var dt = new DataTable();
+            using (var conection = new OleDbConnection(_fadEntities.ConnectionString))
+            {
+                try
+                {
+                    conection.Open();
+                    string query = $@"SELECT tblSampling.RefNo, tblSampling.SamplingDate,
+                                    [LSName] & ', ' & [Municipalities.Municipality] & ',  ' & [ProvinceName] AS LandingSiteName,
+                                    tblGearVariations.Variation, [Name1] & ' ' & [temp_AllNames.Name2] AS CatchName, 
+                                    tblLF.LenClass, tblLF.Freq
+                                    FROM Provinces 
+                                        INNER JOIN (Municipalities 
+                                        INNER JOIN (tblLandingSites 
+                                        INNER JOIN ((tblGearVariations 
+                                        INNER JOIN (tblSampling 
+                                        INNER JOIN (tblCatchComp 
+                                        INNER JOIN tblLF 
+                                            ON tblCatchComp.RowGUID = tblLF.CatchCompRow) 
+                                            ON tblSampling.SamplingGUID = tblCatchComp.SamplingGUID) 
+                                            ON tblGearVariations.GearVarGUID = tblSampling.GearVarGUID) 
+                                        INNER JOIN temp_AllNames ON tblCatchComp.NameGUID = temp_AllNames.NameNo) 
+                                            ON tblLandingSites.LSGUID = tblSampling.LSGUID) 
+                                            ON Municipalities.MunNo = tblLandingSites.MunNo) 
+                                            ON Provinces.ProvNo = Municipalities.ProvNo
+                                    WHERE Year([SamplingDate]) In ({inYears}) AND tblSampling.AOI={{{aoiGUID}}}
+                                    ORDER BY Year([SamplingDate]), 
+                                            [LSName] & ', ' & [Municipalities.Municipality] & ', ' & [ProvinceName], 
+                                            tblGearVariations.Variation,
+                                            tblSampling.RefNo";
+
+
+                    var adapter = new OleDbDataAdapter(query, conection);
+                    adapter.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                    {
+                        thisList.Clear();
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            LenFreqFlattened lff = new LenFreqFlattened
+                            {
+                                RefNo = dr["RefNo"].ToString(),
+                                LandingSite = dr["LandingSiteName"].ToString(),
+                                Gear = dr["Variation"].ToString(),
+                                DateSampled = (DateTime)dr["SamplingDate"],
+                                CatchName = dr["CatchName"].ToString(),
+                                Length = (double)dr["LenClass"],
+                                Frequency = (int)dr["Freq"]
+                            };
+                            thisList.Add(lff);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log(ex);
+
+                }
+            }
+            return thisList;
+        }
         private List<LenFreq> getLenFreqs()
         {
             List<LenFreq> thisList = new List<LenFreq>();
@@ -53,8 +122,8 @@ namespace FAD3.Database.Classes.merge
                     Logger.Log(ex);
 
                 }
-                return thisList;
             }
+            return thisList;
         }
 
         public bool Add(LenFreq lf)
@@ -68,7 +137,18 @@ namespace FAD3.Database.Classes.merge
                            ({lf.LenClass},{lf.Freq},{{{lf.CatchComposition.RowGUID}}},{{{lf.RowGUID}}},{(lf.Sequence==null?"null":lf.Sequence.ToString())})";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
-                    success = update.ExecuteNonQuery() > 0;
+                    try
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+                    catch (OleDbException dbex)
+                    {
+                        Logger.LogMerge(dbex.Message,true,lf);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(ex);
+                    }
                 }
             }
             return success;

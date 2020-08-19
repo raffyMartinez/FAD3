@@ -232,12 +232,29 @@ namespace FAD3.Database.Classes.merge
                     }
                     catch (OleDbException dbex)
                     {
-                        Logger.Log(dbex);
+                        Logger.LogMerge(dbex.Message,true,s);
                     }
                     catch (Exception ex)
                     {
                         Logger.Log(ex);
                     }
+                }
+            }
+            return success;
+        }
+
+        public bool ModifyRefNumber(Sampling s)
+        {
+            bool success = false;
+            using (OleDbConnection conn = new OleDbConnection(_fadEntities.ConnectionString))
+            {
+                conn.Open();
+                var sql = $@"Update tblSampling set
+                                RefNo = '{s.ReferenceNumber.ReferenceNumber}_1'
+                            WHERE RefNo = '{s.ReferenceNumber.ReferenceNumber}'";
+                using (OleDbCommand update = new OleDbCommand(sql, conn))
+                {
+                    success = update.ExecuteNonQuery() > 0;
                 }
             }
             return success;

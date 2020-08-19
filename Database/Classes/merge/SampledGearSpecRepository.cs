@@ -70,7 +70,18 @@ namespace FAD3.Database.Classes.merge
                            ({{{sgc.Sampling.RowID}}},{{{sgc.RowID}}},{{{sgc.GearSpec.RowGUID}}},'{sgc.Value}')";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
-                    success = update.ExecuteNonQuery() > 0;
+                    try
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+                    catch(OleDbException dbex)
+                    {
+                        Logger.LogMerge(dbex.Message,true,sgc);
+                    }
+                    catch(Exception ex)
+                    {
+                        Logger.Log(ex);
+                    }
                 }
             }
             return success;

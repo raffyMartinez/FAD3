@@ -19,8 +19,8 @@ namespace FAD3.Database.Classes.merge
         {
             Sampling = s;
             //Generate();
-             
-            
+
+
         }
 
         private void Parse()
@@ -28,7 +28,7 @@ namespace FAD3.Database.Classes.merge
             try
             {
                 var result = ReferenceNumber.Split('-');
-                if (result.Count() ==3)
+                if (result.Count() == 3)
                 {
                     YearCode = int.Parse(result[0].Substring(result[0].Length - 2, 2));
                     AOICode = result[0].Substring(0, result[0].Length - 2);
@@ -36,7 +36,7 @@ namespace FAD3.Database.Classes.merge
                     GearCode = result[1];
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Logger.Log(ex);
             }
@@ -46,7 +46,7 @@ namespace FAD3.Database.Classes.merge
         public string AOICode { get; private set; }
         public Sampling Sampling { get; set; }
 
-        public void Generate(string refNo="")
+        public void Generate(string refNo = "")
         {
             //if(Sampling.Fad4Database.DatabaseIsFad4)
             //{

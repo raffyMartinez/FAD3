@@ -172,6 +172,7 @@ namespace FAD3.Database.Classes
 
                     var adapter = new OleDbDataAdapter(query, conection);
                     adapter.Fill(dt);
+                    
                     _TotalWtOfFromTotal = 0;
                     Identification IdType = Identification.Scientific;
                     for (int i = 0; i < dt.Rows.Count; i++)
@@ -179,6 +180,10 @@ namespace FAD3.Database.Classes
                         DataRow dr = dt.Rows[i];
                         Name1 = dr["Name1"].ToString();
                         Name2 = dr["Name2"].ToString();
+                        if(Name2== "tri")
+                        {
+
+                        }
                         CatchName = $"{Name1} {Name2}";
                         IdType = Identification.Scientific;
                         if (dr["Identification"].ToString() == "Local names") IdType = Identification.LocalName;

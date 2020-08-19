@@ -88,7 +88,18 @@ namespace FAD3.Database.Classes.merge
                            ({{{cc.NameGUID}}},{(int)cc.NameType}, {{{cc.RowGUID}}}, {{{cc.Sampling.RowID}}},{(cc.Sequence==null?"null":cc.Sequence.ToString())})";
                 using (OleDbCommand update = new OleDbCommand(sql, conn))
                 {
-                    success = update.ExecuteNonQuery() > 0;
+                    try
+                    {
+                        success = update.ExecuteNonQuery() > 0;
+                    }
+                    catch (OleDbException dbex)
+                    {
+                        Logger.LogMerge(dbex.Message,true,cc);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(ex);
+                    }
                 }
             }
             return success;
